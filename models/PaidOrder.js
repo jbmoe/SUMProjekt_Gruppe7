@@ -6,4 +6,4 @@ const paidOrder = new mongoose.Schema({
     paymentMethod: String
 });
 
-module.exports = mongoose.model('PaidOrder', paidOrder, "PaidOrder");
+module.exports = mongoose.model('PaidOrder', paidOrder, "PaidOrders");

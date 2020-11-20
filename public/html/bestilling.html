@@ -40,13 +40,13 @@
         <h3>Rabat</h3>
         <label>Procent</label>
         <br>
-        <input type='number' max="100" id ='rabatProcent' value='%'></input>
+        <input type='number' max="100" id='rabatProcent' value='%'></input>
         <button onclick="lavRabatProcent()">Udregn</button>
         <label for='fejlRabat'></label>
         <br><br>
         <label>Kroner</label>
         <br>
-        <input type='number' min="0" id ='rabatKroner' value='Kr'></input>
+        <input type='number' min="0" id='rabatKroner' value='Kr'></input>
         <button onclick="lavRabatKroner()">Udregn</button>
         <br><label id='fejlRabat'></label>
 
@@ -55,7 +55,7 @@
                 <span class="close" id="close">&times;</span>
                 <h2>Borde:</h2>
                 <table id="orders">
-                
+
                 </table>
 
                 <button id="annuller">Annuller</button>
@@ -67,7 +67,7 @@
                 <span class="close" id="close">&times;</span>
                 <table id="editOrder">
                 </table>
-                
+
                 <button id="saveButton">Gem</button>
             </div>
 
@@ -85,17 +85,18 @@
                     <option value="kort">Kort</option>
                     <option value="kontant">Kontant</option>
                     <option value="mobilepay">Mobilepay</option>
-                    
+
                 </select>
                 <br>
                 <button id="betalButton">Betal</button>
             </div>
+        </div>
+        
         <div id="addProductModal" class="modal">
             <div class="modal-content" id="addProductModalDiv">
                 <span class="close" id="close">&times;</span>
                 <table id="addProduct">
                 </table>
             </div>
-
         </div>
 </body>
