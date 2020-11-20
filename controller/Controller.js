@@ -25,7 +25,7 @@ exports.getProduct = function (productId) {
 };
 
 exports.getProducts = function () {
-    return Product.find().populate('product').exec();
+    return Product.find().populate('Products').exec();
 };
 
 exports.deleteProduct = async function (productId) {

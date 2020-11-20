@@ -197,9 +197,9 @@ function getRegning() {
     return toReturn;
 }
 
-async function main(url) {
+async function main() {
     try {
-        products = await get(url);
+        products = await get('/api/products');
     } catch (fejl) {
         console.log(fejl);
     }
@@ -208,12 +208,12 @@ async function main(url) {
     for (tr of trs)
         tr.onclick = productHandler;
 }
-main('/api/products');
+main();
 
 
-async function generateOrdersModal(url) {
+async function generateOrdersModal() {
     try {
-        orders = await get(url);
+        orders = await get("/api/orders");
     } catch (fejl) {
         console.log(fejl);
     }
@@ -249,7 +249,7 @@ async function saveEditOrderHandler(event) {
     let object = { products: productsString, price: nySamletPris, comment: nyComment }
     await post('/api/orders/update/' + id, object)
     editModal.style.display = "none"
-    generateOrdersModal('/api/orders')
+    generateOrdersModal()
 }
 
 
@@ -270,12 +270,12 @@ async function betalOrderModalHandler(event) {
 }
 
 async function betalOrderHandler(){
-    let order = JSON.stringify(this)
+    let order = this
     let paymentMethod = document.getElementById('betaling').value
-    console.log(order)
-    console.log(paymentMethod)
-    // await post('/api/orders/payment', {order, paymentMethod})
-    // await deLete('/api/orders/'+this._id)
+    await post('/api/orders/payment', {order, paymentMethod})
+    await deLete('/api/orders/'+this._id)
+    betalModal.style.display = "none"
+    generateOrdersModal()
 }
 
 
@@ -341,7 +341,7 @@ async function deleteOrderHandler(event) {
     let proceed = confirm("Er du sikker på du vil slette?")
     if (proceed) {
         await deLete('/api/orders/' + id)
-        generateOrdersModal('/api/orders')
+        generateOrdersModal()
 
     }
 }
@@ -358,6 +358,7 @@ function addProductModal() {
     for (let i = 1; i < rows.length; i++) {
         rows[i].addEventListener('click', addProductHandler.bind(event, rows[i].children[0].innerHTML))
     }
+    console.log("test")
 }
 
 function addProductHandler(productName) {
@@ -419,7 +420,7 @@ annullerKnap.onclick = function () {
 
 
 borderKnap.onclick = function () {
-    generateOrdersModal('/api/orders')
+    generateOrdersModal()
     borderModal.style.display = "block"
 }
 
@@ -432,8 +433,6 @@ function printRegning(time, table, waiter, price, comment) {
     console.log('kommentar: ' + comment)
     console.log('Total: ' + price + 'DK');
     console.log('din dejlige tjener: ' + waiter);
-
-    borderModal.style.display = "block"
 }
 
 window.onclick = function (event) {
