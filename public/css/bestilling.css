@@ -1,6 +1,6 @@
 body {font-family: Arial;}
 
-#regning th {
+table th {
     background-color: #4CAF50;
     padding: 8px;
     padding-top: 12px;
@@ -10,13 +10,15 @@ body {font-family: Arial;}
     color: white;
 }
 
-#regning td {
+table td {
     border: 1px solid #ddd;
     padding: 8px;
 }
-
-#regning tr:nth-child(even){background-color: #9e9d9d;}
-#regning tr:hover {background-color: #ddd;}
+table{
+    border-collapse: collapse;
+}
+table tr:nth-child(even){background-color: #9e9d9d;}
+table tr:hover {background-color: #ddd;}
 
 
 
