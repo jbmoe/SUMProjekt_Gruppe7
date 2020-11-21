@@ -10,28 +10,26 @@
         <button id='hentborde'>Hent borde</button>
         <button id='rydbord'>Ryd bord</button>
     </span>
-    <div id="produkter">
-        <table id="produktTable">
-            <tr>
-                <th>Navn</th>
+    <table id="produktTable">
+        <tr>
+            <th>Navn</th>
+            <th>Pris</th>
+            <th>Kategori</th>
+        </tr>
+    </table>
+
+    <table id='regning'>
+        <thead>
+            <tr id='theader'>
+                <th>Beskrivelse</th>
+                <th>Antal</th>
                 <th>Pris</th>
-                <th>Kategori</th>
             </tr>
-        </table>
-    </div>
-    <br>
-    <div>
-        <table id='regning'>
-            <thead>
-                <tr id='theader'>
-                    <th>Beskrivelse</th>
-                    <th>Antal</th>
-                    <th>Pris</th>
-                </tr>
-            </thead>
-            <tbody id="regningContent"></tbody>
-        </table>
-        <br>
+        </thead>
+        <tbody id="regningContent"></tbody>
+    </table>
+
+    <div id="opretDiv">
         <label for='samletPris'>Pris</label>
         <input type='text' id='samletPris' value=0></input>
         <button id='opretButton'>Opret</button>
@@ -44,41 +42,41 @@
         </select>
         <label for='bemærkning'>Bemærkning</label>
         <input type='text' id='bemærkning' value=''></input>
-        <br><br>
+    </div>
 
+    <div id="rabatDiv">
         <h3>Rabat</h3>
         <label>Procent</label>
-        <br>
         <input type='number' max="100" id='rabatProcent' value='%'></input>
-        <button onclick="lavRabatProcent()">Udregn</button>
+        <button id="lavRabatProcentButton">Udregn</button>
         <label for='fejlRabat'></label>
-        <br><br>
+
         <label>Kroner</label>
-        <br>
         <input type='number' min="0" id='rabatKroner' value='Kr'></input>
-        <button onclick="lavRabatKroner()">Udregn</button>
-        <br><label id='fejlRabat'></label>
+        <button id="lavRabatKronerButton">Udregn</button>
+        <label id='fejlRabat'></label>
+    </div>
+    
+    <div id="bordeModal" class="modal">
+        <div class="modal-content">
+            <span class="close" id="close">&times;</span>
+            <h2>Borde:</h2>
+            <table id="orders">
 
-        <div id="bordeModal" class="modal">
-            <div class="modal-content">
-                <span class="close" id="close">&times;</span>
-                <h2>Borde:</h2>
-                <table id="orders">
+            </table>
 
-                </table>
+            <button id="annuller">Annuller</button>
+        </div>
+    </div>
 
-                <button id="annuller">Annuller</button>
-            </div>
+    <div id="editModal" class="modal">
+        <div class="modal-content" id="editModalDiv">
+            <span class="close" id="close">&times;</span>
+            <table id="editOrder">
+            </table>
+
+            <button id="saveButton">Gem</button>
         </div>
 
-        <div id="editModal" class="modal">
-            <div class="modal-content" id="editModalDiv">
-                <span class="close" id="close">&times;</span>
-                <table id="editOrder">
-                </table>
-
-                <button id="saveButton">Gem</button>
-            </div>
-
-        </div>
+    </div>
 </body>

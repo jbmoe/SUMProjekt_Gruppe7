@@ -77,6 +77,7 @@ function insertProductRow(product) {
 
     let price = document.createElement('input')
     price.setAttribute('type', 'number')
+    price.style.maxWidth = '40px'
     price.value = data[1]
     let cellPrice = row.insertCell(1)
     cellPrice.appendChild(price)
@@ -145,7 +146,7 @@ async function post(url, objekt) {
         body: JSON.stringify(objekt),
         headers: { 'Content-Type': 'application/json' }
     });
-    if (respons.status !== 200) // Created
+    if (!(respons.status == 200 || respons.status == 201)) // Created
         throw new Error(respons.status);
     return await respons.json();
 }

@@ -1,5 +1,7 @@
 body {font-family: Arial;}
-
+img{
+    width: 20px;
+}
 table th {
     background-color: #4CAF50;
     padding: 8px;

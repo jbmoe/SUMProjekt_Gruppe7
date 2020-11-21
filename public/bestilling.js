@@ -1,3 +1,4 @@
+// const {controller} = require('../controller/Controller')????
 var regningContent = document.getElementById('regningContent');
 var bordSelect = document.getElementById('bordNr')
 var regning = document.getElementById('regning')
@@ -7,6 +8,9 @@ var borderModal = document.getElementById('bordeModal')
 var editModal = document.getElementById('editModal')
 var editOrderTable = document.getElementById('editOrder');
 var orderTable = document.getElementById('orders');
+var rabatKronerInput = document.getElementById('rabatKroner')
+var rabatProcentInput = document.getElementById('rabatProcent')
+var bemærkningInput = document.getElementById('bemærkning')
 var products = [];
 var bestillingMap = new Map();
 
@@ -53,12 +57,35 @@ function createBestillingTable(bestilling) {
     for (const s of bestilling) {
         let salgslinje = s[1];
         let row = regningContent.insertRow();
+
         let cellName = row.insertCell();
-        let cellAmount = row.insertCell();
-        let cellPrice = row.insertCell();
         cellName.innerHTML = salgslinje.navn
-        cellAmount.innerHTML = salgslinje.antal
+
+        let cellAmount = row.insertCell();
+        let amountInput = document.createElement('input')
+        amountInput.setAttribute('type', 'number')
+        amountInput.value = salgslinje.antal;
+        amountInput.style.maxWidth = '40px'
+        amountInput.onchange = () => {
+            salgslinje.antal = amountInput.value;
+            salgslinje.samletPris = salgslinje.antal * salgslinje.enhedsPris
+            createBestillingTable(bestillingMap)
+        }
+        cellAmount.appendChild(amountInput);
+
+        let cellPrice = row.insertCell();
         cellPrice.innerHTML = salgslinje.samletPris
+
+        let deleteCell = row.insertCell();
+        let imgDelete = document.createElement('img');
+        imgDelete.src = '../img/slet.png'
+        deleteCell.appendChild(imgDelete);
+
+        deleteCell.onclick = () => {
+            row.parentNode.removeChild(row)
+            bestillingMap.delete(salgslinje.productId)
+            createBestillingTable(bestillingMap)
+        }
     }
     udregnPris(bestilling)
 }
@@ -85,7 +112,7 @@ function generateBestillingTable(orders) {
 
 function lavRabatProcent() {
     let pris = Number(samletPrisInput.value);
-    let rabatProcent = Number(document.getElementById('rabatProcent').value) / 100;
+    let rabatProcent = Number(rabatProcentInput.value) / 100;
     if (document.getElementById('rabatProcent').value > 100) {
         let fejlBesked = document.getElementById("fejlRabat");
         fejlBesked.insertAdjacentHTML("afterend", "<p>Du kan ikke give så meget rabat!<br>Må ikke være mere end 100%.</p>");
@@ -97,7 +124,7 @@ function lavRabatProcent() {
 
 function lavRabatKroner() {
     let pris = Number(samletPrisInput.value);
-    let rabatKroner = Number(document.getElementById('rabatKroner').value);
+    let rabatKroner = Number(rabatKronerInput.value);
     if (document.getElementById('rabatKroner').value > pris) {
         let fejlBesked = document.getElementById("fejlRabat");
         fejlBesked.insertAdjacentHTML("afterend", "<p>Du kan ikke give så meget rabat!<br>Rabat kan ikke være mere end samlet pris.</p>");
@@ -112,29 +139,30 @@ function sletSalgslinje(event) {
     udregnPris()
 }
 
-async function opretHandler() {
-    let bemærkningInput = document.getElementById('bemærkning')
-    let time = Date.now();
-    let table = bordSelect.value;
-    let waiter = 'Per';
-    let products = JSON.stringify(getRegning());
-    let price = samletPrisInput.value;
-    let comment = bemærkningInput.value;
-    await post('/api/orders', { time, table, waiter, products, price, comment });
-    printRegning(time, table, waiter, price, comment)
-    samletPrisInput.value = ""
-    bemærkningInput.value = ""
-    bordSelect.value = 1
+async function opretBestilling() {
+    let bestilling = {
+        time: Date.now(),
+        table: bordSelect.value,
+        waiter: 'Per',
+        products: JSON.stringify(getBestilling()),
+        price: samletPrisInput.value,
+        comment: bemærkningInput.value
+    }
+
+    console.log(await post('/api/orders', bestilling));
+    // printRegning(time, table, waiter, price, comment)
+
     rydRegning()
 }
 
 
-function getRegning() {
+function getBestilling() {
     let toReturn = [];
-    for (let i = 1; i < regning.children.length; i++) {
-        let j = regning.children[i].children[0];
-        toReturn.push({ name: j.children[0].innerHTML, amount: j.children[1].children[0].value, price: j.children[2].innerHTML })
+
+    for (const b of bestillingMap.values()) {
+        toReturn.push(b)
     }
+
     return toReturn;
 }
 
@@ -252,10 +280,12 @@ function rydRegning() {
     regningContent.innerHTML = '';
     bestillingMap.clear();
     samletPrisInput.value = 0
+    bemærkningInput.value = ""
+    bordSelect.value = 1
 }
 
 function printRegning(time, table, waiter, price, comment) {
-    let bong = getRegning()
+    let bong = getBestilling()
     console.log('bord ' + table + ' ' + 'tid: ' + time);
     for (let i = 0; i < bong.length; i++) {
         console.log('Name: ' + bong[i].name + ' ' + 'Amount: ' + bong[i].amount + ' ' + 'Price: ' + bong[i].price)
@@ -288,7 +318,7 @@ async function post(url, objekt) {
         body: JSON.stringify(objekt),
         headers: { 'Content-Type': 'application/json' }
     });
-    if (respons.status !== 200) // Created
+    if (!(respons.status == 200 || respons.status == 201)) // Created
         throw new Error(respons.status);
     return await respons.json();
 }
@@ -302,10 +332,36 @@ async function deLete(url) {
     return await respons.json();
 }
 
+// // JSON helperfunction to stringfy of Map
+// function replacer(key, value) {
+//     const originalObject = this[key];
+//     if (originalObject instanceof Map) {
+//         return {
+//             dataType: 'Map',
+//             value: Array.from(originalObject.entries()), // or with spread: value: [...originalObject]
+//         };
+//     } else {
+//         return value;
+//     }
+// }
+
+// //JSON helperfunction to parse of Map
+// function reviver(key, value) {
+//     if (typeof value === 'object' && value !== null) {
+//         if (value.dataType === 'Map') {
+//             return new Map(value.value);
+//         }
+//     }
+//     return value;
+// }
+
 async function main() {
-    document.getElementById('opretButton').onclick = opretHandler
+    document.getElementById('opretButton').onclick = opretBestilling
     document.getElementById('rydButton').onclick = rydRegning
     document.getElementById('saveButton').onclick = saveEditOrderHandler
+    document.getElementById('lavRabatKronerButton').onclick = lavRabatKroner
+    document.getElementById('lavRabatProcentButton').onclick = lavRabatProcent
+
 
     for (e of document.querySelectorAll("#close")) {
         e.onclick = function (event) {
