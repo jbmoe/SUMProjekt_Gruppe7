@@ -1,3 +1,4 @@
+var regningContent = document.getElementById('regningContent');
 var bordSelect = document.getElementById('bordNr')
 var regning = document.getElementById('regning')
 var samletPrisInput = document.getElementById('samletPris')
@@ -5,9 +6,9 @@ var close = document.getElementById('close')
 var borderModal = document.getElementById('bordeModal')
 var editModal = document.getElementById('editModal')
 var editOrderTable = document.getElementById('editOrder');
-var products = [];
 var orderTable = document.getElementById('orders');
-var regningMap = new Map();
+var products = [];
+var bestillingMap = new Map();
 
 function createProductTable() {
     for (const p of products) {
@@ -24,13 +25,13 @@ function insertProductRow(product) {
         cell.innerHTML = data[i];
     }
 
-    row.onclick = () => productHandler(product)
+    row.onclick = () => addToBestilling(product)
 }
 
-function productHandler(product) {
+function addToBestilling(product) {
 
-    if (regningMap.has(product._id)) {
-        let salgslinje = regningMap.get(product._id)
+    if (bestillingMap.has(product._id)) {
+        let salgslinje = bestillingMap.get(product._id)
         salgslinje.antal++;
         salgslinje.samletPris = salgslinje.enhedsPris * salgslinje.antal;
     } else {
@@ -41,19 +42,17 @@ function productHandler(product) {
             enhedsPris: product.price,
             productId: product._id
         }
-        regningMap.set(product._id, salgslinje)
+        bestillingMap.set(product._id, salgslinje)
     }
 
-    createRegningTable(regningMap);
+    createBestillingTable(bestillingMap);
 }
 
-function createRegningTable(map) {
-    let insertInto = document.getElementById('regningContent');
-    insertInto.innerHTML = '';
-    console.log(map)
-    for (const s of map) {
-        let salgslinje = s['1'];
-        let row = insertInto.insertRow();
+function createBestillingTable(bestilling) {
+    regningContent.innerHTML = '';
+    for (const s of bestilling) {
+        let salgslinje = s[1];
+        let row = regningContent.insertRow();
         let cellName = row.insertCell();
         let cellAmount = row.insertCell();
         let cellPrice = row.insertCell();
@@ -61,7 +60,17 @@ function createRegningTable(map) {
         cellAmount.innerHTML = salgslinje.antal
         cellPrice.innerHTML = salgslinje.samletPris
     }
+    udregnPris(bestilling)
+}
 
+function udregnPris(bestilling) {
+    let sum = 0;
+
+    for (const s of bestilling) {
+        let salgslinje = s[1];
+        sum += salgslinje.samletPris;
+    }
+    samletPrisInput.value = sum;
 }
 
 function generateBestillingTable(orders) {
@@ -75,32 +84,32 @@ function generateBestillingTable(orders) {
 }
 
 function lavRabatProcent() {
-    let pris = Number(document.getElementById('samletPris').value);
+    let pris = Number(samletPrisInput.value);
     let rabatProcent = Number(document.getElementById('rabatProcent').value) / 100;
     if (document.getElementById('rabatProcent').value > 100) {
         let fejlBesked = document.getElementById("fejlRabat");
         fejlBesked.insertAdjacentHTML("afterend", "<p>Du kan ikke give så meget rabat!<br>Må ikke være mere end 100%.</p>");
     } else {
         let total = pris - (pris * rabatProcent);
-        document.getElementById('samletPris').value = total;
+        samletPrisInput.value = total;
     }
 }
 
 function lavRabatKroner() {
-    let pris = Number(document.getElementById('samletPris').value);
+    let pris = Number(samletPrisInput.value);
     let rabatKroner = Number(document.getElementById('rabatKroner').value);
     if (document.getElementById('rabatKroner').value > pris) {
         let fejlBesked = document.getElementById("fejlRabat");
         fejlBesked.insertAdjacentHTML("afterend", "<p>Du kan ikke give så meget rabat!<br>Rabat kan ikke være mere end samlet pris.</p>");
     } else {
         let total = pris - rabatKroner;
-        document.getElementById('samletPris').value = total;
+        samletPrisInput.value = total;
     }
 }
 
 function sletSalgslinje(event) {
     event.currentTarget.parentElement.parentElement.parentElement.outerHTML = ""
-    samletPris()
+    udregnPris()
 }
 
 async function opretHandler() {
@@ -119,10 +128,6 @@ async function opretHandler() {
     rydRegning()
 }
 
-function rydRegning() {
-    regning.innerHTML = '<tr><th>Beskrivelse</th><th>Antal</th><th>Pris</th></tr>';
-    samletPrisInput.value = 0
-}
 
 function getRegning() {
     let toReturn = [];
@@ -133,9 +138,9 @@ function getRegning() {
     return toReturn;
 }
 
-async function generateOrdersModal(url) {
+async function generateOrdersModal() {
     try {
-        orders = await get(url);
+        orders = await get('/api/orders');
     } catch (fejl) {
         console.log(fejl);
     }
@@ -165,7 +170,7 @@ async function saveEditOrderHandler(event) {
     let object = { products: productsString, price: nySamletPris, comment: nyComment }
     await post('/api/orders/update/' + id, object)
     editModal.style.display = "none"
-    generateOrdersModal('/api/orders')
+    generateOrdersModal()
 }
 
 async function editOrderHandler(event) {
@@ -209,7 +214,7 @@ function updateSamletPrisEditOrder() {
             nySamletPris += 0
         }
     })
-    document.getElementById('editSamletPris').innerHTML = nySamletPris
+    samletPrisInput.innerHTML = nySamletPris
 }
 
 function calcEnkeltPris(order) {
@@ -225,7 +230,7 @@ async function deleteOrderHandler(event) {
     let proceed = confirm("Er du sikker på du vil slette?")
     if (proceed) {
         await deLete('/api/orders/' + id)
-        generateOrdersModal('/api/orders')
+        generateOrdersModal()
 
     }
 }
@@ -241,6 +246,12 @@ function insertOrderRows(order) {
     });
     html += "<tfoot><tr><td>Samlet pris</td><td id='editSamletPris' contenteditable=true>" + order.price + "</td></tr><tr><td>Bemærkning</td><td contenteditable=true>" + order.comment + "</td></tr></tfoot>"
     return html
+}
+
+function rydRegning() {
+    regningContent.innerHTML = '';
+    bestillingMap.clear();
+    samletPrisInput.value = 0
 }
 
 function printRegning(time, table, waiter, price, comment) {
@@ -317,11 +328,10 @@ async function main() {
     }
 
     document.getElementById('hentborde').onclick = function () {
-        generateOrdersModal('/api/orders')
+        generateOrdersModal()
         borderModal.style.display = "block"
     }
     await initialize();
-    console.log(products)
     createProductTable();
 }
 main();
