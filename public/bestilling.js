@@ -50,6 +50,7 @@ function productHandler(product) {
 function createRegningTable(map) {
     let insertInto = document.getElementById('regningContent');
     insertInto.innerHTML = '';
+    console.log(map)
     for (const s of map) {
         let salgslinje = s['1'];
         let row = insertInto.insertRow();
@@ -320,6 +321,7 @@ async function main() {
         borderModal.style.display = "block"
     }
     await initialize();
+    console.log(products)
     createProductTable();
 }
 main();

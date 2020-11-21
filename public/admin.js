@@ -49,7 +49,8 @@ async function createProduct() {
         input.value = '';
 
     let createdProduct = await post('/api/products/', product);
-    product._id = createdProduct.product._id;
+    console.log(createdProduct)
+    product._id = createdProduct.created._id;
     console.log('Produkt oprettet', product);
     products.push(product)
     insertProductRow(product)
