@@ -20,15 +20,16 @@ router
         } catch (e) {
             sendStatus(e, response);
         }
+        response.sendStatus(201)
     }).post('/update/:productId', async (request, response) => {
         try {
             let { name, price, category } = request.body;
-            let update = await controller.updateProduct(request.params.productId, name, price, category);
-            response.send({ message: 'Product updated!' })
+            let updatedProduct = await controller.updateProduct(request.params.productId, name, price, category);
+            response.send({ message: 'Product updated!', updatedProduct })
         } catch (e) {
             sendStatus(e, response);
         }
-        // response.sendStatus(201)
+        response.sendStatus(200)
     })
     .delete('/:id', async (request, response) => {
         try {
@@ -37,6 +38,7 @@ router
         } catch (e) {
             sendStatus(e, response);
         }
+        response.sendStatus(200)
     });
 
 function sendStatus(e, response) {
