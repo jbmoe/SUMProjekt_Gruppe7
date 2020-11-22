@@ -49,12 +49,12 @@ function addToBestilling(product) {
         bestillingMap.set(product._id, salgslinje)
     }
 
-    createBestillingTable(bestillingMap);
+    createBestillingTable();
 }
 
-function createBestillingTable(bestilling) {
+function createBestillingTable() {
     regningContent.innerHTML = '';
-    for (const s of bestilling) {
+    for (const s of bestillingMap) {
         let salgslinje = s[1];
         let row = regningContent.insertRow();
 
@@ -69,7 +69,7 @@ function createBestillingTable(bestilling) {
         amountInput.onchange = () => {
             salgslinje.antal = amountInput.value;
             salgslinje.samletPris = salgslinje.antal * salgslinje.enhedsPris
-            createBestillingTable(bestillingMap)
+            createBestillingTable()
         }
         cellAmount.appendChild(amountInput);
 
@@ -84,19 +84,20 @@ function createBestillingTable(bestilling) {
         deleteCell.onclick = () => {
             row.parentNode.removeChild(row)
             bestillingMap.delete(salgslinje.productId)
-            createBestillingTable(bestillingMap)
+            createBestillingTable()
         }
     }
-    udregnPris(bestilling)
+    udregnPris()
 }
 
-function udregnPris(bestilling) {
+function udregnPris() {
     let sum = 0;
 
-    for (const s of bestilling) {
+    for (const s of bestillingMap) {
         let salgslinje = s[1];
         sum += salgslinje.samletPris;
     }
+
     samletPrisInput.value = sum;
 }
 
@@ -111,9 +112,9 @@ function generateBestillingTable(orders) {
 }
 
 function lavRabatProcent() {
-    let pris = Number(samletPrisInput.value);
-    let rabatProcent = Number(rabatProcentInput.value) / 100;
-    if (document.getElementById('rabatProcent').value > 100) {
+    let pris = samletPrisInput.value;
+    let rabatProcent = rabatProcentInput.value / 100;
+    if (rabatProcentInput.value > 100) {
         let fejlBesked = document.getElementById("fejlRabat");
         fejlBesked.insertAdjacentHTML("afterend", "<p>Du kan ikke give så meget rabat!<br>Må ikke være mere end 100%.</p>");
     } else {
@@ -123,9 +124,9 @@ function lavRabatProcent() {
 }
 
 function lavRabatKroner() {
-    let pris = Number(samletPrisInput.value);
-    let rabatKroner = Number(rabatKronerInput.value);
-    if (document.getElementById('rabatKroner').value > pris) {
+    let pris = samletPrisInput.value;
+    let rabatKroner = rabatKronerInput.value;
+    if (rabatKronerInput.value > pris) {
         let fejlBesked = document.getElementById("fejlRabat");
         fejlBesked.insertAdjacentHTML("afterend", "<p>Du kan ikke give så meget rabat!<br>Rabat kan ikke være mere end samlet pris.</p>");
     } else {
@@ -144,19 +145,18 @@ async function opretBestilling() {
         time: Date.now(),
         table: bordSelect.value,
         waiter: 'Per',
-        products: JSON.stringify(getBestilling()),
+        products: JSON.stringify(getSalgslinjer()),
         price: samletPrisInput.value,
         comment: bemærkningInput.value
     }
 
     console.log(await post('/api/orders', bestilling));
-    // printRegning(time, table, waiter, price, comment)
-
+    printBestilling(bestilling)
     rydRegning()
 }
 
 
-function getBestilling() {
+function getSalgslinjer() {
     let toReturn = [];
 
     for (const b of bestillingMap.values()) {
@@ -223,7 +223,6 @@ async function editOrderHandler(event) {
     Array.from(document.querySelectorAll("#editPrice")).forEach(element => {
         element.addEventListener('input', updateSamletPrisEditOrder);
     })
-
 }
 
 function editOrderPriceHandler(pris) {
@@ -284,17 +283,20 @@ function rydRegning() {
     bordSelect.value = 1
 }
 
-function printRegning(time, table, waiter, price, comment) {
-    let bong = getBestilling()
-    console.log('bord ' + table + ' ' + 'tid: ' + time);
-    for (let i = 0; i < bong.length; i++) {
-        console.log('Name: ' + bong[i].name + ' ' + 'Amount: ' + bong[i].amount + ' ' + 'Price: ' + bong[i].price)
-    }
-    console.log('kommentar: ' + comment)
-    console.log('Total: ' + price + 'DK');
-    console.log('din dejlige tjener: ' + waiter);
+function printBestilling(bestilling) {
+    let salgslinjer = getSalgslinjer()
+    let toReturn = `Bord ${bestilling.table}, Tidspunkt: ${new Date(bestilling.time).toLocaleString()}\n\n`;
 
-    borderModal.style.display = "block"
+    for (let i = 0; i <salgslinjer.length; i++) {
+        s = salgslinjer[i]
+        toReturn += `Ret ${i+1}: ${s.navn} Mængde: ${s.antal} Pris: ${s.enhedsPris}\n`
+    }
+
+    toReturn += `\nBemærkning: ${bestilling.comment}\n`
+    toReturn += `Total pris: ${bestilling.price}\n`
+    toReturn += `Tjener: ${bestilling.waiter}\n`
+    
+    console.log(toReturn)
 }
 
 async function initialize() {
@@ -331,29 +333,6 @@ async function deLete(url) {
         throw new Error(respons.status);
     return await respons.json();
 }
-
-// // JSON helperfunction to stringfy of Map
-// function replacer(key, value) {
-//     const originalObject = this[key];
-//     if (originalObject instanceof Map) {
-//         return {
-//             dataType: 'Map',
-//             value: Array.from(originalObject.entries()), // or with spread: value: [...originalObject]
-//         };
-//     } else {
-//         return value;
-//     }
-// }
-
-// //JSON helperfunction to parse of Map
-// function reviver(key, value) {
-//     if (typeof value === 'object' && value !== null) {
-//         if (value.dataType === 'Map') {
-//             return new Map(value.value);
-//         }
-//     }
-//     return value;
-// }
 
 async function main() {
     document.getElementById('opretButton').onclick = opretBestilling
