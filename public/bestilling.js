@@ -99,7 +99,6 @@ function udregnPris() {
     samletPrisInput.value = sum;
 }
 
-
 function lavRabatProcent() {
     let pris = samletPrisInput.value;
     let rabatProcent = rabatProcentInput.value / 100;
@@ -137,7 +136,6 @@ async function opretBestilling() {
     printBestilling(bestilling)
     rydRegning()
 }
-
 
 function bestillingMapToArray() {
     let toReturn = [];
@@ -178,69 +176,85 @@ function generateBestillingTable(orders) {
     }
 }
 
-async function saveEditOrderHandler(event) {
-    let id = event.currentTarget.previousElementSibling.getAttribute("orderid")
-    let table = editOrderTable.children[2]
-    let products = [];
-    for (let i = 0; i < table.children.length; i++) {
-        products.push({ name: table.children[i].children[0].innerHTML, amount: table.children[i].children[1].children[0].value, price: table.children[i].children[2].innerHTML })
-    }
-    let productsString = JSON.stringify(products)
-    let nySamletPris = editOrderTable.children[3].children[0].children[1].innerHTML
-    let nyComment = editOrderTable.children[3].children[1].children[1].innerHTML
-    let object = { products: productsString, price: nySamletPris, comment: nyComment }
-    await post('/api/orders/update/' + id, object)
-    editModal.style.display = "none"
-    generateOrdersModal()
-}
-
 async function editOrderHandler(order) {
     editModal.style.display = "block"
+
     let table = document.getElementById('editOrderContent');
+    table.innerHTML = ''
+    let salgslinjer = JSON.parse(order.products);
 
-    console.log(order)
+    for (const s of salgslinjer) {
+        let row = table.insertRow();
 
+        row.insertCell().innerHTML = s.navn
 
-    // editOrderTable.setAttribute("orderid", id)
-    // editOrderTable.innerHTML = "<thead><tr><th>Redigér regning</td></tr></thead><tr><td>Beskrivelse</td><td>Antal</td><td>Pris</td></tr>"
-    // editOrderTable.insertAdjacentHTML('beforeend', insertOrderRows(orderToEdit))
-    
-    let enkeltPriser = calcEnkeltPris(orderToEdit)
-    let i = 0
-    Array.from(document.querySelectorAll("#editAmount")).forEach(element => {
-        element.addEventListener('input', editOrderPriceHandler.bind(event, enkeltPriser[i]));
-        i++;
-    })
-    Array.from(document.querySelectorAll("#editPrice")).forEach(element => {
-        element.addEventListener('input', updateSamletPrisEditOrder);
-    })
-}
-
-function editOrderPriceHandler(pris) {
-    let nyPris = parseInt(pris) * parseInt(event.currentTarget.value)
-    event.currentTarget.parentElement.nextElementSibling.innerHTML = nyPris
-    updateSamletPrisEditOrder()
-}
-
-function updateSamletPrisEditOrder() {
-    let nySamletPris = 0;
-    Array.from(document.querySelectorAll("#editPrice")).forEach(element => {
-        if (element.value) {
-            nySamletPris += parseInt(element.value)
+        let cellAntal = row.insertCell();
+        let antalInput = document.createElement('input');
+        antalInput.setAttribute('type', 'number')
+        antalInput.value = s.antal;
+        antalInput.style.maxWidth = '40px'
+        antalInput.onchange = () => {
+            s.antal = antalInput.value;
+            s.samletPris = s.antal * s.enhedsPris;
+            prisInput.value = s.samletPris;
         }
-        else {
-            nySamletPris += 0
+        cellAntal.appendChild(antalInput)
+
+        let cellPris = row.insertCell();
+        let prisInput = document.createElement('input')
+        prisInput.setAttribute('type', 'number')
+        prisInput.value = s.samletPris;
+        prisInput.onchange = () => {
+            s.samletPris = prisInput.value;
         }
-    })
-    samletPrisInput.innerHTML = nySamletPris
+        cellPris.appendChild(prisInput)
+
+        let cellDelete = row.insertCell();
+        let deleteBtn = document.createElement('button')
+        deleteBtn.onclick = () => {
+            salgslinjer.splice(salgslinjer.indexOf(s), 1)
+            row.parentNode.removeChild(row)
+            console.log(salgslinjer)
+        }
+        deleteBtn.innerHTML = 'X'
+        cellDelete.appendChild(deleteBtn)
+    }
+
+    let samletPrisRow = table.insertRow();
+    samletPrisRow.insertCell().innerHTML = 'Samlet pris';
+
+    let samletPrisInput = document.createElement('input')
+    samletPrisInput.setAttribute('type', 'number')
+    samletPrisInput.value = order.price
+    samletPrisInput.style.maxWidth = '40px'
+    samletPrisInput.onchange = () => {
+        order.price = samletPrisInput.value;
+    }
+    samletPrisRow.insertCell().appendChild(samletPrisInput);
+
+    let bemærkningRow = table.insertRow();
+    bemærkningRow.insertCell().innerHTML = 'Bemærkning'
+
+    let bemærkningInput = document.createElement('input')
+    bemærkningInput.value = order.comment;
+    bemærkningInput.style.width = '96%'
+
+    let bemærkningCell = bemærkningRow.insertCell();
+    bemærkningCell.setAttribute('colspan', '2')
+    bemærkningCell.appendChild(bemærkningInput)
+
+    document.getElementById('saveButton').onclick = () => saveEditOrderHandler(order, salgslinjer, samletPrisInput.value, bemærkningInput.value)
 }
 
-function calcEnkeltPris(order) {
-    let enkeltPriser = [];
-    Array.from(JSON.parse(order.products)).forEach(element => {
-        enkeltPriser.push(element.price / element.amount)
-    })
-    return enkeltPriser
+async function saveEditOrderHandler(order, salgslinjer, samletPris, bemærkning) {
+    let opdateretBestilling = {
+        products: JSON.stringify(salgslinjer),
+        price: samletPris,
+        comment: bemærkning
+    }
+    console.log(await post('/api/orders/update/' + order._id, opdateretBestilling))
+    editModal.style.display = "none"
+    generateOrdersModal()
 }
 
 async function deleteOrderHandler(event) {
@@ -249,21 +263,8 @@ async function deleteOrderHandler(event) {
     if (proceed) {
         await deLete('/api/orders/' + id)
         generateOrdersModal()
-        
-    }
-}
 
-function insertOrderRows(order) {
-    let html = ""
-    Array.from(JSON.parse(order.products)).forEach(element => {
-        
-        html +=
-        "<tr><td contenteditable=true>" + element.name +
-        "</td><td><INPUT id='editAmount' TYPE='NUMBER' MIN='0' MAX='100' STEP='1' VALUE='" + element.amount + "' SIZE='6'></INPUT>" +
-        "</td><td><input id='editPrice' value='" + element.price + "'></input></td></tr>"
-    });
-    html += "<tfoot><tr><td>Samlet pris</td><td id='editSamletPris' contenteditable=true>" + order.price + "</td></tr><tr><td>Bemærkning</td><td contenteditable=true>" + order.comment + "</td></tr></tfoot>"
-    return html
+    }
 }
 
 function rydRegning() {
@@ -277,16 +278,16 @@ function rydRegning() {
 function printBestilling(bestilling) {
     let salgslinjer = bestillingMapToArray()
     let toReturn = `Bord ${bestilling.table}, Tidspunkt: ${new Date(bestilling.time).toLocaleString()}\n\n`;
-    
-    for (let i = 0; i <salgslinjer.length; i++) {
+
+    for (let i = 0; i < salgslinjer.length; i++) {
         s = salgslinjer[i]
-        toReturn += `Ret ${i+1}: ${s.navn} Mængde: ${s.antal} Pris: ${s.enhedsPris}\n`
+        toReturn += `Ret ${i + 1}: ${s.navn} Mængde: ${s.antal} Pris: ${s.enhedsPris}\n`
     }
-    
+
     toReturn += `\nBemærkning: ${bestilling.comment}\n`
     toReturn += `Total pris: ${bestilling.price}\n`
     toReturn += `Tjener: ${bestilling.waiter}\n`
-    
+
     console.log(toReturn)
 }
 
