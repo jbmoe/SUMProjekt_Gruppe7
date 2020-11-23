@@ -29,11 +29,10 @@ function insertProductRow(product) {
         cell.innerHTML = data[i];
     }
 
-    row.onclick = () => addToBestilling(product)
+    row.onclick = () => addProductToBestilling(product)
 }
 
-function addToBestilling(product) {
-
+function addProductToBestilling(product) {
     if (bestillingMap.has(product._id)) {
         let salgslinje = bestillingMap.get(product._id)
         salgslinje.antal++;
@@ -48,7 +47,6 @@ function addToBestilling(product) {
         }
         bestillingMap.set(product._id, salgslinje)
     }
-
     createBestillingTable();
 }
 
@@ -101,15 +99,6 @@ function udregnPris() {
     samletPrisInput.value = sum;
 }
 
-function generateBestillingTable(orders) {
-    let html = ''
-    for (order of orders) {
-        html += '<tr id=' + order._id + '><td>' + order.table +
-            '</td><td>' + order.price +
-            '</td><td><button id="editButton">Edit</button></td><td><button id="deleteButton">X</button></td></tr>\n';
-    }
-    return html;
-}
 
 function lavRabatProcent() {
     let pris = samletPrisInput.value;
@@ -135,34 +124,26 @@ function lavRabatKroner() {
     }
 }
 
-function sletSalgslinje(event) {
-    event.currentTarget.parentElement.parentElement.parentElement.outerHTML = ""
-    udregnPris()
-}
-
 async function opretBestilling() {
     let bestilling = {
         time: Date.now(),
         table: bordSelect.value,
         waiter: 'Per',
-        products: JSON.stringify(getSalgslinjer()),
+        products: JSON.stringify(bestillingMapToArray()),
         price: samletPrisInput.value,
         comment: bemærkningInput.value
     }
-
     console.log(await post('/api/orders', bestilling));
     printBestilling(bestilling)
     rydRegning()
 }
 
 
-function getSalgslinjer() {
+function bestillingMapToArray() {
     let toReturn = [];
-
     for (const b of bestillingMap.values()) {
         toReturn.push(b)
     }
-
     return toReturn;
 }
 
@@ -172,17 +153,29 @@ async function generateOrdersModal() {
     } catch (fejl) {
         console.log(fejl);
     }
+    generateBestillingTable(orders)
+}
 
-    orderTable.innerHTML = "<tr><th>Bord nr.</th><th>Samlet pris</th></tr>"
-    orderTable.insertAdjacentHTML('beforeend', generateBestillingTable(orders));
-    let editButtons = document.querySelectorAll('#editButton')
-    Array.from(editButtons).forEach(element => {
-        element.addEventListener('click', editOrderHandler)
-    });
-    let deleteButtons = document.querySelectorAll('#deleteButton')
-    Array.from(deleteButtons).forEach(element => {
-        element.addEventListener('click', deleteOrderHandler)
-    });
+function generateBestillingTable(orders) {
+    let table = document.getElementById('ordersContent')
+    table.innerHTML = ''
+    for (const o of orders) {
+        let row = table.insertRow();
+        row.insertCell().innerHTML = o.table;
+        row.insertCell().innerHTML = o.price;
+
+        let cellEdit = row.insertCell();
+        let editBtn = document.createElement('button');
+        editBtn.innerHTML = 'Ændre'
+        editBtn.onclick = () => editOrderHandler(o);
+        cellEdit.appendChild(editBtn)
+
+        let cellDelete = row.insertCell()
+        let deleteBtn = document.createElement('button');
+        deleteBtn.innerHTML = 'X'
+        deleteBtn.onclick = () => deleteOrderHandler(o);
+        cellDelete.appendChild(deleteBtn)
+    }
 }
 
 async function saveEditOrderHandler(event) {
@@ -284,18 +277,18 @@ function rydRegning() {
 }
 
 function printBestilling(bestilling) {
-    let salgslinjer = getSalgslinjer()
+    let salgslinjer = bestillingMapToArray()
     let toReturn = `Bord ${bestilling.table}, Tidspunkt: ${new Date(bestilling.time).toLocaleString()}\n\n`;
 
-    for (let i = 0; i <salgslinjer.length; i++) {
+    for (let i = 0; i < salgslinjer.length; i++) {
         s = salgslinjer[i]
-        toReturn += `Ret ${i+1}: ${s.navn} Mængde: ${s.antal} Pris: ${s.enhedsPris}\n`
+        toReturn += `Ret ${i + 1}: ${s.navn} Mængde: ${s.antal} Pris: ${s.enhedsPris}\n`
     }
 
     toReturn += `\nBemærkning: ${bestilling.comment}\n`
     toReturn += `Total pris: ${bestilling.price}\n`
     toReturn += `Tjener: ${bestilling.waiter}\n`
-    
+
     console.log(toReturn)
 }
 
@@ -340,7 +333,6 @@ async function main() {
     document.getElementById('saveButton').onclick = saveEditOrderHandler
     document.getElementById('lavRabatKronerButton').onclick = lavRabatKroner
     document.getElementById('lavRabatProcentButton').onclick = lavRabatProcent
-
 
     for (e of document.querySelectorAll("#close")) {
         e.onclick = function (event) {

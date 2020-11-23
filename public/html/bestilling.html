@@ -47,22 +47,28 @@
     <div id="rabatDiv">
         <h3>Rabat</h3>
         <label>Procent</label>
-        <input type='number' max="100" id='rabatProcent' >
+        <input type='number' max="100" id='rabatProcent'>
         <button id="lavRabatProcentButton">Udregn</button>
         <label for='fejlRabat'></label>
 
         <label>Kroner</label>
-        <input type='number' min="0" id='rabatKroner' >
+        <input type='number' min="0" id='rabatKroner'>
         <button id="lavRabatKronerButton">Udregn</button>
         <label id='fejlRabat'></label>
     </div>
-    
+
     <div id="bordeModal" class="modal">
         <div class="modal-content">
             <span class="close" id="close">&times;</span>
             <h2>Borde:</h2>
             <table id="orders">
-
+                <thead>
+                    <tr id='theader'>
+                        <th>Bord nr.</th>
+                        <th>Samlet pris</th>
+                    </tr>
+                </thead>
+                <tbody id="ordersContent"></tbody>
             </table>
 
             <button id="annuller">Annuller</button>
