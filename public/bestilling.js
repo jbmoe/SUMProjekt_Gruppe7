@@ -261,54 +261,42 @@ function addProductToOrder(order) {
             let cell = row.insertCell(i);
             cell.innerHTML = data[i];
         }
-        row.onclick = () => addProductHandler(order, product)
+        row.onclick = () => addProductHandler(order, p)
     }
-
-    // table.innerHTML = generateProductTable(products)
-    // let rows = table.rows
-    // for (let i = 1; i < rows.length; i++) {
-    //     rows[i].addEventListener('click', addProductHandler.bind(event, rows[i].children[0].innerHTML))
-    // }
-    // console.log("test")
 }
 
 function addProductHandler(order, product) {
     let proceed = confirm("Vil du tilføje \"" + product.name + "\" til bestillingen?")
     if (proceed) {
-        let enkeltPris = 0
-        products.forEach(element => {
-            if (element.name === productName) {
-                enkeltPris = element.price
+        let products = JSON.parse(order.products)
+        console.log(products)
+
+        let found = false, i = 0;
+        while (i < products.length && !found) {
+            if (products[i].productId === product._id) {
+                found = true;
+            } else {
+                i++;
             }
-        })
+        }
 
-        let amountInput = document.createElement("input")
-        amountInput.type = "Number"
-        amountInput.size = "6"
-        amountInput.min = "0"
-        amountInput.max = "100"
-        amountInput.value = 1
-        amountInput.addEventListener('input', editOrderPriceHandler.bind(event, enkeltPris));
-
-        let priceInput = document.createElement("input")
-        priceInput.value = enkeltPris
-        priceInput.id = "editPrice"
-        priceInput.addEventListener('input', updateSamletPrisEditOrder);
-
-        let deleteButton = document.createElement("button")
-        deleteButton.innerHTML = "X"
-        deleteButton.addEventListener('click', deleteProductHandler);
-
-        let newRow = editOrderTable.children[2].insertRow()
-        newRow.insertCell(0).innerHTML = productName
-        newRow.insertCell(1).appendChild(amountInput)
-        newRow.insertCell(2).appendChild(priceInput)
-        newRow.insertCell(3).appendChild(deleteButton)
-
-        updateSamletPrisEditOrder()
+        if (found) {
+            products[i].antal++
+        } else {
+            let salgslinje = {
+                antal: 1,
+                navn: product.name,
+                samletPris: product.price,
+                enhedsPris: product.price,
+                productId: product._id
+            }
+            products.push(salgslinje)
+        }
+        order.products = JSON.stringify(products)
+        order.price += product.price
     }
-
-    productModal.style.display = "none"
+    editOrderHandler(order)
+    document.getElementById('addProductModal').style.display = "none"
 }
 
 async function updateOrder(order, salgslinjer, samletPris, bemærkning) {
