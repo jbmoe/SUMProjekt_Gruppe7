@@ -177,11 +177,14 @@ function generateBestillingTable(orders) {
 }
 
 async function editOrderHandler(order) {
+    console.log(order)
     editModal.style.display = "block"
 
     let table = document.getElementById('editOrderContent');
     table.innerHTML = ''
     let salgslinjer = JSON.parse(order.products);
+
+    console.log(salgslinjer)
 
     for (const s of salgslinjer) {
         let row = table.insertRow();
