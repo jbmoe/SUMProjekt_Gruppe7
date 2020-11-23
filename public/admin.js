@@ -2,8 +2,7 @@ var modals = document.getElementsByClassName("modal");
 var opretModal = document.getElementById("opretModal");
 var ændreModal = document.getElementById("ændreModal");
 var openModalBtns = document.getElementsByClassName("openModal");
-var closeElements = document.querySelectorAll("#close");
-var opretBtn = document.getElementById('opret')
+var closeElements = document.querySelectorAll("#close"); 
 var inputData = document.getElementsByClassName('data')
 var productTable = document.getElementById('produktTable')
 var products = [];
@@ -188,7 +187,7 @@ async function main() {
     window.onclick = (event) => closeModals(event);
     document.body.addEventListener('keyup', (event) => closeModals(event))
 
-    opretBtn.onclick = createProduct;
+    document.getElementById('opret').onclick = createProduct;
 
     await initialize();
     createProductTable();
