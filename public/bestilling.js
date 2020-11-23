@@ -179,6 +179,8 @@ function generateOrdersTable(orders) {
 async function editOrderHandler(order) {
     editModal.style.display = "block"
 
+    document.getElementById('addProduct').onclick = () => addPoductModal()
+
     let table = document.getElementById('editOrderContent');
     table.innerHTML = ''
     let salgslinjer = JSON.parse(order.products);
@@ -245,6 +247,17 @@ async function editOrderHandler(order) {
     bemærkningCell.appendChild(bemærkningInput)
 
     document.getElementById('saveButton').onclick = () => updateOrder(order, salgslinjer, samletPrisInput.value, bemærkningInput.value)
+}
+
+function addProductModal() {
+    productModal.style.display = "block"
+    let table = document.getElementById("addProduct")
+    table.innerHTML = generateProductTable(products)
+    let rows = table.rows
+    for (let i = 1; i < rows.length; i++) {
+        rows[i].addEventListener('click', addProductHandler.bind(event, rows[i].children[0].innerHTML))
+    }
+    console.log("test")
 }
 
 async function updateOrder(order, salgslinjer, samletPris, bemærkning) {
