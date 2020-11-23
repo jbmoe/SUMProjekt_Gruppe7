@@ -153,29 +153,27 @@ async function generateOrdersModal() {
     } catch (fejl) {
         console.log(fejl);
     }
-    generateBestillingTable(orders)
+    
+    orderTable.innerHTML = "<tr><th>Bord nr.</th><th>Samlet pris</th></tr>"
+    orderTable.insertAdjacentHTML('beforeend', generateBestillingTable(orders));
+    let editButtons = document.querySelectorAll('#editButton')
+    Array.from(editButtons).forEach(element => {
+        element.addEventListener('click', editOrderHandler)
+    });
+    let deleteButtons = document.querySelectorAll('#deleteButton')
+    Array.from(deleteButtons).forEach(element => {
+        element.addEventListener('click', deleteOrderHandler)
+    });
 }
 
 function generateBestillingTable(orders) {
-    let table = document.getElementById('ordersContent')
-    table.innerHTML = ''
-    for (const o of orders) {
-        let row = table.insertRow();
-        row.insertCell().innerHTML = o.table;
-        row.insertCell().innerHTML = o.price;
-
-        let cellEdit = row.insertCell();
-        let editBtn = document.createElement('button');
-        editBtn.innerHTML = 'Ændre'
-        editBtn.onclick = () => editOrderHandler(o);
-        cellEdit.appendChild(editBtn)
-
-        let cellDelete = row.insertCell()
-        let deleteBtn = document.createElement('button');
-        deleteBtn.innerHTML = 'X'
-        deleteBtn.onclick = () => deleteOrderHandler(o);
-        cellDelete.appendChild(deleteBtn)
+    let html = ''
+    for (order of orders) {
+        html += '<tr id=' + order._id + '><td>' + order.table +
+            '</td><td>' + order.price +
+            '</td><td><button id="editButton">Edit</button></td><td><button id="deleteButton">X</button></td></tr>\n';
     }
+    return html;
 }
 
 async function saveEditOrderHandler(event) {
