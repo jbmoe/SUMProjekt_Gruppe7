@@ -8,8 +8,6 @@ var borderModal = document.getElementById('bordeModal')
 var editModal = document.getElementById('editModal')
 var editOrderTable = document.getElementById('editOrder');
 var orderTable = document.getElementById('orders');
-var rabatKronerInput = document.getElementById('rabatKroner')
-var rabatProcentInput = document.getElementById('rabatProcent')
 var bemærkningInput = document.getElementById('bemærkning')
 var products = [];
 var bestillingMap = new Map();
@@ -101,26 +99,28 @@ function udregnPris() {
 
 function lavRabatProcent() {
     let pris = samletPrisInput.value;
-    let rabatProcent = rabatProcentInput.value / 100;
-    if (rabatProcentInput.value > 100) {
-        let fejlBesked = document.getElementById("fejlRabat");
-        fejlBesked.insertAdjacentHTML("afterend", "<p>Du kan ikke give så meget rabat!<br>Må ikke være mere end 100%.</p>");
+    let rabatProcent = document.getElementById('rabatProcent').value;
+
+    if (rabatProcent > 100 || rabatProcent < 1 || !rabatProcent) {
+        alert('Rabatprocent skal være mellem 1 og 100')
     } else {
-        let total = pris - (pris * rabatProcent);
+        let total = pris - (pris * rabatProcent / 100);
         samletPrisInput.value = total;
     }
+    document.getElementById('rabatProcent').value = ''
 }
 
 function lavRabatKroner() {
     let pris = samletPrisInput.value;
-    let rabatKroner = rabatKronerInput.value;
-    if (rabatKronerInput.value > pris) {
-        let fejlBesked = document.getElementById("fejlRabat");
-        fejlBesked.insertAdjacentHTML("afterend", "<p>Du kan ikke give så meget rabat!<br>Rabat kan ikke være mere end samlet pris.</p>");
+    let rabatKroner = document.getElementById('rabatKroner').value;
+
+    if (rabatKroner > pris || rabatKroner < 1 || !rabatKroner) {
+        alert('Rabatkroner skal være mindst 1 kr og ikke over total pris!')
     } else {
         let total = pris - rabatKroner;
         samletPrisInput.value = total;
     }
+    document.getElementById('rabatKroner').value = ''
 }
 
 async function opretBestilling() {
@@ -151,10 +151,10 @@ async function generateOrdersModal() {
     } catch (fejl) {
         console.log(fejl);
     }
-    generateBestillingTable(orders)
+    generateOrdersTable(orders)
 }
 
-function generateBestillingTable(orders) {
+function generateOrdersTable(orders) {
     let table = document.getElementById('ordersContent')
     table.innerHTML = ''
     for (const o of orders) {
@@ -169,22 +169,19 @@ function generateBestillingTable(orders) {
         cellEdit.appendChild(editBtn)
 
         let cellDelete = row.insertCell()
-        let deleteBtn = document.createElement('button');
-        deleteBtn.innerHTML = 'X'
-        deleteBtn.onclick = () => deleteOrderHandler(o);
+        let deleteBtn = document.createElement('img');
+        deleteBtn.src = '../img/slet.png'
+        deleteBtn.onclick = () => deleteOrder(o);
         cellDelete.appendChild(deleteBtn)
     }
 }
 
 async function editOrderHandler(order) {
-    console.log(order)
     editModal.style.display = "block"
 
     let table = document.getElementById('editOrderContent');
     table.innerHTML = ''
     let salgslinjer = JSON.parse(order.products);
-
-    console.log(salgslinjer)
 
     for (const s of salgslinjer) {
         let row = table.insertRow();
@@ -194,45 +191,46 @@ async function editOrderHandler(order) {
         let cellAntal = row.insertCell();
         let antalInput = document.createElement('input');
         antalInput.setAttribute('type', 'number')
+        antalInput.setAttribute('min', '1')
         antalInput.value = s.antal;
-        antalInput.style.maxWidth = '40px'
+        antalInput.style.maxWidth = '30px'
         antalInput.onchange = () => {
+            samletPrisInput.value = samletPrisInput.value - cellPris.innerHTML
             s.antal = antalInput.value;
             s.samletPris = s.antal * s.enhedsPris;
-            prisInput.value = s.samletPris;
+            cellPris.innerHTML = s.samletPris;
+            samletPrisInput.value = parseInt(samletPrisInput.value) + parseInt(cellPris.innerHTML)
         }
         cellAntal.appendChild(antalInput)
 
         let cellPris = row.insertCell();
-        let prisInput = document.createElement('input')
-        prisInput.setAttribute('type', 'number')
-        prisInput.value = s.samletPris;
-        prisInput.onchange = () => {
-            s.samletPris = prisInput.value;
-        }
-        cellPris.appendChild(prisInput)
+        cellPris.innerHTML = s.samletPris;
 
         let cellDelete = row.insertCell();
-        let deleteBtn = document.createElement('button')
+        let deleteBtn = document.createElement('img')
         deleteBtn.onclick = () => {
+            samletPrisInput.value -= cellPris.innerHTML
             salgslinjer.splice(salgslinjer.indexOf(s), 1)
             row.parentNode.removeChild(row)
-            console.log(salgslinjer)
         }
-        deleteBtn.innerHTML = 'X'
+        deleteBtn.src = '../img/slet.png'
         cellDelete.appendChild(deleteBtn)
     }
 
     let samletPrisRow = table.insertRow();
     samletPrisRow.insertCell().innerHTML = 'Samlet pris';
 
+    let waiterRow = table.insertRow()
+    waiterRow.insertCell().innerHTML = 'Tjener'
+    waiterRow.insertCell() // Emtpy cell for looks
+    waiterRow.insertCell().innerHTML = order.waiter;
+
     let samletPrisInput = document.createElement('input')
     samletPrisInput.setAttribute('type', 'number')
+    samletPrisInput.setAttribute('min', '0')
     samletPrisInput.value = order.price
-    samletPrisInput.style.maxWidth = '40px'
-    samletPrisInput.onchange = () => {
-        order.price = samletPrisInput.value;
-    }
+    samletPrisInput.style.maxWidth = '50px'
+    samletPrisRow.insertCell() // Emtpy cell for looks
     samletPrisRow.insertCell().appendChild(samletPrisInput);
 
     let bemærkningRow = table.insertRow();
@@ -246,10 +244,10 @@ async function editOrderHandler(order) {
     bemærkningCell.setAttribute('colspan', '2')
     bemærkningCell.appendChild(bemærkningInput)
 
-    document.getElementById('saveButton').onclick = () => saveEditOrderHandler(order, salgslinjer, samletPrisInput.value, bemærkningInput.value)
+    document.getElementById('saveButton').onclick = () => updateOrder(order, salgslinjer, samletPrisInput.value, bemærkningInput.value)
 }
 
-async function saveEditOrderHandler(order, salgslinjer, samletPris, bemærkning) {
+async function updateOrder(order, salgslinjer, samletPris, bemærkning) {
     let opdateretBestilling = {
         products: JSON.stringify(salgslinjer),
         price: samletPris,
@@ -260,13 +258,12 @@ async function saveEditOrderHandler(order, salgslinjer, samletPris, bemærkning)
     generateOrdersModal()
 }
 
-async function deleteOrderHandler(event) {
-    let id = event.currentTarget.parentElement.parentElement.id
+async function deleteOrder(order) {
+    let id = order._id
     let proceed = confirm("Er du sikker på du vil slette?")
     if (proceed) {
         await deLete('/api/orders/' + id)
         generateOrdersModal()
-
     }
 }
 
@@ -332,7 +329,7 @@ async function deLete(url) {
 async function main() {
     document.getElementById('opretButton').onclick = opretBestilling
     document.getElementById('rydButton').onclick = rydRegning
-    document.getElementById('saveButton').onclick = saveEditOrderHandler
+    document.getElementById('saveButton').onclick = updateOrder
     document.getElementById('lavRabatKronerButton').onclick = lavRabatKroner
     document.getElementById('lavRabatProcentButton').onclick = lavRabatProcent
 

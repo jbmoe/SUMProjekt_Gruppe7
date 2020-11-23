@@ -17,7 +17,7 @@ exports.createProduct = function (name, price, category) {
 exports.updateProduct = async function (id, name, price, category) {
     const filter = { _id: id }
     const updatedProduct = { name, price, category }
-    await Product.findOneAndUpdate(filter, updatedProduct, { new: true })
+    return await Product.findOneAndUpdate(filter, updatedProduct, { new: true })
 }
 
 exports.getProduct = function (productId) {
@@ -54,7 +54,7 @@ exports.getOrders = function () {
 exports.updateOrder = async function (id, products, price, comment) {
     const filter = {_id: id}
     const update = {products: products, price: price, comment: comment}
-    await Order.findOneAndUpdate(filter, update)
+    return await Order.findOneAndUpdate(filter, update)
 }
 
 exports.deleteOrder = async function (orderID) {

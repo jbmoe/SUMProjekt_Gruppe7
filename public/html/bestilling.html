@@ -30,31 +30,36 @@
     </table>
 
     <div id="opretDiv">
-        <label for='samletPris'>Pris</label>
-        <input type='text' id='samletPris' value=0></input>
-        <button id='opretButton'>Opret</button>
-        <button id='rydButton'>Ryd</button>
-        <label for='bordNr'>Bord Nr.</label>
-        <select name='bordNr' id='bordNr' value=0>
-            <option value='1'>1</option>
-            <option value='2'>2</option>
-            <option value='3'>3</option>
-        </select>
-        <label for='bemærkning'>Bemærkning</label>
-        <input type='text' id='bemærkning' value=''></input>
+        <div> 
+            <label for='samletPris'>Pris</label>
+            <input type='text' id='samletPris' value=0></input>
+            <button id='opretButton'>Opret</button>
+            <button id='rydButton'>Ryd</button>
+        </div>
+        <div> 
+            <label for='bordNr'>Bord Nr.</label>
+            <select name='bordNr' id='bordNr' value=0>
+                <option value='1'>1</option>
+                <option value='2'>2</option>
+                <option value='3'>3</option>
+            </select>
+            <label for='bemærkning'>Bemærkning</label>
+            <input type='text' id='bemærkning' value=''></input>
+        </div>
     </div>
 
     <div id="rabatDiv">
-        <h3>Rabat</h3>
-        <label>Procent</label>
-        <input type='number' max="100" id='rabatProcent'>
-        <button id="lavRabatProcentButton">Udregn</button>
-        <label for='fejlRabat'></label>
-
-        <label>Kroner</label>
-        <input type='number' min="0" id='rabatKroner'>
-        <button id="lavRabatKronerButton">Udregn</button>
-        <label id='fejlRabat'></label>
+        <h4>Rabat</h4>
+        <div>
+            <label>Procent</label>
+            <input type='number' min="1" max="100" id='rabatProcent'>
+            <button id="lavRabatProcentButton">Udregn</button>
+        </div>
+        <div>
+            <label>Kroner</label>
+            <input type='number' min="1" id='rabatKroner'>
+            <button id="lavRabatKronerButton">Udregn</button>
+        </div>
     </div>
 
     <div id="bordeModal" class="modal">
