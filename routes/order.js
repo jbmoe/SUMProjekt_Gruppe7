@@ -20,8 +20,16 @@ router
         } catch (e) {
             sendStatus(e, response);
         }
-        response.sendStatus(201)
-    })
+    }).post('/payment', async (request, response) => {
+        try {
+            let {order, paymentMethod} = request.body;
+            await controller.createPaidOrder(order, paymentMethod);
+            response.send({ message: 'Order paid!' });
+        } catch (e) {
+            sendStatus(e, response);
+        }
+    }
+    )
     .post('/update/:orderID', async (request, response) => {
         try {
             let { products, price, comment } = request.body;

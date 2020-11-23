@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const Order = require('../models/Order');
 const Product = require('../models/Product')
+const PaidOrder = require('../models/PaidOrder')
 const config = require('../config');
 
 mongoose.connect(config.databaseURI, { useNewUrlParser: true, useUnifiedTopology: true })
@@ -24,7 +25,7 @@ exports.getProduct = function (productId) {
 };
 
 exports.getProducts = function () {
-    return Product.find().populate('product').exec();
+    return Product.find().populate('Products').exec();
 };
 
 exports.deleteProduct = async function (productId) {
@@ -47,7 +48,7 @@ exports.getOrder = function (orderID) {
 };
 
 exports.getOrders = function () {
-    return Order.find().populate('order').exec();
+    return Order.find().populate('UnpaidOrders').exec();
 };
 
 exports.updateOrder = async function (id, products, price, comment) {
@@ -60,3 +61,9 @@ exports.deleteOrder = async function (orderID) {
     return await Order.deleteOne().where('_id').eq(orderID).exec()
 };
 
+exports.createPaidOrder = async function(order, paymentMethod){
+    return await PaidOrder.create({
+        order,
+        paymentMethod
+    })
+}

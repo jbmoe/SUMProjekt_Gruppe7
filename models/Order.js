@@ -10,4 +10,4 @@ const order = new mongoose.Schema({
     comment: String
 });
 
-module.exports = mongoose.model('Order', order);
+module.exports = mongoose.model('Order', order, "UnpaidOrders");
