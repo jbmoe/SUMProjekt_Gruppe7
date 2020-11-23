@@ -153,27 +153,29 @@ async function generateOrdersModal() {
     } catch (fejl) {
         console.log(fejl);
     }
-    
-    orderTable.innerHTML = "<tr><th>Bord nr.</th><th>Samlet pris</th></tr>"
-    orderTable.insertAdjacentHTML('beforeend', generateBestillingTable(orders));
-    let editButtons = document.querySelectorAll('#editButton')
-    Array.from(editButtons).forEach(element => {
-        element.addEventListener('click', editOrderHandler)
-    });
-    let deleteButtons = document.querySelectorAll('#deleteButton')
-    Array.from(deleteButtons).forEach(element => {
-        element.addEventListener('click', deleteOrderHandler)
-    });
+    generateBestillingTable(orders)
 }
 
 function generateBestillingTable(orders) {
-    let html = ''
-    for (order of orders) {
-        html += '<tr id=' + order._id + '><td>' + order.table +
-            '</td><td>' + order.price +
-            '</td><td><button id="editButton">Edit</button></td><td><button id="deleteButton">X</button></td></tr>\n';
+    let table = document.getElementById('ordersContent')
+    table.innerHTML = ''
+    for (const o of orders) {
+        let row = table.insertRow();
+        row.insertCell().innerHTML = o.table;
+        row.insertCell().innerHTML = o.price;
+
+        let cellEdit = row.insertCell();
+        let editBtn = document.createElement('button');
+        editBtn.innerHTML = 'Ændre'
+        editBtn.onclick = () => editOrderHandler(o);
+        cellEdit.appendChild(editBtn)
+
+        let cellDelete = row.insertCell()
+        let deleteBtn = document.createElement('button');
+        deleteBtn.innerHTML = 'X'
+        deleteBtn.onclick = () => deleteOrderHandler(o);
+        cellDelete.appendChild(deleteBtn)
     }
-    return html;
 }
 
 async function saveEditOrderHandler(event) {
@@ -192,18 +194,16 @@ async function saveEditOrderHandler(event) {
     generateOrdersModal()
 }
 
-async function editOrderHandler(event) {
+async function editOrderHandler(order) {
     editModal.style.display = "block"
-    let id = event.currentTarget.parentElement.parentElement.id
-    let orderToEdit;
-    for (order of orders) {
-        if (order._id === id) {
-            orderToEdit = order
-        }
-    }
-    editOrderTable.setAttribute("orderid", id)
-    editOrderTable.innerHTML = "<thead><tr><th>Redigér regning</td></tr></thead><tr><td>Beskrivelse</td><td>Antal</td><td>Pris</td></tr>"
-    editOrderTable.insertAdjacentHTML('beforeend', insertOrderRows(orderToEdit))
+    let table = document.getElementById('editOrderContent');
+
+    console.log(order)
+
+
+    // editOrderTable.setAttribute("orderid", id)
+    // editOrderTable.innerHTML = "<thead><tr><th>Redigér regning</td></tr></thead><tr><td>Beskrivelse</td><td>Antal</td><td>Pris</td></tr>"
+    // editOrderTable.insertAdjacentHTML('beforeend', insertOrderRows(orderToEdit))
     
     let enkeltPriser = calcEnkeltPris(orderToEdit)
     let i = 0
