@@ -259,10 +259,9 @@ async function updateOrder(order, salgslinjer, samletPris, bemærkning) {
 }
 
 async function deleteOrder(order) {
-    let id = order._id
     let proceed = confirm("Er du sikker på du vil slette?")
     if (proceed) {
-        await deLete('/api/orders/' + id)
+        await deLete('/api/orders/' + order._id)
         generateOrdersModal()
     }
 }
