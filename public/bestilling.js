@@ -204,7 +204,7 @@ async function editOrderHandler(event) {
     editOrderTable.setAttribute("orderid", id)
     editOrderTable.innerHTML = "<thead><tr><th>Redigér regning</td></tr></thead><tr><td>Beskrivelse</td><td>Antal</td><td>Pris</td></tr>"
     editOrderTable.insertAdjacentHTML('beforeend', insertOrderRows(orderToEdit))
-
+    
     let enkeltPriser = calcEnkeltPris(orderToEdit)
     let i = 0
     Array.from(document.querySelectorAll("#editAmount")).forEach(element => {
@@ -249,18 +249,18 @@ async function deleteOrderHandler(event) {
     if (proceed) {
         await deLete('/api/orders/' + id)
         generateOrdersModal()
-
+        
     }
 }
 
 function insertOrderRows(order) {
     let html = ""
     Array.from(JSON.parse(order.products)).forEach(element => {
-
+        
         html +=
-            "<tr><td contenteditable=true>" + element.name +
-            "</td><td><INPUT id='editAmount' TYPE='NUMBER' MIN='0' MAX='100' STEP='1' VALUE='" + element.amount + "' SIZE='6'></INPUT>" +
-            "</td><td><input id='editPrice' value='" + element.price + "'></input></td></tr>"
+        "<tr><td contenteditable=true>" + element.name +
+        "</td><td><INPUT id='editAmount' TYPE='NUMBER' MIN='0' MAX='100' STEP='1' VALUE='" + element.amount + "' SIZE='6'></INPUT>" +
+        "</td><td><input id='editPrice' value='" + element.price + "'></input></td></tr>"
     });
     html += "<tfoot><tr><td>Samlet pris</td><td id='editSamletPris' contenteditable=true>" + order.price + "</td></tr><tr><td>Bemærkning</td><td contenteditable=true>" + order.comment + "</td></tr></tfoot>"
     return html
@@ -277,16 +277,16 @@ function rydRegning() {
 function printBestilling(bestilling) {
     let salgslinjer = bestillingMapToArray()
     let toReturn = `Bord ${bestilling.table}, Tidspunkt: ${new Date(bestilling.time).toLocaleString()}\n\n`;
-
-    for (let i = 0; i < salgslinjer.length; i++) {
+    
+    for (let i = 0; i <salgslinjer.length; i++) {
         s = salgslinjer[i]
-        toReturn += `Ret ${i + 1}: ${s.navn} Mængde: ${s.antal} Pris: ${s.enhedsPris}\n`
+        toReturn += `Ret ${i+1}: ${s.navn} Mængde: ${s.antal} Pris: ${s.enhedsPris}\n`
     }
-
+    
     toReturn += `\nBemærkning: ${bestilling.comment}\n`
     toReturn += `Total pris: ${bestilling.price}\n`
     toReturn += `Tjener: ${bestilling.waiter}\n`
-
+    
     console.log(toReturn)
 }
 
