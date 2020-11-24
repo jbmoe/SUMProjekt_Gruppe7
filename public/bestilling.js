@@ -307,8 +307,7 @@ async function updateOrder(order, salgslinjer, samletPris, bemærkning) {
 }
 
 async function deleteOrder(order) {
-    let proceed = confirm("Er du sikker på du vil slette?")
-    if (proceed) {
+    if (confirm("Er du sikker på du vil slette bestillingen?")) {
         console.log(await deLete('/api/orders/' + order._id))
         generateOrdersModal()
     }

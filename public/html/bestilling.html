@@ -5,60 +5,70 @@
 </head>
 
 <body>
-    <h3>Bestilling</h3>
-    <span id="Borde">
-        <button id='hentborde'>Hent borde</button>
-        <button id='rydbord'>Ryd bord</button>
-    </span>
-    <table id="produktTable">
-        <tr>
-            <th>Navn</th>
-            <th>Pris</th>
-            <th>Kategori</th>
-        </tr>
-    </table>
-
-    <table id='regning'>
-        <thead>
-            <tr id='theader'>
-                <th>Beskrivelse</th>
-                <th>Antal</th>
-                <th>Pris</th>
-            </tr>
-        </thead>
-        <tbody id="regningContent"></tbody>
-    </table>
-
-    <div id="opretDiv">
-        <div>
-            <label for='samletPris'>Pris</label>
-            <input type='text' id='samletPris' value=0></input>
-            <button id='opretButton'>Opret</button>
-            <button id='rydButton'>Ryd</button>
+    <div class="grid-container">
+        <div class="item1" id="header">
+            <h3>Bestilling</h3>
+            <span id="Borde">
+                <button id='hentborde'>Hent borde</button>
+                <button id='rydbord'>Ryd bord</button>
+            </span>
         </div>
-        <div>
-            <label for='bordNr'>Bord Nr.</label>
-            <select name='bordNr' id='bordNr' value=0>
-                <option value='1'>1</option>
-                <option value='2'>2</option>
-                <option value='3'>3</option>
-            </select>
-            <label for='bemærkning'>Bemærkning</label>
-            <input type='text' id='bemærkning' value=''></input>
+        <div class="item2" id="menu">
+            <table id="produktTable">
+                <tr>
+                    <th>Navn</th>
+                    <th>Pris</th>
+                    <th>Kategori</th>
+                </tr>
+            </table>
         </div>
-    </div>
+        <div class="item3" id="bestilling">
+            <table id='regning'>
+                <thead>
+                    <tr id='theader'>
+                        <th>Beskrivelse</th>
+                        <th>Antal</th>
+                        <th>Pris</th>
+                    </tr>
+                </thead>
+                <tbody id="regningContent"></tbody>
+            </table>
+        </div>
+        <div class="item4" id="opret">
+            <div id="opretDiv">
+                <div>
+                    <label for='samletPris'>Pris</label>
+                    <input type='text' id='samletPris' value=0></input>
+                    <button id='opretButton'>Opret</button>
+                    <button id='rydButton'>Ryd</button>
+                </div>
+                <div>
+                    <label for='bordNr'>Bord Nr.</label>
+                    <select name='bordNr' id='bordNr' value=0>
+                        <option value='1'>1</option>
+                        <option value='2'>2</option>
+                        <option value='3'>3</option>
+                    </select>
+                    <label for='bemærkning'>Bemærkning</label>
+                    <input type='text' id='bemærkning' value=''></input>
+                </div>
+            </div>
 
-    <div id="rabatDiv">
-        <h4>Rabat</h4>
-        <div>
-            <label>Procent</label>
-            <input type='number' min="1" max="100" id='rabatProcent'>
-            <button id="lavRabatProcentButton">Udregn</button>
         </div>
-        <div>
-            <label>Kroner</label>
-            <input type='number' min="1" id='rabatKroner'>
-            <button id="lavRabatKronerButton">Udregn</button>
+        <div class="item5" id="rabat">
+            <div id="rabatDiv">
+                <h4>Rabat</h4>
+                <div>
+                    <label>Procent</label>
+                    <input type='number' min="1" max="100" id='rabatProcent'>
+                    <button id="lavRabatProcentButton">Udregn</button>
+                </div>
+                <div>
+                    <label>Kroner</label>
+                    <input type='number' min="1" id='rabatKroner'>
+                    <button id="lavRabatKronerButton">Udregn</button>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -78,6 +88,10 @@
             <button id="annuller">Annuller</button>
         </div>
     </div>
+
+
+
+
 
     <div id="editModal" class="modal">
         <div class="modal-content" id="editModalDiv">

@@ -1,43 +1,43 @@
+.item1 { grid-area: header; text-align: center;}
+.item2 { grid-area: menu; text-align: left;}
+.item3 { grid-area: bestilling; text-align: -webkit-right;}
+.item4 { grid-area: opret; }
+.item5 { grid-area: rabat; }
 
-img{
-    width: 20px;
-}
-table th {
-    background-color: #4CAF50;
-    padding: 8px;
-    padding-top: 12px;
-    padding-bottom: 12px;
-    text-align: left;
-    background-color: #4CAF50;
-    color: white;
-}
-
-table {
-    border-collapse: collapse;
-}
-
-table td {
-    border: 1px solid #ddd;
-    padding: 8px;
-}
-table tr:nth-child(even){background-color: #9e9d9d;}
-table tr:hover {background-color: #ddd;}
-
-
-
-th {
-    background-color: #4CAF50;
-    padding: 8px;
-    padding-top: 12px;
-    padding-bottom: 12px;
-    text-align: left;
-    background-color: #4CAF50;
-    color: white;
+.grid-container {
+    display: grid;
+    grid-template-areas:
+        'header header'
+        'menu bestilling'
+        'menu opret'
+        'menu rabat';
+    grid-template-columns: 50% 50%;
+    grid-template-row: 10% 70% 10% 10%;
+    grid-gap: 10px;
+    /* background-color: #2196F3; */
+    /* padding: 10px; */
 }
 
+.grid-container > div {
+    /* background-color: rgba(255, 255, 255, 0.8); */
+    /* text-align: left; */
+    /* padding: 20px 0; */
+}
 
-th tr:nth-child(even){background-color: #9e9d9d;}
-th tr:hover {background-color: #ddd;}
+.item3, .item4, .item5{
+    text-align: -webkit-right;      
+}
+
+#produktTable, #regning {
+    /* height: 100%;
+    min-height: 100%; */
+    max-height: 100%;
+    width: 90%;
+}
+
+tr {
+    height: 41px;
+}
 
 #editModalDiv{
     max-width: fit-content;
@@ -55,19 +55,18 @@ th tr:hover {background-color: #ddd;}
     overflow: auto; /* Enable scroll if needed */
     background-color: rgb(0,0,0); /* Fallback color */
     background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-    
 }
-  
+
 /* Modal Content */
 .modal-content {
     background-color: #fefefe;
     margin: auto;
     padding: 20px;
     border: 1px solid #888;
-    max-width: fit-content;    
+    max-width: fit-content;
     display: grid;
-    width: fit-content; 
-    height: fit-content; 
+    width: fit-content;
+    height: fit-content;
 }
 
 /* The Close Button */
