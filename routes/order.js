@@ -22,7 +22,7 @@ router
         }
     }).post('/payment', async (request, response) => {
         try {
-            let {order, paymentMethod} = request.body;
+            let { order, paymentMethod } = request.body;
             await controller.createPaidOrder(order, paymentMethod);
             response.send({ message: 'Order paid!' });
         } catch (e) {
@@ -41,7 +41,7 @@ router
     })
     .delete('/:orderID', async (request, response) => {
         try {
-            await controller.deleteOrder(request.params.orderID)
+            let deleted = await controller.deleteOrder(request.params.orderID)
             response.send({ message: 'Order deleted!' });
         } catch (e) {
             sendStatus(e, response);

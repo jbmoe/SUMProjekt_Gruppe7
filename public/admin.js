@@ -2,7 +2,7 @@ var modals = document.getElementsByClassName("modal");
 var opretModal = document.getElementById("opretModal");
 var ændreModal = document.getElementById("ændreModal");
 var openModalBtns = document.getElementsByClassName("openModal");
-var closeElements = document.querySelectorAll("#close"); 
+var closeElements = document.querySelectorAll("#close");
 var inputData = document.getElementsByClassName('data')
 var productTable = document.getElementById('produktTable')
 var products = [];
@@ -19,8 +19,7 @@ function closeModals(event) {
     if (event.target == opretModal || event.target == ændreModal || event.key == 'Escape') {
         opretModal.style.display = "none";
         ændreModal.style.display = "none";
-        for (input of inputData)
-            input.value = '';
+        for (input of inputData) input.value = '';
     }
 }
 
@@ -44,8 +43,7 @@ async function createProduct() {
         category
     };
 
-    for (input of inputData)
-        input.value = '';
+    for (input of inputData) input.value = '';
 
     let createdProduct = await post('/api/products/', product);
     product._id = createdProduct.created._id;
@@ -55,9 +53,7 @@ async function createProduct() {
 }
 
 function createProductTable() {
-    for (const p of products) {
-        insertProductRow(p)
-    }
+    for (const p of products) insertProductRow(p)
 }
 
 function insertProductRow(product) {
@@ -89,13 +85,9 @@ function insertProductRow(product) {
     options[2].text = "Diverse";
 
     // Sets selected option to be current category
-    if (data[2] === 'Madvare') {
-        options[0].setAttribute('selected', 'selected')
-    } else if (data[2] === 'Drikkevare') {
-        options[1].setAttribute('selected', 'selected')
-    } else {
-        options[2].setAttribute('selected', 'selected')
-    }
+    if (data[2] === 'Madvare') options[0].setAttribute('selected', 'selected')
+    else if (data[2] === 'Drikkevare') options[1].setAttribute('selected', 'selected')
+    else options[2].setAttribute('selected', 'selected')
 
     category.add(options[0]);
     category.add(options[1]);

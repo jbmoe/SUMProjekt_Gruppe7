@@ -266,23 +266,17 @@ function addProductToOrder(order) {
 }
 
 function addProductHandler(order, product) {
-    let proceed = confirm("Vil du tilføje \"" + product.name + "\" til bestillingen?")
+    let proceed = confirm(`Vil du tilføje ${product.name} til bestillingen?`)
     if (proceed) {
         let products = JSON.parse(order.products)
-        console.log(products)
-
         let found = false, i = 0;
         while (i < products.length && !found) {
-            if (products[i].productId === product._id) {
-                found = true;
-            } else {
-                i++;
-            }
+            if (products[i].productId === product._id) found = true;
+            else i++;
         }
 
-        if (found) {
-            products[i].antal++
-        } else {
+        if (found) products[i].antal++
+        else {
             let salgslinje = {
                 antal: 1,
                 navn: product.name,
@@ -313,7 +307,7 @@ async function updateOrder(order, salgslinjer, samletPris, bemærkning) {
 async function deleteOrder(order) {
     let proceed = confirm("Er du sikker på du vil slette?")
     if (proceed) {
-        await deLete('/api/orders/' + order._id)
+        console.log(await deLete('/api/orders/' + order._id))
         generateOrdersModal()
     }
 }
