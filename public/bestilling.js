@@ -312,6 +312,34 @@ async function deleteOrder(order) {
     }
 }
 
+async function betalOrderModalHandler(event) {
+    let betalOrderTable = document.getElementById('betalOrder')
+
+    betalModal.style.display = "block"
+    let id = event.currentTarget.parentElement.parentElement.id
+    let orderToBetal;
+    for (order of orders) {
+        if (order._id === id) {
+            orderToBetal = order
+        }
+    }
+    betalOrderTable.setAttribute("orderid", id)
+    betalOrderTable.innerHTML = "<thead><tr><th>Betal Regning:</td></tr></thead><tr><td>Beskrivelse</td><td>Antal</td><td>Pris</td></tr>"
+    betalOrderTable.insertAdjacentHTML('beforeend', insertOrderRows(orderToBetal))
+    betalKnap.addEventListener('click', betalOrderHandler.bind(orderToBetal))
+
+}
+
+async function betalOrderHandler() {
+    let order = this
+    let paymentMethod = document.getElementById('betaling').value
+    await post('/api/orders/payment', { order, paymentMethod })
+    await deLete('/api/orders/' + this._id)
+    betalModal.style.display = "none"
+    generateOrdersModal()
+}
+
+
 function rydRegning() {
     regningContent.innerHTML = '';
     bestillingMap.clear();
