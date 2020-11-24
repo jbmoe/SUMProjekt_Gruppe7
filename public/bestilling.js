@@ -247,6 +247,8 @@ async function editOrderHandler(order) {
     bemærkningCell.appendChild(bemærkningInput)
 
     document.getElementById('saveButton').onclick = () => updateOrder(order, salgslinjer, samletPrisInput.value, bemærkningInput.value)
+
+    document.getElementById('betalButton').onclick = () => betalOrder(order)
 }
 
 function addProductToOrder(order) {
@@ -312,33 +314,16 @@ async function deleteOrder(order) {
     }
 }
 
-async function betalOrderModalHandler(event) {
-    let betalOrderTable = document.getElementById('betalOrder')
 
-    betalModal.style.display = "block"
-    let id = event.currentTarget.parentElement.parentElement.id
-    let orderToBetal;
-    for (order of orders) {
-        if (order._id === id) {
-            orderToBetal = order
-        }
-    }
-    betalOrderTable.setAttribute("orderid", id)
-    betalOrderTable.innerHTML = "<thead><tr><th>Betal Regning:</td></tr></thead><tr><td>Beskrivelse</td><td>Antal</td><td>Pris</td></tr>"
-    betalOrderTable.insertAdjacentHTML('beforeend', insertOrderRows(orderToBetal))
-    betalKnap.addEventListener('click', betalOrderHandler.bind(orderToBetal))
-
-}
-
-async function betalOrderHandler() {
-    let order = this
+async function betalOrder(order) {
     let paymentMethod = document.getElementById('betaling').value
-    await post('/api/orders/payment', { order, paymentMethod })
-    await deLete('/api/orders/' + this._id)
-    betalModal.style.display = "none"
-    generateOrdersModal()
-}
+    if (confirm(`Er du sikker på du vil tilknytte betaling og afslutte bestillingen?\nDen vil blive flyttet til betalte bestillinger under Admin`)) {
+        console.log(await post('/api/orders/payment', { order, paymentMethod }))
+        editModal.style.display = "none"
+        generateOrdersModal()
+    }
 
+}
 
 function rydRegning() {
     regningContent.innerHTML = '';

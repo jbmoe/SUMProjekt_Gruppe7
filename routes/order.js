@@ -24,6 +24,7 @@ router
         try {
             let { order, paymentMethod } = request.body;
             await controller.createPaidOrder(order, paymentMethod);
+            await controller.deleteOrder(order._id)
             response.send({ message: 'Order paid!' });
         } catch (e) {
             sendStatus(e, response);
