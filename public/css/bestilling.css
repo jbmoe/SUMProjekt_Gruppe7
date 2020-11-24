@@ -1,18 +1,16 @@
 .item1 { grid-area: header; text-align: center;}
 .item2 { grid-area: menu; text-align: left;}
 .item3 { grid-area: bestilling; text-align: -webkit-right;}
-.item4 { grid-area: opret; }
-.item5 { grid-area: rabat; }
-
+.item4 { grid-area: footer; }
+*{max-height: 100%;}
 .grid-container {
     display: grid;
     grid-template-areas:
         'header header'
         'menu bestilling'
-        'menu opret'
-        'menu rabat';
+        'menu footer';
     grid-template-columns: 50% 50%;
-    grid-template-row: 10% 70% 10% 10%;
+    grid-template-rows: 100px 500px 150px 150px;
     grid-gap: 10px;
     /* background-color: #2196F3; */
     /* padding: 10px; */
@@ -24,8 +22,12 @@
     /* padding: 20px 0; */
 }
 
-.item3, .item4, .item5{
+.item3, .item4{
     text-align: -webkit-right;      
+}
+
+#empty{
+    background-color: white;
 }
 
 #produktTable, #regning {
@@ -37,6 +39,10 @@
 
 tr {
     height: 41px;
+}
+
+.narrow{
+    width: 49px;
 }
 
 #editModalDiv{

@@ -68,9 +68,11 @@ function createBestillingTable() {
             createBestillingTable()
         }
         cellAmount.appendChild(amountInput);
+        cellAmount.setAttribute('class', 'narrow')
 
         let cellPrice = row.insertCell();
         cellPrice.innerHTML = salgslinje.samletPris
+        cellPrice.setAttribute('class', 'narrow')
 
         let deleteCell = row.insertCell();
         let imgDelete = document.createElement('img');

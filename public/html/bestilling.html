@@ -17,7 +17,7 @@
             <table id="produktTable">
                 <tr>
                     <th>Navn</th>
-                    <th>Pris</th>
+                    <th class="narrow">Pris</th>
                     <th>Kategori</th>
                 </tr>
             </table>
@@ -27,14 +27,15 @@
                 <thead>
                     <tr id='theader'>
                         <th>Beskrivelse</th>
-                        <th>Antal</th>
-                        <th>Pris</th>
+                        <th class="narrow">Antal</th>
+                        <th class="narrow">Pris</th>
+                        <th class="narrow" id="empty"></th>
                     </tr>
                 </thead>
                 <tbody id="regningContent"></tbody>
             </table>
         </div>
-        <div class="item4" id="opret">
+        <div class="item4" id="footer">
             <div id="opretDiv">
                 <div>
                     <label for='samletPris'>Pris</label>
@@ -53,9 +54,6 @@
                     <input type='text' id='bemærkning' value=''></input>
                 </div>
             </div>
-
-        </div>
-        <div class="item5" id="rabat">
             <div id="rabatDiv">
                 <h4>Rabat</h4>
                 <div>
