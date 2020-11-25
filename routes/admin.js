@@ -10,6 +10,7 @@ router
             const navn = request.session.navn;
             let user = await controller.getUser(navn)
             if (user[0].admin) {
+                //skift til din egen sti
                 response.sendFile(path.join('C:\\Users\\Rasmus\\Desktop\\Sum Projekt\\SUMProjekt_Gruppe7\\public\\html\\admin.html'))
             } 
             else {

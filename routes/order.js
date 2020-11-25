@@ -9,6 +9,7 @@ router
         try {
             const navn = request.session.navn;
             if (navn) {
+                 //skift til din egen sti
                 response.sendFile(path.join('C:\\Users\\Rasmus\\Desktop\\Sum Projekt\\SUMProjekt_Gruppe7\\public\\html\\bestilling.html'))
             } 
             else {
