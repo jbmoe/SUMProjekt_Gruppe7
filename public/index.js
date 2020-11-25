@@ -22,8 +22,10 @@ async function post(url, objekt) {
 
 login.onclick = async () => {
     try {
-        await post("/login", { navn: navn.value, password: password.value });
-        window.location.href = "/api/orders";
+        console.log(password.value)
+        let users = await post("/login", { navn: navn.value, password: password.value })
+        console.log(users);
+        window.location.href = "/bestilling";
     } catch (e) {
         password.value = "";
         alert("Forkert password")

@@ -1,10 +1,15 @@
 <head>
     <link rel="stylesheet" href="../css/bestilling.css">
+    <link rel="stylesheet" href="../css/index.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="../bestilling.js" defer></script>
 </head>
 
 <body>
+    <div class="tab">
+        <button class="tablinks" id='bestilling'>Bestilling</button>
+        <button class="tablinks" id='admin'>Admin</button>
+    </div>
     <div class="grid-container">
         <div class="item1" id="header">
             <h3>Bestilling</h3>
@@ -68,81 +73,68 @@
                 </div>
             </div>
         </div>
-    <div class="tab">
-        <button class="tablinks" id='bestilling'>Bestilling</button>
-        <button class="tablinks" id='admin'>Admin</button>
-    </div>
-    <h3>Bestilling</h3>
-    <span id="Borde">
-        <button id='hentborde'>Hent borde</button>
-        <button id='rydbord'>Ryd bord</button>
-    </span>
-    <div id="produkter">
-
-    </div>
-
-    <div id="bordeModal" class="modal">
-        <div class="modal-content">
-            <span class="close" id="close">&times;</span>
-            <h2>Borde:</h2>
-            <table id="orders">
-                <thead>
-                    <tr id='theader'>
-                        <th>Bord nr.</th>
-                        <th>Samlet pris</th>
-                    </tr>
-                </thead>
-                <tbody id="ordersContent"></tbody>
-            </table>
-            <button id="annuller">Annuller</button>
+        <div id="bordeModal" class="modal">
+            <div class="modal-content">
+                <span class="close" id="close">&times;</span>
+                <h2>Borde:</h2>
+                <table id="orders">
+                    <thead>
+                        <tr id='theader'>
+                            <th>Bord nr.</th>
+                            <th>Samlet pris</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ordersContent"></tbody>
+                </table>
+                <button id="annuller">Annuller</button>
+            </div>
         </div>
-    </div>
 
 
 
 
 
-    <div id="editModal" class="modal">
-        <div class="modal-content" id="editModalDiv">
-            <span class="close" id="close">&times;</span>
-            <table id="editOrder">
-                <thead>
-                    <tr id='theader'>
-                        <th>Beskrivelse</th>
-                        <th>Antal</th>
-                        <th>Pris</th>
-                        <th style="background-color: white;"><img id="addProduct" src="../img/plus.png"></th>
-                    </tr>
-                </thead>
-                <tbody id="editOrderContent"></tbody>
-            </table>
-            <button id="saveButton">Gem</button>
+        <div id="editModal" class="modal">
+            <div class="modal-content" id="editModalDiv">
+                <span class="close" id="close">&times;</span>
+                <table id="editOrder">
+                    <thead>
+                        <tr id='theader'>
+                            <th>Beskrivelse</th>
+                            <th>Antal</th>
+                            <th>Pris</th>
+                            <th style="background-color: white;"><img id="addProduct" src="../img/plus.png"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="editOrderContent"></tbody>
+                </table>
+                <button id="saveButton">Gem</button>
 
-            <label for="betaling">Vælg betalingsmetode: </label>
-            <select id="betaling">
-                <option value="kort">Kort</option>
-                <option value="kontant">Kontant</option>
-                <option value="mobilepay">Mobilepay</option>
+                <label for="betaling">Vælg betalingsmetode: </label>
+                <select id="betaling">
+                    <option value="kort">Kort</option>
+                    <option value="kontant">Kontant</option>
+                    <option value="mobilepay">Mobilepay</option>
 
-            </select>
-            <button id="betalButton">Betal</button>
+                </select>
+                <button id="betalButton">Betal</button>
+            </div>
         </div>
-    </div>
 
-    <div id="addProductModal" class="modal">
-        <div class="modal-content" id="addProductModalDiv">
-            <span class="close" id="close">&times;</span>
-            <table id="addProduct">
-                <thead>
-                    <tr id='theader'>
-                        <th>Beskrivelse</th>
-                        <th>Pris</th>
-                        <th>Kategori</th>
-                    </tr>
-                </thead>
-                <tbody id="addProductContent"></tbody>
-            </table>
+        <div id="addProductModal" class="modal">
+            <div class="modal-content" id="addProductModalDiv">
+                <span class="close" id="close">&times;</span>
+                <table id="addProduct">
+                    <thead>
+                        <tr id='theader'>
+                            <th>Beskrivelse</th>
+                            <th>Pris</th>
+                            <th>Kategori</th>
+                        </tr>
+                    </thead>
+                    <tbody id="addProductContent"></tbody>
+                </table>
+            </div>
         </div>
-    </div>
 
 </body>

@@ -15,14 +15,21 @@ router
 
     .post('/', async (request, response) => {
         const { navn, password } = request.body;
-        let user = controller.getUser(navn)
-        // if (password === user.password && navn) {
+        let user = await controller.getUser(navn)
+        if (password === user[0].password && navn) {
             request.session.navn = navn;
-            response.send(user)
             // response.status(201).send(['login ok!']);
-        // } else {
-        //     response.sendStatus(401);
-        // }
+            response.send(user)
+        } else {
+            // response.send({navn, password});
+            response.send(user.password)
+        }
     });
+
+    function sendStatus(e, response) {
+        console.error("Exception: " + e);
+        if (e.stack) console.error(e.stack);
+        response.status(500).send(e);
+    }
 
     module.exports = router;

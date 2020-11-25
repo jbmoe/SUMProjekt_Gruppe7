@@ -9,6 +9,7 @@ var editModal = document.getElementById('editModal')
 var editOrderTable = document.getElementById('editOrder');
 var orderTable = document.getElementById('orders');
 var bemærkningInput = document.getElementById('bemærkning')
+var adminTab = document.getElementById('admin')
 var products = [];
 var bestillingMap = new Map();
 
@@ -423,6 +424,6 @@ main();
 
 
 adminTab.addEventListener('click', function(){
-    window.location.href = '/api/orders'
+    window.location.href = '/admin'
 }, false)
 
