@@ -16,12 +16,13 @@ router
     .post('/', async (request, response) => {
         const { navn, password } = request.body;
         let user = controller.getUser(navn)
-        if (password === user.password && navn) {
+        // if (password === user.password && navn) {
             request.session.navn = navn;
-            response.status(201).send(['login ok!']);
-        } else {
-            response.sendStatus(401);
-        }
+            response.send(user)
+            // response.status(201).send(['login ok!']);
+        // } else {
+        //     response.sendStatus(401);
+        // }
     });
 
     module.exports = router;

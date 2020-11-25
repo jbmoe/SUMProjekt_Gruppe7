@@ -24,7 +24,6 @@ exports.getUser = function (name) {
 };
 
 
-
 exports.createProduct = function (name, price, category) {
     return Product.create({
         name,
