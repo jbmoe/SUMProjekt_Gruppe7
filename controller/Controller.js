@@ -2,9 +2,28 @@ const mongoose = require('mongoose');
 const Order = require('../models/Order');
 const Product = require('../models/Product')
 const PaidOrder = require('../models/PaidOrder')
+const User = require('../models/User')
 const config = require('../config');
 
 mongoose.connect(config.databaseURI, { useNewUrlParser: true, useUnifiedTopology: true })
+
+exports.createUser = function (name, password, admin) {
+    return User.create({
+        name,
+        password,
+        admin
+    })
+}
+
+exports.deleteUser = async function (name) {
+    return await User.deleteOne().where('_id').eq(name).exec()
+};
+
+exports.getUser = function (name) {
+    return Product.find.where('name').eq(name).exec()
+};
+
+
 
 exports.createProduct = function (name, price, category) {
     return Product.create({

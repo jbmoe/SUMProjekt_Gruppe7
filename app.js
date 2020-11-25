@@ -8,6 +8,7 @@ app.use(express.static('public/html'));
 app.use(express.json());
 app.use('/api/products', require('./routes/product'));
 app.use('/api/orders', require('./routes/order'));
+app.use('/login', require('./routes/login'))
 
 
 const port = process.env.PORT || config.localPort; // Heroku

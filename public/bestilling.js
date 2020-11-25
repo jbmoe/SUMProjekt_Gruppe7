@@ -16,6 +16,8 @@ var editOrderTable = document.getElementById('editOrder');
 var betalOrderTable = document.getElementById('betalOrder')
 var productModal = document.getElementById('addProductModal')
 var betalKnap = document.getElementById('betalButton')
+let adminTab = document.getElementById('admin')
+let bestillingTab = document.getElementById('bestilling')
 var editButtons;
 var deleteButtons;
 var products;
@@ -446,3 +448,8 @@ window.onclick = function (event) {
         productModal.style.display = "none"
     }
 }
+
+adminTab.addEventListener('click', function(){
+    window.location.href = '/api/orders'
+}, false)
+

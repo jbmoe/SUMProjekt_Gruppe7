@@ -6,8 +6,14 @@ const router = express.Router();
 router
     .get('/', async (request, response) => {
         try {
-            let orders = await controller.getOrders();
-            response.send(orders);
+            const navn = request.session.navn;
+            if (navn) {
+                let orders = await controller.getOrders();
+                response.send(orders);
+            }
+            else {
+                response.redirect('/')
+            }
         } catch (e) {
             sendStatus(e, response);
         }
@@ -25,7 +31,7 @@ router
     )
     .post('/payment', async (request, response) => {
         try {
-            let {order, paymentMethod} = request.body;
+            let { order, paymentMethod } = request.body;
             await controller.createPaidOrder(order, paymentMethod);
             response.send({ message: 'Order paid!' });
         } catch (e) {
