@@ -19,10 +19,9 @@ exports.deleteUser = async function (name) {
     return await User.deleteOne().where('_id').eq(name).exec()
 };
 
-exports.getUser = function (name) {
-    return Product.find.where('name').eq(name).exec()
+exports.getUser = async function (name) {
+    return User.find({name}).exec()
 };
-
 
 
 exports.createProduct = function (name, price, category) {

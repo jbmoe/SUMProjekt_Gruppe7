@@ -1,6 +1,7 @@
 const controller = require("../controller/Controller");
 const express = require('express');
 const router = express.Router();
+const path = require('path');
 
 
 router
@@ -8,9 +9,22 @@ router
         try {
             const navn = request.session.navn;
             if (navn) {
+                response.sendFile(path.join('C:\\Users\\Rasmus\\Desktop\\Sum Projekt\\SUMProjekt_Gruppe7\\public\\html\\bestilling.html'))
+            } 
+            else {
+                response.redirect('/')
+            }
+        } catch (e) {
+            sendStatus(e, response);
+        }
+    })
+    .get('/', async (request, response) => {
+        try {
+            const navn = request.session.navn;
+            if (navn) {
                 let orders = await controller.getOrders();
                 response.send(orders);
-            }
+            } 
             else {
                 response.redirect('/')
             }

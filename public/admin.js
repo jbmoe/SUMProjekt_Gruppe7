@@ -5,7 +5,12 @@ var openModalBtns = document.getElementsByClassName("openModal");
 var closeElements = document.querySelectorAll("#close");
 var inputData = document.getElementsByClassName('data')
 var productTable = document.getElementById('produktTable')
+var bestillingTab = document.getElementById('bestilling')
 var products = [];
+
+bestillingTab.addEventListener('click', function(){
+    window.location.href = '/bestilling'
+}, false)
 
 async function initialize() {
     try {

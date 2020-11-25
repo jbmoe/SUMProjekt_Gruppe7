@@ -11,6 +11,7 @@ var orderTable = document.getElementById('orders');
 var bemærkningInput = document.getElementById('bemærkning')
 var kategoriSelect = document.getElementById('kategori')
 var productTable = document.getElementById('productTableContent')
+var adminTab = document.getElementById('admin')
 var products = [];
 var bestillingMap = new Map();
 
@@ -442,6 +443,6 @@ main();
 
 
 adminTab.addEventListener('click', function(){
-    window.location.href = '/api/orders'
+    window.location.href = '/admin'
 }, false)
 
