@@ -5,6 +5,69 @@
 </head>
 
 <body>
+    <div class="grid-container">
+        <div class="item1" id="header">
+            <h3>Bestilling</h3>
+            <span id="Borde">
+                <button id='hentborde'>Hent borde</button>
+                <button id='rydbord'>Ryd bord</button>
+            </span>
+        </div>
+        <div class="item2" id="menu">
+            <table id="produktTable">
+                <tr>
+                    <th>Navn</th>
+                    <th class="narrow">Pris</th>
+                    <th>Kategori</th>
+                </tr>
+            </table>
+        </div>
+        <div class="item3" id="bestilling">
+            <table id='regning'>
+                <thead>
+                    <tr id='theader'>
+                        <th>Beskrivelse</th>
+                        <th class="narrow">Antal</th>
+                        <th class="narrow">Pris</th>
+                        <th class="narrow" id="empty"></th>
+                    </tr>
+                </thead>
+                <tbody id="regningContent"></tbody>
+            </table>
+        </div>
+        <div class="item4" id="footer">
+            <div id="opretDiv">
+                <div>
+                    <label for='samletPris'>Pris</label>
+                    <input type='text' id='samletPris' value=0></input>
+                    <button id='opretButton'>Opret</button>
+                    <button id='rydButton'>Ryd</button>
+                </div>
+                <div>
+                    <label for='bordNr'>Bord Nr.</label>
+                    <select name='bordNr' id='bordNr' value=0>
+                        <option value='1'>1</option>
+                        <option value='2'>2</option>
+                        <option value='3'>3</option>
+                    </select>
+                    <label for='bemærkning'>Bemærkning</label>
+                    <input type='text' id='bemærkning' value=''></input>
+                </div>
+            </div>
+            <div id="rabatDiv">
+                <h4>Rabat</h4>
+                <div>
+                    <label>Procent</label>
+                    <input type='number' min="1" max="100" id='rabatProcent'>
+                    <button id="lavRabatProcentButton">Udregn</button>
+                </div>
+                <div>
+                    <label>Kroner</label>
+                    <input type='number' min="1" id='rabatKroner'>
+                    <button id="lavRabatKronerButton">Udregn</button>
+                </div>
+            </div>
+        </div>
     <div class="tab">
         <button class="tablinks" id='bestilling'>Bestilling</button>
         <button class="tablinks" id='admin'>Admin</button>
@@ -17,90 +80,69 @@
     <div id="produkter">
 
     </div>
-    <br>
-    <div>
-        <table id='regning'>
-            <tr id='theader'>
-                <th>Beskrivelse</th>
-                <th>Antal</th>
-                <th>Pris</th>
-            </tr>
-        </table>
-        <br>
-        <label for='samletPris'>Pris</label>
-        <input type='text' id='samletPris' value=0></input>
-        <button id='opretButton'>Opret</button>
-        <button id='rydButton'>Ryd</button>
-        <label for='bordNr'>Bord Nr.</label>
-        <select name='bordNr' id='bordNr' value=0>
-            <option value='1'>1</option>
-            <option value='2'>2</option>
-            <option value='3'>3</option>
-        </select>
-        <label for='bemærkning'>Bemærkning</label>
-        <input type='text' id='bemærkning' value=''></input>
-        <br><br>
 
-        <h3>Rabat</h3>
-        <label>Procent</label>
-        <br>
-        <input type='number' max="100" id='rabatProcent' value='%'></input>
-        <button onclick="lavRabatProcent()">Udregn</button>
-        <label for='fejlRabat'></label>
-        <br><br>
-        <label>Kroner</label>
-        <br>
-        <input type='number' min="0" id='rabatKroner' value='Kr'></input>
-        <button onclick="lavRabatKroner()">Udregn</button>
-        <br><label id='fejlRabat'></label>
-
-        <div id="bordeModal" class="modal">
-            <div class="modal-content">
-                <span class="close" id="close">&times;</span>
-                <h2>Borde:</h2>
-                <table id="orders">
-
-                </table>
-
-                <button id="annuller">Annuller</button>
-            </div>
+    <div id="bordeModal" class="modal">
+        <div class="modal-content">
+            <span class="close" id="close">&times;</span>
+            <h2>Borde:</h2>
+            <table id="orders">
+                <thead>
+                    <tr id='theader'>
+                        <th>Bord nr.</th>
+                        <th>Samlet pris</th>
+                    </tr>
+                </thead>
+                <tbody id="ordersContent"></tbody>
+            </table>
+            <button id="annuller">Annuller</button>
         </div>
+    </div>
 
-        <div id="editModal" class="modal">
-            <div class="modal-content" id="editModalDiv">
-                <span class="close" id="close">&times;</span>
-                <table id="editOrder">
-                </table>
 
-                <button id="saveButton">Gem</button>
-            </div>
 
+
+
+    <div id="editModal" class="modal">
+        <div class="modal-content" id="editModalDiv">
+            <span class="close" id="close">&times;</span>
+            <table id="editOrder">
+                <thead>
+                    <tr id='theader'>
+                        <th>Beskrivelse</th>
+                        <th>Antal</th>
+                        <th>Pris</th>
+                        <th style="background-color: white;"><img id="addProduct" src="../img/plus.png"></th>
+                    </tr>
+                </thead>
+                <tbody id="editOrderContent"></tbody>
+            </table>
+            <button id="saveButton">Gem</button>
+
+            <label for="betaling">Vælg betalingsmetode: </label>
+            <select id="betaling">
+                <option value="kort">Kort</option>
+                <option value="kontant">Kontant</option>
+                <option value="mobilepay">Mobilepay</option>
+
+            </select>
+            <button id="betalButton">Betal</button>
         </div>
+    </div>
 
-        <div id="betalModal" class="modal">
-            <div class="modal-content" id="betalModalDiv">
-                <span class="close" id="close">&times</span>
-                <table id="betalOrder">
-
-                </table>
-                <label for="betaling">Vælg betalingsmetode: </label>
-
-                <select id="betaling">
-                    <option value="kort">Kort</option>
-                    <option value="kontant">Kontant</option>
-                    <option value="mobilepay">Mobilepay</option>
-
-                </select>
-                <br>
-                <button id="betalButton">Betal</button>
-            </div>
+    <div id="addProductModal" class="modal">
+        <div class="modal-content" id="addProductModalDiv">
+            <span class="close" id="close">&times;</span>
+            <table id="addProduct">
+                <thead>
+                    <tr id='theader'>
+                        <th>Beskrivelse</th>
+                        <th>Pris</th>
+                        <th>Kategori</th>
+                    </tr>
+                </thead>
+                <tbody id="addProductContent"></tbody>
+            </table>
         </div>
-        
-        <div id="addProductModal" class="modal">
-            <div class="modal-content" id="addProductModalDiv">
-                <span class="close" id="close">&times;</span>
-                <table id="addProduct">
-                </table>
-            </div>
-        </div>
+    </div>
+
 </body>

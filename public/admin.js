@@ -3,7 +3,6 @@ var opretModal = document.getElementById("opretModal");
 var ændreModal = document.getElementById("ændreModal");
 var openModalBtns = document.getElementsByClassName("openModal");
 var closeElements = document.querySelectorAll("#close");
-var opretBtn = document.getElementById('opret')
 var inputData = document.getElementsByClassName('data')
 var productTable = document.getElementById('produktTable')
 var products = [];
@@ -20,8 +19,7 @@ function closeModals(event) {
     if (event.target == opretModal || event.target == ændreModal || event.key == 'Escape') {
         opretModal.style.display = "none";
         ændreModal.style.display = "none";
-        for (input of inputData)
-            input.value = '';
+        for (input of inputData) input.value = '';
     }
 }
 
@@ -45,20 +43,17 @@ async function createProduct() {
         category
     };
 
-    for (input of inputData)
-        input.value = '';
+    for (input of inputData) input.value = '';
 
     let createdProduct = await post('/api/products/', product);
-    product._id = createdProduct.product._id;
+    product._id = createdProduct.created._id;
     console.log('Produkt oprettet', product);
     products.push(product)
     insertProductRow(product)
 }
 
 function createProductTable() {
-    for (const p of products) {
-        insertProductRow(p)
-    }
+    for (const p of products) insertProductRow(p)
 }
 
 function insertProductRow(product) {
@@ -77,6 +72,7 @@ function insertProductRow(product) {
 
     let price = document.createElement('input')
     price.setAttribute('type', 'number')
+    price.style.maxWidth = '40px'
     price.value = data[1]
     let cellPrice = row.insertCell(1)
     cellPrice.appendChild(price)
@@ -89,13 +85,9 @@ function insertProductRow(product) {
     options[2].text = "Diverse";
 
     // Sets selected option to be current category
-    if (data[2] === 'Madvare') {
-        options[0].setAttribute('selected', 'selected')
-    } else if (data[2] === 'Drikkevare') {
-        options[1].setAttribute('selected', 'selected')
-    } else {
-        options[2].setAttribute('selected', 'selected')
-    }
+    if (data[2] === 'Madvare') options[0].setAttribute('selected', 'selected')
+    else if (data[2] === 'Drikkevare') options[1].setAttribute('selected', 'selected')
+    else options[2].setAttribute('selected', 'selected')
 
     category.add(options[0]);
     category.add(options[1]);
@@ -145,7 +137,7 @@ async function post(url, objekt) {
         body: JSON.stringify(objekt),
         headers: { 'Content-Type': 'application/json' }
     });
-    if (respons.status !== 200) // Created
+    if (!(respons.status == 200 || respons.status == 201)) // Created
         throw new Error(respons.status);
     return await respons.json();
 }
@@ -187,7 +179,7 @@ async function main() {
     window.onclick = (event) => closeModals(event);
     document.body.addEventListener('keyup', (event) => closeModals(event))
 
-    opretBtn.onclick = createProduct;
+    document.getElementById('opret').onclick = createProduct;
 
     await initialize();
     createProductTable();

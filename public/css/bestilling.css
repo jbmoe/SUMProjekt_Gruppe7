@@ -1,40 +1,49 @@
-body {font-family: Arial;}
-
-table th {
-    background-color: #4CAF50;
-    padding: 8px;
-    padding-top: 12px;
-    padding-bottom: 12px;
-    text-align: left;
-    background-color: #4CAF50;
-    color: white;
+.item1 { grid-area: header; text-align: center;}
+.item2 { grid-area: menu; text-align: left;}
+.item3 { grid-area: bestilling; text-align: -webkit-right;}
+.item4 { grid-area: footer; }
+*{max-height: 100%;}
+.grid-container {
+    display: grid;
+    grid-template-areas:
+        'header header'
+        'menu bestilling'
+        'menu footer';
+    grid-template-columns: 50% 50%;
+    grid-template-rows: 100px 500px 150px 150px;
+    grid-gap: 10px;
+    /* background-color: #2196F3; */
+    /* padding: 10px; */
 }
 
-table td {
-    border: 1px solid #ddd;
-    padding: 8px;
-}
-table{
-    border-collapse: collapse;
-}
-table tr:nth-child(even){background-color: #9e9d9d;}
-table tr:hover {background-color: #ddd;}
-
-
-
-#theader th {
-    background-color: #4CAF50;
-    padding: 8px;
-    padding-top: 12px;
-    padding-bottom: 12px;
-    text-align: left;
-    background-color: #4CAF50;
-    color: white;
+.grid-container > div {
+    /* background-color: rgba(255, 255, 255, 0.8); */
+    /* text-align: left; */
+    /* padding: 20px 0; */
 }
 
+.item3, .item4{
+    text-align: -webkit-right;      
+}
 
-#theader tr:nth-child(even){background-color: #9e9d9d;}
-#theader tr:hover {background-color: #ddd;}
+#empty{
+    background-color: white;
+}
+
+#produktTable, #regning {
+    /* height: 100%;
+    min-height: 100%; */
+    max-height: 100%;
+    width: 90%;
+}
+
+tr {
+    height: 41px;
+}
+
+.narrow{
+    width: 49px;
+}
 
 #editModalDiv{
     max-width: fit-content;
@@ -52,18 +61,18 @@ table tr:hover {background-color: #ddd;}
     overflow: auto; /* Enable scroll if needed */
     background-color: rgb(0,0,0); /* Fallback color */
     background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-    
 }
-  
+
 /* Modal Content */
 .modal-content {
     background-color: #fefefe;
     margin: auto;
     padding: 20px;
-    border: 1px solid #888; 
+    border: 1px solid #888;
+    max-width: fit-content;
     display: grid;
-    width: fit-content; 
-    height: fit-content; 
+    width: fit-content;
+    height: fit-content;
 }
 
 /* The Close Button */
