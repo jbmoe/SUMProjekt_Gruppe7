@@ -1,6 +1,7 @@
 body {
   font-family: Arial;
   overflow: hidden;
+  overflow-y:scroll    
 }
 
 img{
