@@ -13,7 +13,7 @@ router
                 response.sendFile(path.join('C:\\Users\\Rasmus\\Desktop\\Sum Projekt\\SUMProjekt_Gruppe7\\public\\html\\admin.html'))
             } 
             else {
-               
+               sendStatus(401)
             }
         } catch (e) {
             sendStatus(e, response);
