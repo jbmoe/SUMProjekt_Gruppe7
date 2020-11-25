@@ -1,3 +1,7 @@
+let navn = document.getElementById('navn')
+let password = document.getElementById('password')
+let login = document.getElementById('login')
+
 async function get(url) {
     const respons = await fetch(url);
     if (respons.status !== 200) // OK
@@ -11,44 +15,23 @@ async function post(url, objekt) {
         body: JSON.stringify(objekt),
         headers: { 'Content-Type': 'application/json' }
     });
-    if (respons.status !== 201) // Created
-        throw new Error(respons.status);
+    // if (respons.status !== 201) // Created
+    //     throw new Error(respons.status);
     return await respons.json();
 }
 
-async function deLete(url) {
-    let respons = await fetch(url, {
-        method: "DELETE"
-    });
-    if (respons.status !== 200) // OK
-        throw new Error(respons.status);
-    return await respons.json();
-}
-
-async function getText(url) {
-    const respons = await fetch(url);
-    if (respons.status !== 200) // OK
-        throw new Error(respons.status);
-    return await respons.text();
+login.onclick = async () => {
+    try {
+        await post("/login", { navn: navn.value, password: password.value });
+        window.location.href = "/api/orders";
+    } catch (e) {
+        password.value = "";
+        alert("Forkert password")
+    }
 }
 
 
-let adminTab = document.getElementById('admin')
-let bestillingTab = document.getElementById('bestilling')
 
-adminTab.addEventListener('click', function(){
-    openTab(adminTab.id)
-}, false)
-
-bestillingTab.addEventListener('click', function(){
-    openTab(bestillingTab.id)
-}, false)
-
-function openTab(tabName) {
-    $(document).ready(function () {
-        $('#div1').load(tabName + '.html')
-    })
-}
 
 
 
