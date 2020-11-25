@@ -439,3 +439,9 @@ async function main() {
     createProductTable(products);
 }
 main();
+
+
+adminTab.addEventListener('click', function(){
+    window.location.href = '/api/orders'
+}, false)
+
