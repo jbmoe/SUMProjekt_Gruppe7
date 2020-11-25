@@ -9,17 +9,20 @@ var editModal = document.getElementById('editModal')
 var editOrderTable = document.getElementById('editOrder');
 var orderTable = document.getElementById('orders');
 var bemærkningInput = document.getElementById('bemærkning')
+var kategoriSelect = document.getElementById('kategori')
+var productTable = document.getElementById('productTableContent')
 var products = [];
 var bestillingMap = new Map();
 
-function createProductTable() {
+function createProductTable(products) {
+    productTable.innerHTML = ''
     for (const p of products) {
         insertProductRow(p)
     }
 }
 
 function insertProductRow(product) {
-    var row = document.getElementById('produktTable').insertRow();
+    var row = productTable.insertRow();
 
     var data = [product.name, product.price, product.category];
     for (let i = 0; i < 3; i++) {
@@ -28,6 +31,20 @@ function insertProductRow(product) {
     }
 
     row.onclick = () => addProductToBestilling(product)
+}
+
+async function showProductsByCat(category) {
+    if (category === 'Alle') {
+        createProductTable(products)
+    } else {
+        let productsCat = [];
+
+        for (const p of products) {
+            if (p.category === category) productsCat.push(p)
+        }
+
+        createProductTable(productsCat)
+    }
 }
 
 function addProductToBestilling(product) {
@@ -398,6 +415,8 @@ async function main() {
         }
     }
 
+    kategoriSelect.onchange = () => showProductsByCat(kategoriSelect.value)
+
     window.onclick = function (event) {
         if (event.target === borderModal) {
             borderModal.style.display = "none";
@@ -417,6 +436,6 @@ async function main() {
         borderModal.style.display = "block"
     }
     await initialize();
-    createProductTable();
+    createProductTable(products);
 }
 main();
