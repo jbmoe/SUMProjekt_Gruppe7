@@ -10,7 +10,7 @@ router
             const navn = request.session.navn;
             if (navn) {
                  //skift til din egen sti
-                response.sendFile(path.join('C:\\Users\\Rasmus\\Desktop\\Sum Projekt\\SUMProjekt_Gruppe7\\public\\html\\bestilling.html'))
+                response.sendFile(path.join('C:\\Users\\jeppe\\Documents\\SUMProjekt_Gruppe7\\SUMProjekt_Gruppe7\\public\\html\\bestilling.html'))
             } 
             else {
                 response.redirect('/')

@@ -186,6 +186,11 @@ async function main() {
 
     document.getElementById('opret').onclick = createProduct;
 
+    document.getElementById('logout').onclick = () => {
+        // TODO
+        window.location.href = '/'
+    }
+
     await initialize();
     createProductTable();
 }
