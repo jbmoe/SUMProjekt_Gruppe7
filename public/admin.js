@@ -9,13 +9,7 @@ var bestillingTab = document.getElementById('bestilling')
 var logoutTab = document.getElementById('logout')
 var products = [];
 
-bestillingTab.addEventListener('click', function () {
-    window.location.href = '/bestilling'
-}, false)
 
-logoutTab.addEventListener('click', function () {
-    window.location.href = "/logout"
-}, false)
 
 async function initialize() {
     try {
@@ -192,9 +186,11 @@ async function main() {
     document.getElementById('opret').onclick = createProduct;
 
     document.getElementById('logout').onclick = () => {
-        // TODO
-        window.location.href = '/'
+        window.location.href = '/logout'
     }
+    bestillingTab.addEventListener('click', function () {
+        window.location.href = '/bestilling'
+    }, false)
 
     await initialize();
     createProductTable();

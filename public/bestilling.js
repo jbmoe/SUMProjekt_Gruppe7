@@ -431,8 +431,7 @@ async function main() {
 
     document.getElementById('admin').onclick = () => window.location.href = '/admin'
     document.getElementById('logout').onclick = () => {
-        // TODO
-        window.location.href = '/'
+        window.location.href = '/logout'
     }
 
     document.getElementById('annuller').onclick = function () {
@@ -447,12 +446,3 @@ async function main() {
     createProductTable(products);
 }
 main();
-
-
-adminTab.addEventListener('click', function(){
-    window.location.href = '/admin'
-}, false)
-
-logoutTab.addEventListener('click', function(){
-    window.location.href = "/logout"
-}, false)
