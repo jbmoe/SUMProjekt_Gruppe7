@@ -18,6 +18,19 @@
     margin: 2px;
 }
 
+.opretUserModal-content {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    max-width: 200px;    
+    display: grid;
+}
+
+.opretUserModal-content * {
+    margin: 2px;
+}
+
 .ændreModal-content {
     background-color: #fefefe;
     margin: auto;
@@ -29,6 +42,23 @@
 }
 
 #produktTable{
+    overflow-y:scroll;
+    height:300px;
+    display:block;
+ }
+
+ 
+.allUsersModal-content {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    max-width: fit-content;  
+    max-height: 80%;  
+    display: grid;
+}
+
+#usersTable{
     overflow-y:scroll;
     height:300px;
     display:block;

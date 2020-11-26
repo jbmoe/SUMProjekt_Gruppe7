@@ -15,6 +15,8 @@
     <span id="buttons">
         <button id="opretBtn" class="openModal">Opret vare</button>
         <button id="ændreBtn" class="openModal">Ændre vare</button>
+        <button id="opretuserBtn" class="openModal">Opret bruger</button>
+        <button id="allUsersBtn" class="openModal">Administrér brugere</button>
     </span>
 
     <div id="salgsoversigt">
@@ -83,5 +85,45 @@
             <button id="close">Annuller</button>
         </div>
     </div>
+
+    <div id="opretUserModal" class="modal">
+
+        <!-- Modal content -->
+        <div class="opretUserModal-content">
+            <span class="close" id="close">&times;</span>
+            <h3>Opret bruger</h3>
+            <label for="brugernavn">Brugernavn</label>
+            <input class="userData" type="text" id="brugernavn">
+
+            <label for="password">Password</label>
+            <input class="userData" type="text" id="password">
+
+            <label for="comfirmPassword">Bekræft password</label>
+            <input class="userData" type="text" id="confirmPassword">
+
+            <label for="adminInput">Admin</label>
+            <input class ="userData" type="checkbox" id="adminInput">
+
+            <button id="opretUser">Opret</button>
+            <button id="close">Annuller</button>
+        </div>
+    </div>
+    <div id="allUsersModal" class="modal">
+        <!-- Modal content -->
+        <div class="allUsersModal-content">
+            <span class="close" id="close">&times;</span>
+            <h3>Administrér brugere</h3>
+            <table id="usersTable">
+                <tr>
+                    <th>Brugernavn</th>
+                    <th>Admin</th>
+                </tr>
+            </table>
+            <button id="close">Annuller</button>
+        </div>
+    </div>
+
+
+
 
 </body>
