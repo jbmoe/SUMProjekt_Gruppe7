@@ -60,7 +60,7 @@ async function createUser() {
 
     userModal.style.display = "none";
 
-    // await post('/admin', user);
+    await post('/admin', user);
     users.push(user)
 }
 
