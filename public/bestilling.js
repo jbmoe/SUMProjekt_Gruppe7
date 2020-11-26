@@ -153,7 +153,7 @@ async function opretBestilling() {
         price: samletPrisInput.value,
         comment: bemærkningInput.value
     }
-    console.log(await post('/api/orders', bestilling));
+    console.log(await post('/bestilling', bestilling));
     printBestilling(bestilling)
     rydRegning()
 }
@@ -168,7 +168,7 @@ function bestillingMapToArray() {
 
 async function generateOrdersModal() {
     try {
-        orders = await get('/api/orders');
+        orders = await get('/bestilling/api');
     } catch (fejl) {
         console.log(fejl);
     }
@@ -322,14 +322,14 @@ async function updateOrder(order, salgslinjer, samletPris, bemærkning) {
         price: samletPris,
         comment: bemærkning
     }
-    console.log(await post('/api/orders/update/' + order._id, opdateretBestilling))
+    console.log(await post('/bestilling/update/' + order._id, opdateretBestilling))
     editModal.style.display = "none"
     generateOrdersModal()
 }
 
 async function deleteOrder(order) {
     if (confirm("Er du sikker på du vil slette bestillingen?")) {
-        console.log(await deLete('/api/orders/' + order._id))
+        console.log(await deLete('bestilling/' + order._id))
         generateOrdersModal()
     }
 }
@@ -338,7 +338,7 @@ async function deleteOrder(order) {
 async function betalOrder(order) {
     let paymentMethod = document.getElementById('betaling').value
     if (confirm(`Er du sikker på du vil tilknytte betaling og afslutte bestillingen?\nDen vil blive flyttet til betalte bestillinger under Admin`)) {
-        console.log(await post('/api/orders/payment', { order, paymentMethod }))
+        console.log(await post('/bestilling/payment', { order, paymentMethod }))
         editModal.style.display = "none"
         generateOrdersModal()
     }

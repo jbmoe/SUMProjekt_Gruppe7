@@ -9,12 +9,11 @@ router
         try {
             const navn = request.session.navn;
             let user = await controller.getUser(navn)
-            if (user[0].admin) {
-                //skift til din egen sti
-                response.sendFile(path.join(path.resolve('public','html','admin.html')))
+            if (navn && user[0].admin) {
+                response.sendFile(path.resolve('public','html','admin.html'))
             } 
             else {
-               
+               response.send('<h1> Pil af din reje </h1><a href="/bestilling"> Gå tilbage</a>')
             }
         } catch (e) {
             sendStatus(e, response);

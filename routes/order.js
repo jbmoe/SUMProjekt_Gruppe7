@@ -10,7 +10,6 @@ router
         try {
             const navn = request.session.navn;
             if (navn) {
-                 //skift til din egen sti
                 response.sendFile(path.resolve('public','html','bestilling.html'))
             } 
             else {
@@ -20,7 +19,7 @@ router
             sendStatus(e, response);
         }
     })
-    .get('/', async (request, response) => {
+    .get('/api', async (request, response) => {
         try {
             const navn = request.session.navn;
             if (navn) {
