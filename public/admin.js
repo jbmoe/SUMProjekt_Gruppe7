@@ -1,30 +1,67 @@
 var modals = document.getElementsByClassName("modal");
 var opretModal = document.getElementById("opretModal");
 var ændreModal = document.getElementById("ændreModal");
+var userModal = document.getElementById("opretUserModal")
+var allUsersModal = document.getElementById("allUsersModal")
 var openModalBtns = document.getElementsByClassName("openModal");
 var closeElements = document.querySelectorAll("#close");
 var inputData = document.getElementsByClassName('data')
+var inputUserData = document.getElementsByClassName('userData')
 var productTable = document.getElementById('produktTable')
 var bestillingTab = document.getElementById('bestilling')
 var logoutTab = document.getElementById('logout')
 var products = [];
+var users = []
 
 
 
 async function initialize() {
     try {
         products = await get('api/products');
+        user = await get('admin/users')
     } catch (fejl) {
         console.log(fejl);
     }
 }
 
 function closeModals(event) {
-    if (event.target == opretModal || event.target == ændreModal || event.key == 'Escape') {
+    if (event.target == opretModal || event.target == ændreModal || event.target == userModal || event.target == allUsersModal || event.key == 'Escape') {
         opretModal.style.display = "none";
         ændreModal.style.display = "none";
+        userModal.style.display = "none";
+        allUsersModal.style.display = "none";
         for (input of inputData) input.value = '';
     }
+}
+
+async function createUser() {
+    let username = inputUserData[0].value;
+    let password = inputUserData[1].value;
+    let confirmPassword = inputUserData[2].value;
+    let admin = inputUserData[3].checked == true;
+
+    try {
+        if (!username) throw 'Indtast brugernavn'
+        if (!password) throw 'Indtast password'
+        if (password !== confirmPassword) throw 'Passwordet er ikke ens'
+    } catch (err) {
+        alert(err)
+        return;
+    }
+
+    let user = {
+        username,
+        password,
+        admin
+    };
+
+    for (input of inputUserData) input.value = '';
+    inputUserData[3].checked = false;
+
+    userModal.style.display = "none";
+
+    // await post('/admin', user);
+    users.push(user)
 }
 
 async function createProduct() {
@@ -174,8 +211,12 @@ async function main() {
         e.onclick = function () {
             opretModal.style.display = "none";
             ændreModal.style.display = "none";
+            userModal.style.display = "none";
+            allUsersModal.style.display = "none";
             for (input of inputData)
                 input.value = '';
+            for (input of inputUserData) input.value = '';
+            inputUserData[3].checked = false;
         }
     }
 
@@ -184,6 +225,8 @@ async function main() {
     document.body.addEventListener('keyup', (event) => closeModals(event))
 
     document.getElementById('opret').onclick = createProduct;
+    document.getElementById('opretUser').onclick = createUser
+   
 
     document.getElementById('logout').onclick = () => {
         window.location.href = '/logout'

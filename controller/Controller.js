@@ -23,6 +23,10 @@ exports.getUser = async function (name) {
     return User.find({name}).exec()
 };
 
+exports.getUsers = function () {
+    return User.find().populate('Users').exec();
+};
+
 
 exports.createProduct = function (name, price, category) {
     return Product.create({

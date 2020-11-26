@@ -22,7 +22,8 @@ router
             sendStatus(e, response);
         }
         response.sendStatus(201)
-    }).post('/update/:productId', async (request, response) => {
+    })
+    .post('/update/:productId', async (request, response) => {
         try {
             let { name, price, category } = request.body;
             let updatedProduct = await controller.updateProduct(request.params.productId, name, price, category);
