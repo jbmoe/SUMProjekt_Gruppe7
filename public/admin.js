@@ -6,10 +6,15 @@ var closeElements = document.querySelectorAll("#close");
 var inputData = document.getElementsByClassName('data')
 var productTable = document.getElementById('produktTable')
 var bestillingTab = document.getElementById('bestilling')
+var logoutTab = document.getElementById('logout')
 var products = [];
 
-bestillingTab.addEventListener('click', function(){
+bestillingTab.addEventListener('click', function () {
     window.location.href = '/bestilling'
+}, false)
+
+logoutTab.addEventListener('click', function () {
+    window.location.href = "/logout"
 }, false)
 
 async function initialize() {

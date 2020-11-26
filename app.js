@@ -11,6 +11,7 @@ app.use(session({secret: 'hemmelig', saveUninitialized: true, resave: true}));
 app.use('/api/products', require('./routes/product'));
 app.use('/bestilling', require('./routes/order'));
 app.use('/login', require('./routes/login'))
+app.use('/logout', require('./routes/logout'))
 app.use('/admin', require('./routes/admin'))
 
 

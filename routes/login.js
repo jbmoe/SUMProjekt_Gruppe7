@@ -1,6 +1,7 @@
 const controller = require("../controller/Controller");
 const express = require('express');
 const router = express.Router();
+const session= require('express-session');
 
 
 router
@@ -18,6 +19,7 @@ router
         let user = await controller.getUser(navn)
         if (password === user[0].password && navn) {
             request.session.navn = navn;
+            request.session.admin = user[0].admin
             // response.status(201).send(['login ok!']);
             response.send(user)
         } else {
@@ -26,10 +28,11 @@ router
         }
     });
 
-    function sendStatus(e, response) {
-        console.error("Exception: " + e);
-        if (e.stack) console.error(e.stack);
-        response.status(500).send(e);
-    }
 
-    module.exports = router;
+function sendStatus(e, response) {
+    console.error("Exception: " + e);
+    if (e.stack) console.error(e.stack);
+    response.status(500).send(e);
+}
+
+module.exports = router;
