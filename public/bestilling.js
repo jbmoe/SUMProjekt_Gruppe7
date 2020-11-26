@@ -12,6 +12,7 @@ var bemærkningInput = document.getElementById('bemærkning')
 var kategoriSelect = document.getElementById('kategori')
 var productTable = document.getElementById('productTableContent')
 var adminTab = document.getElementById('admin')
+var logoutTab = document.getElementById('logout')
 var products = [];
 var bestillingMap = new Map();
 
@@ -428,6 +429,11 @@ async function main() {
         }
     }
 
+    document.getElementById('admin').onclick = () => window.location.href = '/admin'
+    document.getElementById('logout').onclick = () => {
+        window.location.href = '/logout'
+    }
+
     document.getElementById('annuller').onclick = function () {
         borderModal.style.display = "none"
     }
@@ -440,9 +446,3 @@ async function main() {
     createProductTable(products);
 }
 main();
-
-
-adminTab.addEventListener('click', function(){
-    window.location.href = '/admin'
-}, false)
-

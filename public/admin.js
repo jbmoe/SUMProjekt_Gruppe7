@@ -6,11 +6,10 @@ var closeElements = document.querySelectorAll("#close");
 var inputData = document.getElementsByClassName('data')
 var productTable = document.getElementById('produktTable')
 var bestillingTab = document.getElementById('bestilling')
+var logoutTab = document.getElementById('logout')
 var products = [];
 
-bestillingTab.addEventListener('click', function(){
-    window.location.href = '/bestilling'
-}, false)
+
 
 async function initialize() {
     try {
@@ -185,6 +184,13 @@ async function main() {
     document.body.addEventListener('keyup', (event) => closeModals(event))
 
     document.getElementById('opret').onclick = createProduct;
+
+    document.getElementById('logout').onclick = () => {
+        window.location.href = '/logout'
+    }
+    bestillingTab.addEventListener('click', function () {
+        window.location.href = '/bestilling'
+    }, false)
 
     await initialize();
     createProductTable();
