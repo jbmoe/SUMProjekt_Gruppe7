@@ -12,6 +12,7 @@ var bemærkningInput = document.getElementById('bemærkning')
 var kategoriSelect = document.getElementById('kategori')
 var productTable = document.getElementById('productTableContent')
 var adminTab = document.getElementById('admin')
+var logoutTab = document.getElementById('logout')
 var products = [];
 var bestillingMap = new Map();
 
@@ -446,3 +447,6 @@ adminTab.addEventListener('click', function(){
     window.location.href = '/admin'
 }, false)
 
+logoutTab.addEventListener('click', function(){
+    window.location.href = "/logout"
+}, false)

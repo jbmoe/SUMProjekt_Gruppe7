@@ -2,7 +2,7 @@ const controller = require("../controller/Controller");
 const express = require('express');
 const router = express.Router();
 const path = require('path');
-
+const session= require('express-session');
 
 router
     .get('/', async (request, response) => {
@@ -14,7 +14,7 @@ router
                 response.sendFile(path.join('C:\\Users\\Rasmus\\Desktop\\Sum Projekt\\SUMProjekt_Gruppe7\\public\\html\\admin.html'))
             } 
             else {
-               sendStatus(401)
+               
             }
         } catch (e) {
             sendStatus(e, response);
