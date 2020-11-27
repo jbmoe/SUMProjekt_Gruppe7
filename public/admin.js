@@ -31,7 +31,7 @@ function closeModals(event) {
         ændreModal.style.display = "none";
         userModal.style.display = "none";
         allUsersModal.style.display = "none";
-        for (input of inputData) input.value = '';
+        rydFelter()
     }
 }
 
@@ -56,8 +56,7 @@ async function createUser() {
         admin
     };
 
-    for (input of inputUserData) input.value = '';
-    inputUserData[3].checked = false;
+    rydFelter()
 
     userModal.style.display = "none";
 
@@ -88,7 +87,7 @@ async function createProduct() {
         category
     };
 
-    for (input of inputData) input.value = '';
+    rydFelter()
 
     let createdProduct = await post('/api/products/', product);
     product._id = createdProduct.created._id;
@@ -235,6 +234,13 @@ async function deleteProduct(product) {
     products.splice(products.indexOf(product), 1)
 }
 
+function rydFelter() {
+    for (input of inputData)
+        input.value = '';
+    for (input of inputUserData) input.value = '';
+    inputUserData[3].checked = false;
+}
+
 async function post(url, objekt) {
     const respons = await fetch(url, {
         method: "POST",
@@ -276,10 +282,7 @@ async function main() {
             ændreModal.style.display = "none";
             userModal.style.display = "none";
             allUsersModal.style.display = "none";
-            for (input of inputData)
-                input.value = '';
-            for (input of inputUserData) input.value = '';
-            inputUserData[3].checked = false;
+            rydFelter();
         }
     }
 
