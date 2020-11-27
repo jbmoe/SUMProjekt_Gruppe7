@@ -51,7 +51,7 @@ async function createUser() {
     }
 
     let user = {
-        name,
+        username,
         password,
         admin
     };
@@ -104,7 +104,7 @@ function insertUserRow(user) {
     var row = userTable.insertRow();
 
     let username = document.createElement('input')
-    username.value = user.name
+    username.value = user.username
     let cellUsername = row.insertCell(0)
     cellUsername.appendChild(username)
 

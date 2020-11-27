@@ -7,9 +7,9 @@ const config = require('../config');
 
 mongoose.connect(config.databaseURI, { useNewUrlParser: true, useUnifiedTopology: true })
 
-exports.createUser = function (name, password, admin) {
+exports.createUser = function (username, password, admin) {
     return User.create({
-        name,
+        username,
         password,
         admin
     })
@@ -25,8 +25,8 @@ exports.deleteUser = async function (userId) {
     return await User.deleteOne().where('_id').eq(userId).exec()
 };
 
-exports.getUser = async function (name) {
-    return User.find({ name }).exec()
+exports.getUser = async function (username) {
+    return User.find({ username }).exec()
 };
 
 exports.getUsers = function () {
