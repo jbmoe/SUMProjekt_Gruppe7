@@ -1,3 +1,5 @@
+<!DOCTYPE html>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <head>
     <link rel="stylesheet" href="../css/bestilling.css">
     <link rel="stylesheet" href="../css/index.css">
@@ -49,10 +51,6 @@
                 <tbody id="regningContent"></tbody>
             </table>
         </div>
-    </div>
-</div>
-<div class="section2 group">
-    <div class="grid-footer span_1_of_2">
         <div class="item4" id="footer">
             <div id="opretDiv">
                 <div>
@@ -66,7 +64,7 @@
                     </select>
                     <br>
                     <label for='bemærkning'></label>
-                    <input type='text' id='bemærkning' value=''></input>
+                    <input type='text' id='bemærkning' placeholder="Bemærkning"></input>
                     <button id='opretButton'>Opret</button>
                     <button id='rydButton'>Ryd</button>
                 </div>
@@ -74,16 +72,18 @@
             <div id="rabatDiv">
                 <div>
                     <label></label>
-                    <input type='number' id='rabatProcent'>
+                    <input type='number' id='rabatProcent' placeholder="Rabatprocent">
                     <button id="lavRabatProcentButton">Udregn</button>
                 </div>
                 <div>
                     <label></label>
-                    <input type='number' min="1" id='rabatKroner'>
+                    <input type='number' min="1" id='rabatKroner' placeholder="Rabatkroner">
                     <button id="lavRabatKronerButton">Udregn</button>
                 </div>
             </div>
         </div>
+    </div>
+</div>
         <div id="bordeModal" class="modal">
             <div class="modal-content">
                 <span class="close" id="close">&times;</span>
@@ -99,16 +99,6 @@
                 </table>
                 <button id="annuller">Annuller</button>
             </div>
-        <div class="item5" id="footer">
-            <br>
-            <label>Samletpris</label>
-            <br><br>
-            <label>Bemærkning</label>
-            <br><br>
-            <label>Rabatprocent</label>
-            <br><br>
-            <label>Rabatkroner</label>
-        </div>
     </div>
         </div>
     </div>

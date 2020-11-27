@@ -1,38 +1,41 @@
 .item1 { grid-area: header; text-align: center;}
 .item2 { grid-area: menu; text-align: left;}
 .item3 { grid-area: bestilling; text-align: -webkit-right;}
+.item4 {grid-area: footer; text-align: left;}
 *{max-height: 100%;}
 .grid-container {
     display: grid;
     grid-template-areas:
         'header header'
-        'menu bestilling';
+        'menu bestilling'
+        'menu footer';
     grid-template-columns: 50% 50%;
     grid-template-rows: 100px 500px;
     grid-gap: 10px;
+    max-width: 1024px;
+    margin: 0 auto;
     /* background-color: #2196F3; */
     /* padding: 10px; */
 }
 
-.item4 {grid-area: footer2; text-align:  webkit-left;}
-.item5 {grid-area: footer; text-align: right;}
-.grid-footer {
-    display: grid;
-    grid-template-areas: 
-    'footer footer2';
-    grid-template-columns: 65% 35%;
-    grid-template-rows: 150px 100px;
-    grid-gap: -50px;
+.grid-container {
+  display: grid;
+  gap: 0px;
 }
 
 .item2 {
     height: 100%;
-    overflow-y:scroll
+    overflow-y:scroll;
 }
 
 .item3 {
     text-align: -webkit-left;  
-    overflow-y:scroll    
+    overflow-y:scroll;   
+}
+
+.item4 {
+  height: 100%;
+  text-align: left;
 }
 
 #empty{
@@ -262,55 +265,3 @@ table tr:hover {background-color: #ddd;}
   background-color: rgb(0,0,0); /* Fallback color */
   background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
 }
-
-.section1 {
-    clear: both;
-	padding: 0px;
-	margin: 0px;
-}
-
-.section2 {
-    clear: both;
-	padding: 0px;
-	margin: 0px;
-}
-
-/* .grid-container {
-    display: block;
-	float:left;
-	margin: 1% 0 1% 1.6%;
-} */
-/*
-.grid-footer {
-    display: block;
-	float:left;
-	margin: 1% 0 1% 1.6%;
-}
-
-.grid-container:first-child { margin-left: 0%;}
-.grid-footer:first-child {margin-right: 0%;}
-
-.group:before,
-.group:after { content: ""; display: table;}
-.group:after { clear: both;}
-.group {zoom: 1;}
-
-@media only screen and (max-width: 480px) {
-	.grid-container { 
-		margin: 1% 0 1% 0%;
-	}
-}
-
-@media only screen and (max-width: 480px) {
-	.span_2_of_2, .span_1_of_2 { width: 100%; }
-}
-
-@media only screen and (max-width: 480px) {
-	.grid-footer { 
-		margin: 1% 0 1% 0%;
-	}
-}
-
-@media only screen and (max-width: 480px) {
-	.span_2_of_2, .span_1_of_2 { width: 100%; }
-} */
