@@ -119,7 +119,7 @@ function udregnPris() {
 }
 
 function lavRabatProcent() {
-    let pris = samletPrisInput.value;
+    let pris = parseInt(samletPrisInput.value);
     let rabatProcent = document.getElementById('rabatProcent').value;
 
     if (rabatProcent > 100 || rabatProcent < 1 || !rabatProcent) {
@@ -132,7 +132,7 @@ function lavRabatProcent() {
 }
 
 function lavRabatKroner() {
-    let pris = samletPrisInput.value;
+    let pris = parseInt(samletPrisInput.value);
     let rabatKroner = document.getElementById('rabatKroner').value;
 
     if (rabatKroner > pris || rabatKroner < 1 || !rabatKroner) {
