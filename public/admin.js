@@ -8,6 +8,7 @@ var closeElements = document.querySelectorAll("#close");
 var inputData = document.getElementsByClassName('data')
 var inputUserData = document.getElementsByClassName('userData')
 var productTable = document.getElementById('produktTable')
+var userTable = document.getElementById('userTable')
 var bestillingTab = document.getElementById('bestilling')
 var logoutTab = document.getElementById('logout')
 var products = [];
@@ -18,7 +19,7 @@ var users = []
 async function initialize() {
     try {
         products = await get('api/products');
-        user = await get('admin/users')
+        users = await get('admin/users')
     } catch (fejl) {
         console.log(fejl);
     }
@@ -38,7 +39,7 @@ async function createUser() {
     let username = inputUserData[0].value;
     let password = inputUserData[1].value;
     let confirmPassword = inputUserData[2].value;
-    let admin = inputUserData[3].checked == true;
+    let admin = inputUserData[3].checked;
 
     try {
         if (!username) throw 'Indtast brugernavn'
@@ -50,7 +51,7 @@ async function createUser() {
     }
 
     let user = {
-        username,
+        name,
         password,
         admin
     };
@@ -60,8 +61,11 @@ async function createUser() {
 
     userModal.style.display = "none";
 
-    await post('/admin', user);
+    let createdUser = await post('/admin', user);
+    user._id = createdUser.created._id;
     users.push(user)
+    insertUserRow(user)
+    console.log('Bruger oprettet', user);
 }
 
 async function createProduct() {
@@ -93,6 +97,67 @@ async function createProduct() {
     insertProductRow(product)
 }
 
+function createUserTable() {
+    for (const u of users) insertUserRow(u)
+}
+
+function insertUserRow(user) {
+    var row = userTable.insertRow();
+
+    let username = document.createElement('input')
+    username.value = user.name
+    let cellUsername = row.insertCell(0)
+    cellUsername.appendChild(username)
+
+    let password = document.createElement('input')
+    password.setAttribute('type', 'password')
+    password.value = user.password
+    let cellPassword = row.insertCell(1)
+    cellPassword.appendChild(password)
+
+    let admin = document.createElement('input')
+    admin.setAttribute('type', 'checkbox')
+    admin.checked = user.admin
+    let cellAdmin = row.insertCell(2);
+    cellAdmin.appendChild(admin)
+
+    let okCell = row.insertCell(3);
+    let imgUpdate = document.createElement('img');
+    imgUpdate.src = '../img/ok.png'
+    okCell.appendChild(imgUpdate);
+
+    let deleteCell = row.insertCell(4);
+    let imgDelete = document.createElement('img');
+    imgDelete.src = '../img/slet.png'
+    deleteCell.appendChild(imgDelete);
+
+    // Sets onclick for update and delete cells
+    okCell.onclick = () => {
+        updateUser(user, [username.value, password.value, admin.checked]);
+    }
+    deleteCell.onclick = () => {
+        row.parentNode.removeChild(row)
+        deleteUser(user);
+    }
+}
+
+async function updateUser(user, data) {
+    let u = {
+        username: data[0],
+        password: data[1],
+        admin: data[2]
+    }
+
+    console.log(await post(`/admin/users/update/${user._id}`, u));
+}
+
+
+async function deleteUser(user) {
+    console.log(await deLete(`/admin/users/${user._id}`))
+    users.splice(users.indexOf(user), 1)
+}
+
+
 function createProductTable() {
     for (const p of products) insertProductRow(p)
 }
@@ -104,17 +169,15 @@ function insertProductRow(product) {
     // Inserts three new cells (<td> elements) 
     // at the 1st, 2nd and 3rd position of the "new" <tr> element
     // and adds data to the new cells
-    var data = [product.name, product.price, product.category];
-
     let name = document.createElement('input')
-    name.value = data[0]
+    name.value = product.name
     let cellName = row.insertCell(0)
     cellName.appendChild(name)
 
     let price = document.createElement('input')
     price.setAttribute('type', 'number')
     price.style.maxWidth = '40px'
-    price.value = data[1]
+    price.value = product.price
     let cellPrice = row.insertCell(1)
     cellPrice.appendChild(price)
 
@@ -126,8 +189,8 @@ function insertProductRow(product) {
     options[2].text = "Diverse";
 
     // Sets selected option to be current category
-    if (data[2] === 'Madvare') options[0].setAttribute('selected', 'selected')
-    else if (data[2] === 'Drikkevare') options[1].setAttribute('selected', 'selected')
+    if (product.category === 'Madvare') options[0].setAttribute('selected', 'selected')
+    else if (product.category === 'Drikkevare') options[1].setAttribute('selected', 'selected')
     else options[2].setAttribute('selected', 'selected')
 
     category.add(options[0]);
@@ -226,7 +289,7 @@ async function main() {
 
     document.getElementById('opret').onclick = createProduct;
     document.getElementById('opretUser').onclick = createUser
-   
+
 
     document.getElementById('logout').onclick = () => {
         window.location.href = '/logout'
@@ -237,6 +300,7 @@ async function main() {
 
     await initialize();
     createProductTable();
+    createUserTable();
 }
 
 main();

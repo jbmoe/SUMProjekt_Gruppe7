@@ -15,12 +15,18 @@ exports.createUser = function (name, password, admin) {
     })
 }
 
-exports.deleteUser = async function (name) {
-    return await User.deleteOne().where('_id').eq(name).exec()
+exports.updateUser = async function (id, username, password, admin) {
+    const filter = { _id: id }
+    const updatedUser = { username, password, admin }
+    return await User.findOneAndUpdate(filter, updatedUser, { new: true })
+}
+
+exports.deleteUser = async function (userId) {
+    return await User.deleteOne().where('_id').eq(userId).exec()
 };
 
 exports.getUser = async function (name) {
-    return User.find({name}).exec()
+    return User.find({ name }).exec()
 };
 
 exports.getUsers = function () {
@@ -74,8 +80,8 @@ exports.getOrders = function () {
 };
 
 exports.updateOrder = async function (id, products, price, comment) {
-    const filter = {_id: id}
-    const update = {products: products, price: price, comment: comment}
+    const filter = { _id: id }
+    const update = { products: products, price: price, comment: comment }
     return await Order.findOneAndUpdate(filter, update)
 }
 
@@ -83,7 +89,7 @@ exports.deleteOrder = async function (orderID) {
     return await Order.deleteOne().where('_id').eq(orderID).exec()
 };
 
-exports.createPaidOrder = async function(order, paymentMethod){
+exports.createPaidOrder = async function (order, paymentMethod) {
     return await PaidOrder.create({
         order,
         paymentMethod

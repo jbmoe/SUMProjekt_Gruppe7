@@ -96,13 +96,13 @@
             <input class="userData" type="text" id="brugernavn">
 
             <label for="password">Password</label>
-            <input class="userData" type="text" id="password">
+            <input class="userData" type="password" id="password">
 
             <label for="comfirmPassword">Bekræft password</label>
-            <input class="userData" type="text" id="confirmPassword">
+            <input class="userData" type="password" id="confirmPassword">
 
             <label for="adminInput">Admin</label>
-            <input class ="userData" type="checkbox" id="adminInput">
+            <input class="userData" type="checkbox" id="adminInput">
 
             <button id="opretUser">Opret</button>
             <button id="close">Annuller</button>
@@ -113,11 +113,15 @@
         <div class="allUsersModal-content">
             <span class="close" id="close">&times;</span>
             <h3>Administrér brugere</h3>
-            <table id="usersTable">
-                <tr>
-                    <th>Brugernavn</th>
-                    <th>Admin</th>
-                </tr>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Brugernavn</th>
+                        <th>Password</th>
+                        <th>Admin</th>
+                    </tr>
+                </thead>
+                <tbody id="userTable"></tbody>
             </table>
             <button id="close">Annuller</button>
         </div>

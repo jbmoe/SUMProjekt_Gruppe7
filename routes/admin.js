@@ -28,11 +28,9 @@ router
             sendStatus(e, response);
         }
     })
-
-
     .post('/', async (request, response) => {
         try {
-            let {username, password, admin } = request.body;
+            let { username, password, admin } = request.body;
             let created = await controller.createUser(username, password, admin);
             response.send({ message: 'User saved!', created });
         } catch (e) {
@@ -40,6 +38,25 @@ router
         }
         response.sendStatus(201)
     })
+    .post('/users/update/:userId', async (request, response) => {
+        try {
+            let { username, password, admin } = request.body;
+            let updatedUser = await controller.updateUser(request.params.userId, username, password, admin);
+            response.send({ message: 'User updated!', updatedUser })
+        } catch (e) {
+            sendStatus(e, response);
+        }
+        response.sendStatus(200)
+    })
+    .delete('/users/:id', async (request, response) => {
+        try {
+            let deleted = await controller.deleteUser(request.params.id);
+            response.send({ message: 'User deleted!', deleted });
+        } catch (e) {
+            sendStatus(e, response);
+        }
+        response.sendStatus(200)
+    });
 
 
 
