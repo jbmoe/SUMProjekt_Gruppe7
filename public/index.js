@@ -15,18 +15,19 @@ async function post(url, objekt) {
         body: JSON.stringify(objekt),
         headers: { 'Content-Type': 'application/json' }
     });
-    // if (respons.status !== 201) // Created
-    //     throw new Error(respons.status);
+    if (respons.status !== 200) // Created
+        throw new Error(respons.status);
     return await respons.json();
 }
 
 login.onclick = async () => {
     try {
-        console.log(password.value)
+        // console.log(password.value)
         let users = await post("/login", { navn: navn.value, password: password.value })
         console.log(users);
         window.location.href = "/bestilling";
     } catch (e) {
+        console.log(e)
         password.value = "";
         alert("Forkert password")
     }
