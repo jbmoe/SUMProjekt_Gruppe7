@@ -1,5 +1,6 @@
 <head>
     <script src="../admin.js" defer></script>
+    <script src="../statistik.js" defer></script>
     <link rel="stylesheet" href="../css/admin.css">
     <link rel="stylesheet" href="../css/index.css">
 </head>
@@ -22,26 +23,14 @@
     <div id="salgsoversigt">
         <label for="dagenssalg">Dagens salg</label>
         <table id="dagenssalg">
-            <tr>
-                <th>Beskrivelse</th>
-                <th>Antal</th>
-                <th>Pris</th>
-            </tr>
-            <tr>
-                <td>Buffet voksen</td>
-                <td>4</td>
-                <td>796</td>
-            </tr>
-            <tr>
-                <td>Cola - lille</td>
-                <td>2</td>
-                <td>70</td>
-            </tr>
-            <tr>
-                <td>Faxe - stor</td>
-                <td>1</td>
-                <td>420</td>
-            </tr>
+            <thead>
+                <tr>
+                    <th>Beskrivelse</th>
+                    <th>Antal</th>
+                    <th>Pris</th>
+                </tr>
+            </thead>
+            <tbody id="salgcontent"></tbody>
         </table>
     </div>
 
