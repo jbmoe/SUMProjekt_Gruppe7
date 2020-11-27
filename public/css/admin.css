@@ -1,3 +1,31 @@
+.item1 {grid-area: left; text-align: left;}
+.item2 {grid-area: right; text-align: center;}
+.item3 {grid-area: header; text-align: center;}
+*{max-height: 100%;}
+.grid-container {
+    display: grid; 
+    grid-template-areas: 
+    'header header'
+    'left right';
+
+    grid-template-columns: 50% 50%;
+    grid-gap: 10px;
+    margin: 0 auto;
+}
+
+.grid-container {
+    display: grid;
+    gap: 0px; 
+}
+
+.item1 {
+     text-align: left;
+}
+
+.item2 {
+    text-align: right; 
+}
+
 #buttons button {
     display: block;
     padding: 10px;
@@ -45,6 +73,7 @@
     overflow-y:scroll;
     height:300px;
     display:block;
+    overflow-x: hidden;
  }
 
  
@@ -63,3 +92,10 @@
     height:300px;
     display:block;
  }
+
+body {
+    font-family: Arial;
+    overflow: hidden;
+}
+
+ 

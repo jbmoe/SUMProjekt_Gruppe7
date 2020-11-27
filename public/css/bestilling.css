@@ -1,7 +1,7 @@
 .item1 { grid-area: header; text-align: center;}
 .item2 { grid-area: menu; text-align: left;}
 .item3 { grid-area: bestilling; text-align: -webkit-right;}
-.item4 {grid-area: footer; text-align: left;}
+.item4 { grid-area: footer; text-align: left;}
 *{max-height: 100%;}
 .grid-container {
     display: grid;
@@ -16,11 +16,6 @@
     margin: 0 auto;
     /* background-color: #2196F3; */
     /* padding: 10px; */
-}
-
-.grid-container {
-  display: grid;
-  gap: 0px;
 }
 
 .item2 {
@@ -38,6 +33,19 @@
   text-align: left;
 }
 
+
+@media only screen and (max-width: 600px) {
+  .grid-container { 
+    grid-template-areas:
+        'header'
+        'menu'
+        'bestilling'
+        'footer';
+        grid-template-columns: 100%;
+  }
+
+  
+}
 #empty{
     background-color: white;
 }
