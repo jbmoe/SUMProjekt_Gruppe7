@@ -286,6 +286,7 @@ async function main() {
         }
     }
 
+
     // When the user clicks anywhere outside of the modal or the escape button, close it
     window.onclick = (event) => closeModals(event);
     document.body.addEventListener('keyup', (event) => closeModals(event))
