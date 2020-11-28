@@ -14,10 +14,8 @@ function statByDate(date) {
     let freqMap = new Map()
 
     let d = new Date(date)
-    console.log(d)
     for (const o of orders) {
         let orderD = new Date(o.time)
-        console.log(orderD)
         if (orderD.getDate() == d.getDate() && orderD.getMonth() == d.getMonth() && orderD.getFullYear() == d.getFullYear()) {
             let products = JSON.parse(o.products)
             for (const p of products) {
@@ -150,7 +148,7 @@ async function main() {
         const element = theads[i];
         element.onclick = () => sortTable(i)
     }
-    
+
     fillTable(freqStat())
     console.log(statByDate(Date.now()))
 }
