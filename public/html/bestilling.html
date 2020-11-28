@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <meta name="viewport" content="width=device-width, initial-scale=1">
+
 <head>
     <link rel="stylesheet" href="../css/bestilling.css">
     <link rel="stylesheet" href="../css/index.css">
+    <link rel="icon" href="../img/favicon.png">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="../bestilling.js" defer></script>
 </head>
@@ -17,7 +19,7 @@
         <div class="item1" id="header">
             <p>TEST</p>
             <h3>Bestilling</h3>
-                <button id='hentborde'>Hent borde</button>
+            <button id='hentborde'>Hent borde</button>
         </div>
         <div class="item2" id="menu">
             <table id="produktTable">
@@ -83,26 +85,6 @@
             </div>
         </div>
     </div>
-</div>
-        <div id="bordeModal" class="modal">
-            <div class="modal-content">
-                <span class="close" id="close">&times;</span>
-                <h2>Borde:</h2>
-                <table id="orders">
-                    <thead>
-                        <tr id='theader'>
-                            <th>Bord nr.</th>
-                            <th>Samlet pris</th>
-                        </tr>
-                    </thead>
-                    <tbody id="ordersContent"></tbody>
-                </table>
-                <button id="annuller">Annuller</button>
-            </div>
-    </div>
-        </div>
-    </div>
-
     <div id="bordeModal" class="modal">
         <div class="modal-content">
             <span class="close" id="close">&times;</span>
@@ -118,10 +100,6 @@
             </table>
             <button id="annuller">Annuller</button>
         </div>
-
-
-
-
 
         <div id="editModal" class="modal">
             <div class="modal-content" id="editModalDiv">

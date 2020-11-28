@@ -82,7 +82,7 @@ function createBestillingTable() {
         amountInput.value = salgslinje.antal;
         amountInput.style.maxWidth = '40px'
         amountInput.onchange = () => {
-            salgslinje.antal = amountInput.value;
+            salgslinje.antal = parseInt(amountInput.value);
             salgslinje.samletPris = salgslinje.antal * salgslinje.enhedsPris
             createBestillingTable()
         }

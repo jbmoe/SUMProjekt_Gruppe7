@@ -1,6 +1,7 @@
 <head>
     <script src="../admin.js" defer></script>
     <script src="../statistik.js" defer></script>
+    <link rel="icon" href="../img/favicon.png">
     <link rel="stylesheet" href="../css/admin.css">
     <link rel="stylesheet" href="../css/index.css">
 </head>
@@ -12,32 +13,32 @@
         <button class="tablinks" id='admin'>Admin</button>
         <button class="tablinks" id='logout'>Log ud</button>
     </div>
-    <div class= "item3">
+    <div class="item3">
         <h3>Admin</h3>
     </div>
     <div class="grid-container">
-    
-    <div class= "item1">
-    <span id="buttons">
-        <button id="opretBtn" class="openModal">Opret vare</button>
-        <button id="ændreBtn" class="openModal">Ændre vare</button>
-        <button id="opretuserBtn" class="openModal">Opret bruger</button>
-        <button id="allUsersBtn" class="openModal">Administrér brugere</button>
-    </span>
-</div>
-    <div class="item2" id="salgsoversigt">
-        <table id="dagenssalg">
-            <thead>
-                <tr>
-                    <th>Beskrivelse</th>
-                    <th>Antal</th>
-                    <th>Pris</th>
-                </tr>
-            </thead>
-            <tbody id="salgcontent"></tbody>
-        </table>
+
+        <div class="item1">
+            <span id="buttons">
+                <button id="opretBtn" class="openModal">Opret vare</button>
+                <button id="ændreBtn" class="openModal">Ændre vare</button>
+                <button id="opretuserBtn" class="openModal">Opret bruger</button>
+                <button id="allUsersBtn" class="openModal">Administrér brugere</button>
+            </span>
+        </div>
+        <div class="item2" id="salgsoversigt">
+            <table id="dagenssalg">
+                <thead>
+                    <tr>
+                        <th class="statAttribut">Beskrivelse</th>
+                        <th class="statAttribut">Antal</th>
+                        <th class="statAttribut">Pris</th>
+                    </tr>
+                </thead>
+                <tbody id="salgcontent"></tbody>
+            </table>
+        </div>
     </div>
-</div>
     <div id="opretModal" class="modal">
 
         <!-- Modal content -->
