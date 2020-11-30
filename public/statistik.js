@@ -1,10 +1,15 @@
-var statistikTable = document.getElementById('salgcontent')
+var frekvensTable = document.getElementById('freqContent')
+var datoTable = document.getElementById('dateContent')
+var periodeTable = document.getElementById('periodContent')
+var datePicker = document.getElementById('date')
+var periodStartPicker = document.getElementById('periodStart')
+var periodEndPicker = document.getElementById('periodEnd')
 var orders = []
 
-function fillTable(arr) {
-    statistikTable.innerHTML = ''
+function fillTable(table, arr) {
+    table.innerHTML = ''
     for (const e of arr) {
-        let row = statistikTable.insertRow();
+        let row = table.insertRow();
         row.insertCell().innerHTML = e.product
         row.insertCell().innerHTML = e.amount
         row.insertCell().innerHTML = e.sum
@@ -12,19 +17,27 @@ function fillTable(arr) {
     }
 }
 
-function statByDate(date) {
+/**
+ * Finder hyppigheden af produkter i oprettede ordrer på en given dato 
+ * @param {Date} date dato der ønskes statistk for 
+ * @param {*} category kategorien af produkter der skal laves statistik på. Hvis alle kategorier ønskes, angives 'Alle'
+ */
+function statForPeriod(d1, d2, category) {
     let freqMap = new Map()
-    let d = new Date(date)
+
+    let date1 = new Date(d1)
+    let date2 = new Date(d2)
+
     for (const o of orders) {
         let orderD = new Date(o.time)
-        if (orderD.getDate() == d.getDate() && orderD.getMonth() == d.getMonth() && orderD.getFullYear() == d.getFullYear()) {
+        if (orderD >= date1 && orderD <= date2) {
             let products = JSON.parse(o.products)
             for (const p of products) {
                 if (freqMap.has(p.productId)) {
                     let entry = freqMap.get(p.productId)
                     entry.amount += p.antal
                     entry.sum = entry.amount * p.enhedsPris
-                } else {
+                } else if (p.kategori === category || category === 'Alle') {
                     let entry = {
                         product: p.navn,
                         amount: p.antal,
@@ -39,6 +52,41 @@ function statByDate(date) {
     return Array.from(freqMap.values());
 }
 
+/**
+ * Finder hyppigheden af produkter i oprettede ordrer på en given dato 
+ * @param {Date} date dato der ønskes statistk for 
+ * @param {*} category kategorien af produkter der skal laves statistik på. Hvis alle kategorier ønskes, angives 'Alle'
+ */
+function statForDate(date, category) {
+    let freqMap = new Map()
+    for (const o of orders) {
+        let orderD = new Date(o.time)
+        if (orderD.getDate() == date.getDate() && orderD.getMonth() == date.getMonth() && orderD.getFullYear() == date.getFullYear()) {
+            let products = JSON.parse(o.products)
+            for (const p of products) {
+                if (freqMap.has(p.productId)) {
+                    let entry = freqMap.get(p.productId)
+                    entry.amount += p.antal
+                    entry.sum = entry.amount * p.enhedsPris
+                } else if (p.kategori === category || category === 'Alle') {
+                    let entry = {
+                        product: p.navn,
+                        amount: p.antal,
+                        category: p.kategori,
+                        sum: p.antal * p.enhedsPris
+                    }
+                    freqMap.set(p.productId, entry)
+                }
+            }
+        }
+    }
+    return Array.from(freqMap.values());
+}
+
+/**
+ * Finder hyppigheden af produkter i oprettede ordrer
+ * @param {String} category kategorien af produkter der skal laves statistik på. Hvis alle kategorier ønskes, angives 'Alle'
+ */
 function freqStat(category) {
     let freqMap = new Map();
     for (const o of orders) {
@@ -66,9 +114,8 @@ function freqStat(category) {
  * Function til at sortere table, og ja har selv lavet den *wink wink* (:
  * @param {Number} n 
  */
-function sortTable(n) {
+function sortTable(table, n) {
     var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
-    table = statistikTable;
     switching = true;
     // Set the sorting direction to ascending:
     dir = "asc";
@@ -128,10 +175,6 @@ function sortTable(n) {
     }
 }
 
-async function showProductsByCat(category) {
-    fillTable(freqStat(category))
-}
-
 async function initialize() {
     try {
         orders = await get('bestilling/api');
@@ -150,17 +193,44 @@ async function get(url) {
 async function main() {
     await initialize()
 
-    let theads = Array.from(document.getElementsByClassName('statAttribut'))
-    for (let i = 0; i < theads.length; i++) {
-        const element = theads[i];
-        element.onclick = () => sortTable(i)
+    datePicker.value = new Date().toISOString().slice(0, 10);
+    datePicker.onchange = () => {
+        fillTable(datoTable, statForDate(new Date(datePicker.value), 'Alle'))
     }
 
-    let kategoriSelect = document.getElementById('kategori')
-    kategoriSelect.onchange = () => fillTable(freqStat(kategoriSelect.value))
+    let date2 = new Date()
+    let date1 = new Date()
+    date1.setDate(date2.getDate() - 7)
 
-    fillTable(freqStat('Alle'))
+    periodStartPicker.value = date1.toISOString().slice(0, 10) + "T" + date1.toTimeString().slice(0, 5)
+    periodStartPicker.onchange = () => {
+        fillTable(periodeTable, statForPeriod(periodStartPicker.value, periodEndPicker.value, 'Alle'))
+    }
 
-    console.log(statByDate(Date.now()))
+    periodEndPicker.value = date2.toISOString().slice(0, 10) + "T" + date2.toTimeString().slice(0, 5)
+    periodEndPicker.onchange = () => {
+        fillTable(periodeTable, statForPeriod(periodStartPicker.value, periodEndPicker.value, 'Alle'))
+    }
+
+    let theads = document.getElementsByClassName('statAttribut')
+    for (let i = 0; i < theads.length; i++) {
+        const element = theads[i];
+        let table = element.parentElement.parentElement.nextElementSibling;
+        element.onclick = () => sortTable(table, i % 3)
+    }
+
+    let categoryFreq = document.querySelector('.kategoriFrek')
+    categoryFreq.onchange = () => fillTable(frekvensTable, freqStat(categoryFreq.value))
+    let categoryDate = document.querySelector('.kategoriDato')
+    categoryDate.onchange = () => fillTable(datoTable, statForDate(new Date(datePicker.value), categoryDate.value))
+    let categoryPeriod = document.querySelector('.kategoriPeriode')
+    categoryPeriod.onchange = () => fillTable(periodeTable, statForPeriod(new Date(periodStartPicker.value), new Date(periodEndPicker.value), categoryPeriod.value))
+
+
+    fillTable(frekvensTable, freqStat('Alle'))
+
+    fillTable(datoTable, statForDate(new Date(), 'Alle'))
+
+    fillTable(periodeTable, statForPeriod(date1, date2, 'Alle'))
 }
 main()

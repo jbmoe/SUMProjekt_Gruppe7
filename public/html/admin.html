@@ -13,11 +13,10 @@
         <button class="tablinks" id='admin'>Admin</button>
         <button class="tablinks" id='logout'>Log ud</button>
     </div>
-    <div class="item3">
+    <div class="item5">
         <h3>Admin</h3>
     </div>
     <div class="grid-container">
-
         <div class="item1">
             <span id="buttons">
                 <button id="opretBtn" class="openModal">Opret vare</button>
@@ -26,15 +25,16 @@
                 <button id="allUsersBtn" class="openModal">Administrér brugere</button>
             </span>
         </div>
-        <div class="item2" id="salgsoversigt">
-            <table id="dagenssalg">
+        <div class="item2" id="frekvensStatistik">
+            <h5>Samlet salg</h5>
+            <table>
                 <thead>
                     <tr>
                         <th class="statAttribut">Beskrivelse</th>
                         <th class="statAttribut">Antal</th>
                         <th class="statAttribut">Pris</th>
                         <th>
-                            <select class="data" id="kategori">
+                            <select class="kategoriFrek">
                                 <option value="Alle">Alle kategorier</option>
                                 <option value="Madvare">Madvare</option>
                                 <option value="Drikkevare">Drikkevare</option>
@@ -43,7 +43,59 @@
                         </th>
                     </tr>
                 </thead>
-                <tbody id="salgcontent"></tbody>
+                <tbody id="freqContent"></tbody>
+            </table>
+        </div>
+        <div class="item3" id="statistikDag">
+            <h5>Samlet salg for dag</h5>
+            <label for="date">Vælg dato</label>
+            <input type="date" id="date">
+            <table>
+                <thead>
+                    <tr>
+                        <th class="statAttribut">Beskrivelse</th>
+                        <th class="statAttribut">Antal</th>
+                        <th class="statAttribut">Pris</th>
+                        <th>
+                            <select class="kategoriDato">
+                                <option value="Alle">Alle kategorier</option>
+                                <option value="Madvare">Madvare</option>
+                                <option value="Drikkevare">Drikkevare</option>
+                                <option value="Diverse">Diverse</option>
+                            </select>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody id="dateContent"></tbody>
+            </table>
+        </div>
+        <div class="item4" id="statistikPeriode">
+            <h5>Samlet salg for periode</h5>
+            <div>
+                <label for="periodStart">Vælg periode start: </label>
+                <input type="datetime-local" id="periodStart">
+            </div>
+            <div>
+                <label for="periodEnd">Vælg periode slut: </label>
+                <input type="datetime-local" id="periodEnd">
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th class="statAttribut">Beskrivelse</th>
+                        <th class="statAttribut">Antal</th>
+                        <th class="statAttribut">Pris</th>
+                        <th>
+                            <select class="kategoriPeriode">
+                                <option value="Alle">Alle kategorier</option>
+                                <option value="Madvare">Madvare</option>
+                                <option value="Drikkevare">Drikkevare</option>
+                                <option value="Diverse">Diverse</option>
+                            </select>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody id="periodContent"></tbody>
             </table>
         </div>
     </div>
