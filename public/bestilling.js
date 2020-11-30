@@ -58,6 +58,7 @@ function addProductToBestilling(product) {
         let salgslinje = {
             antal: 1,
             navn: product.name,
+            kategori: product.category,
             samletPris: product.price,
             enhedsPris: product.price,
             productId: product._id

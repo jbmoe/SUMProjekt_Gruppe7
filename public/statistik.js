@@ -2,17 +2,18 @@ var statistikTable = document.getElementById('salgcontent')
 var orders = []
 
 function fillTable(arr) {
+    statistikTable.innerHTML = ''
     for (const e of arr) {
         let row = statistikTable.insertRow();
         row.insertCell().innerHTML = e.product
         row.insertCell().innerHTML = e.amount
         row.insertCell().innerHTML = e.sum
+        row.insertCell().innerHTML = e.category
     }
 }
 
 function statByDate(date) {
     let freqMap = new Map()
-
     let d = new Date(date)
     for (const o of orders) {
         let orderD = new Date(o.time)
@@ -27,6 +28,7 @@ function statByDate(date) {
                     let entry = {
                         product: p.navn,
                         amount: p.antal,
+                        category: p.kategori,
                         sum: p.antal * p.enhedsPris
                     }
                     freqMap.set(p.productId, entry)
@@ -37,8 +39,8 @@ function statByDate(date) {
     return Array.from(freqMap.values());
 }
 
-function freqStat() {
-    let freqMap = new Map()
+function freqStat(category) {
+    let freqMap = new Map();
     for (const o of orders) {
         let products = JSON.parse(o.products)
         for (const p of products) {
@@ -46,10 +48,11 @@ function freqStat() {
                 let entry = freqMap.get(p.productId)
                 entry.amount += p.antal
                 entry.sum = entry.amount * p.enhedsPris
-            } else {
+            } else if (p.kategori === category || category === 'Alle') {
                 let entry = {
                     product: p.navn,
                     amount: p.antal,
+                    category: p.kategori,
                     sum: p.antal * p.enhedsPris
                 }
                 freqMap.set(p.productId, entry)
@@ -77,7 +80,7 @@ function sortTable(n) {
         rows = table.rows;
         /* Loop through all table rows (except the
         first, which contains table headers): */
-        for (i = 0; i < (rows.length - 1); i++) {
+        for (i = 0; i < rows.length - 1; i++) {
             // Start by saying there should be no switching:
             shouldSwitch = false;
             /* Get the two elements you want to compare,
@@ -125,6 +128,10 @@ function sortTable(n) {
     }
 }
 
+async function showProductsByCat(category) {
+    fillTable(freqStat(category))
+}
+
 async function initialize() {
     try {
         orders = await get('bestilling/api');
@@ -149,7 +156,11 @@ async function main() {
         element.onclick = () => sortTable(i)
     }
 
-    fillTable(freqStat())
+    let kategoriSelect = document.getElementById('kategori')
+    kategoriSelect.onchange = () => fillTable(freqStat(kategoriSelect.value))
+
+    fillTable(freqStat('Alle'))
+
     console.log(statByDate(Date.now()))
 }
 main()
