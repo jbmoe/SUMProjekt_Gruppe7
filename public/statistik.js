@@ -6,15 +6,19 @@ var periodStartPicker = document.getElementById('periodStart')
 var periodEndPicker = document.getElementById('periodEnd')
 var orders = []
 
-function fillTable(table, arr) {
+function fillTable(table, statArr) {
     table.innerHTML = ''
-    for (const e of arr) {
+    for (const e of statArr[0]) {
         let row = table.insertRow();
         row.insertCell().innerHTML = e.product
         row.insertCell().innerHTML = e.amount
         row.insertCell().innerHTML = e.sum
         row.insertCell().innerHTML = e.category
     }
+    let row = table.insertRow()
+    row.insertCell().innerHTML = 'Samlet salg'
+    row.insertCell().innerHTML = statArr[1]
+    row.insertCell().innerHTML = statArr[2]
 }
 
 /**
@@ -24,7 +28,7 @@ function fillTable(table, arr) {
  */
 function statForPeriod(d1, d2, category) {
     let freqMap = new Map()
-
+    let sum = 0, count = 0;
     let date1 = new Date(d1)
     let date2 = new Date(d2)
 
@@ -35,8 +39,14 @@ function statForPeriod(d1, d2, category) {
             for (const p of products) {
                 if (freqMap.has(p.productId)) {
                     let entry = freqMap.get(p.productId)
+                    sum -= entry.amount * p.enhedsPris
+                    count -= entry.amount
+
                     entry.amount += p.antal
                     entry.sum = entry.amount * p.enhedsPris
+
+                    sum += entry.amount * p.enhedsPris
+                    count += entry.amount
                 } else if (p.kategori === category || category === 'Alle') {
                     let entry = {
                         product: p.navn,
@@ -44,12 +54,14 @@ function statForPeriod(d1, d2, category) {
                         category: p.kategori,
                         sum: p.antal * p.enhedsPris
                     }
+                    sum += entry.sum;
+                    count += entry.amount;
                     freqMap.set(p.productId, entry)
                 }
             }
         }
     }
-    return Array.from(freqMap.values());
+    return [Array.from(freqMap.values()), count, sum];
 }
 
 /**
@@ -59,6 +71,7 @@ function statForPeriod(d1, d2, category) {
  */
 function statForDate(date, category) {
     let freqMap = new Map()
+    let sum = 0, count = 0;
     for (const o of orders) {
         let orderD = new Date(o.time)
         if (orderD.getDate() == date.getDate() && orderD.getMonth() == date.getMonth() && orderD.getFullYear() == date.getFullYear()) {
@@ -66,8 +79,14 @@ function statForDate(date, category) {
             for (const p of products) {
                 if (freqMap.has(p.productId)) {
                     let entry = freqMap.get(p.productId)
+                    sum -= entry.amount * p.enhedsPris
+                    count -= entry.amount
+
                     entry.amount += p.antal
                     entry.sum = entry.amount * p.enhedsPris
+
+                    sum += entry.amount * p.enhedsPris
+                    count += entry.amount
                 } else if (p.kategori === category || category === 'Alle') {
                     let entry = {
                         product: p.navn,
@@ -75,12 +94,14 @@ function statForDate(date, category) {
                         category: p.kategori,
                         sum: p.antal * p.enhedsPris
                     }
+                    sum += entry.sum;
+                    count += entry.amount;
                     freqMap.set(p.productId, entry)
                 }
             }
         }
     }
-    return Array.from(freqMap.values());
+    return [Array.from(freqMap.values()), count, sum];
 }
 
 /**
@@ -89,13 +110,20 @@ function statForDate(date, category) {
  */
 function freqStat(category) {
     let freqMap = new Map();
+    let sum = 0, count = 0;
     for (const o of orders) {
         let products = JSON.parse(o.products)
         for (const p of products) {
             if (freqMap.has(p.productId)) {
                 let entry = freqMap.get(p.productId)
+                sum -= entry.amount * p.enhedsPris
+                count -= entry.amount
+
                 entry.amount += p.antal
                 entry.sum = entry.amount * p.enhedsPris
+
+                sum += entry.amount * p.enhedsPris
+                count += entry.amount
             } else if (p.kategori === category || category === 'Alle') {
                 let entry = {
                     product: p.navn,
@@ -103,11 +131,13 @@ function freqStat(category) {
                     category: p.kategori,
                     sum: p.antal * p.enhedsPris
                 }
+                sum += entry.sum;
+                count += entry.amount;
                 freqMap.set(p.productId, entry)
             }
         }
     }
-    return Array.from(freqMap.values());
+    return [Array.from(freqMap.values()), count, sum];
 }
 
 /**
@@ -221,11 +251,12 @@ async function main() {
 
     let categoryFreq = document.querySelector('.kategoriFrek')
     categoryFreq.onchange = () => fillTable(frekvensTable, freqStat(categoryFreq.value))
+
     let categoryDate = document.querySelector('.kategoriDato')
     categoryDate.onchange = () => fillTable(datoTable, statForDate(new Date(datePicker.value), categoryDate.value))
+
     let categoryPeriod = document.querySelector('.kategoriPeriode')
     categoryPeriod.onchange = () => fillTable(periodeTable, statForPeriod(new Date(periodStartPicker.value), new Date(periodEndPicker.value), categoryPeriod.value))
-
 
     fillTable(frekvensTable, freqStat('Alle'))
 
