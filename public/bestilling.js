@@ -14,6 +14,7 @@ var productTable = document.getElementById('productTableContent')
 var adminTab = document.getElementById('admin')
 var logoutTab = document.getElementById('logout')
 var products = [];
+var selectedToSplit = [];
 var bestillingMap = new Map();
 
 function createProductTable(products) {
@@ -239,7 +240,14 @@ async function editOrderHandler(order) {
         }
         deleteBtn.src = '../img/slet.png'
         cellDelete.appendChild(deleteBtn)
+
+        let cellSplit = row.insertCell();
+        let splitCheckbox = document.createElement('input')
+        splitCheckbox.setAttribute('type', 'checkbox')
+        splitCheckbox.onclick = () => selectToSplit(s, splitCheckbox.checked)
+        cellSplit.appendChild(splitCheckbox)
     }
+
 
     let samletPrisRow = table.insertRow();
     samletPrisRow.insertCell().innerHTML = 'Samlet pris';
@@ -271,6 +279,8 @@ async function editOrderHandler(order) {
     document.getElementById('saveButton').onclick = () => updateOrder(order, salgslinjer, samletPrisInput.value, bemærkningInput.value)
 
     document.getElementById('betalButton').onclick = () => betalOrder(order)
+
+    document.getElementById('opdelButton').onclick = () => opdelRegning(order)
 }
 
 function addProductToOrder(order) {
@@ -370,6 +380,39 @@ function printBestilling(bestilling) {
     console.log(toReturn)
 }
 
+async function opdelRegning(order) {
+    let samletPris = 0;
+    for (s of selectedToSplit) {
+        samletPris += parseInt(s.samletPris)
+    }
+
+    let bestilling = {
+        time: order.time,
+        table: order.table,
+        waiter: order.waiter,
+        products: JSON.stringify(selectedToSplit),
+        price: samletPris,
+        comment: order.comment
+    }
+
+    let paymentMethod = document.getElementById('betaling').value
+    if (confirm(`Er du sikker på du vil tilknytte betaling og afslutte bestillingen?\nDen vil blive flyttet til betalte bestillinger under Admin`)) {
+        let newOrder = await post('/bestilling', bestilling)
+        let order = JSON.stringify(newOrder.createdOrder)
+        await post('/bestilling/payment', { order, paymentMethod })
+    }
+}
+
+function selectToSplit(salgslinje, checked) {
+    if (!selectedToSplit.includes(salgslinje) && checked) {
+        selectedToSplit.push(salgslinje)
+    }
+    else if (selectedToSplit.includes && !checked) {
+        selectedToSplit.splice(salgslinje)
+    }
+    console.log(selectedToSplit)
+}
+
 async function initialize() {
     try {
         products = await get('/api/products');
@@ -386,6 +429,7 @@ async function get(url) {
 }
 
 async function post(url, objekt) {
+    console.log(objekt)
     const respons = await fetch(url, {
         method: "POST",
         body: JSON.stringify(objekt),
@@ -411,6 +455,7 @@ async function main() {
     document.getElementById('saveButton').onclick = updateOrder
     document.getElementById('lavRabatKronerButton').onclick = lavRabatKroner
     document.getElementById('lavRabatProcentButton').onclick = lavRabatProcent
+
 
     for (e of document.querySelectorAll("#close")) {
         e.onclick = function (event) {

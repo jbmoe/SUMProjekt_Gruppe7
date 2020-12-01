@@ -6,15 +6,23 @@ var periodStartPicker = document.getElementById('periodStart')
 var periodEndPicker = document.getElementById('periodEnd')
 var orders = []
 
-function fillTable(table, arr) {
+function fillTable(table, statArr) {
     table.innerHTML = ''
-    for (const e of arr) {
+    for (const e of statArr[0]) {
         let row = table.insertRow();
         row.insertCell().innerHTML = e.product
         row.insertCell().innerHTML = e.amount
         row.insertCell().innerHTML = e.sum
         row.insertCell().innerHTML = e.category
     }
+    // Indsætter række nederst i tabellen med samlet oversigt 
+    let footer = table.parentElement.querySelector('tfoot')
+    footer.innerHTML = ''
+    let row = footer.insertRow()
+    row.insertCell().innerHTML = 'Samlet salg'
+    row.insertCell().innerHTML = statArr[1]
+    row.insertCell().innerHTML = statArr[2]
+    table.parentElement.appendChild(footer)
 }
 
 /**
@@ -24,7 +32,7 @@ function fillTable(table, arr) {
  */
 function statForPeriod(d1, d2, category) {
     let freqMap = new Map()
-
+    let sum = 0, count = 0;
     let date1 = new Date(d1)
     let date2 = new Date(d2)
 
@@ -35,8 +43,14 @@ function statForPeriod(d1, d2, category) {
             for (const p of products) {
                 if (freqMap.has(p.productId)) {
                     let entry = freqMap.get(p.productId)
+                    sum -= entry.amount * p.enhedsPris
+                    count -= entry.amount
+
                     entry.amount += p.antal
                     entry.sum = entry.amount * p.enhedsPris
+
+                    sum += entry.amount * p.enhedsPris
+                    count += entry.amount
                 } else if (p.kategori === category || category === 'Alle') {
                     let entry = {
                         product: p.navn,
@@ -44,12 +58,14 @@ function statForPeriod(d1, d2, category) {
                         category: p.kategori,
                         sum: p.antal * p.enhedsPris
                     }
+                    sum += entry.sum;
+                    count += entry.amount;
                     freqMap.set(p.productId, entry)
                 }
             }
         }
     }
-    return Array.from(freqMap.values());
+    return [Array.from(freqMap.values()), count, sum];
 }
 
 /**
@@ -59,6 +75,7 @@ function statForPeriod(d1, d2, category) {
  */
 function statForDate(date, category) {
     let freqMap = new Map()
+    let sum = 0, count = 0;
     for (const o of orders) {
         let orderD = new Date(o.time)
         if (orderD.getDate() == date.getDate() && orderD.getMonth() == date.getMonth() && orderD.getFullYear() == date.getFullYear()) {
@@ -66,8 +83,14 @@ function statForDate(date, category) {
             for (const p of products) {
                 if (freqMap.has(p.productId)) {
                     let entry = freqMap.get(p.productId)
+                    sum -= entry.amount * p.enhedsPris
+                    count -= entry.amount
+
                     entry.amount += p.antal
                     entry.sum = entry.amount * p.enhedsPris
+
+                    sum += entry.amount * p.enhedsPris
+                    count += entry.amount
                 } else if (p.kategori === category || category === 'Alle') {
                     let entry = {
                         product: p.navn,
@@ -75,12 +98,14 @@ function statForDate(date, category) {
                         category: p.kategori,
                         sum: p.antal * p.enhedsPris
                     }
+                    sum += entry.sum;
+                    count += entry.amount;
                     freqMap.set(p.productId, entry)
                 }
             }
         }
     }
-    return Array.from(freqMap.values());
+    return [Array.from(freqMap.values()), count, sum];
 }
 
 /**
@@ -89,13 +114,20 @@ function statForDate(date, category) {
  */
 function freqStat(category) {
     let freqMap = new Map();
+    let sum = 0, count = 0;
     for (const o of orders) {
         let products = JSON.parse(o.products)
         for (const p of products) {
             if (freqMap.has(p.productId)) {
                 let entry = freqMap.get(p.productId)
+                sum -= entry.amount * p.enhedsPris
+                count -= entry.amount
+
                 entry.amount += p.antal
                 entry.sum = entry.amount * p.enhedsPris
+
+                sum += entry.amount * p.enhedsPris
+                count += entry.amount
             } else if (p.kategori === category || category === 'Alle') {
                 let entry = {
                     product: p.navn,
@@ -103,11 +135,13 @@ function freqStat(category) {
                     category: p.kategori,
                     sum: p.antal * p.enhedsPris
                 }
+                sum += entry.sum;
+                count += entry.amount;
                 freqMap.set(p.productId, entry)
             }
         }
     }
-    return Array.from(freqMap.values());
+    return [Array.from(freqMap.values()), count, sum];
 }
 
 /**
@@ -121,10 +155,10 @@ function sortTable(table, n) {
     dir = "asc";
     /* Make a loop that will continue until
     no switching has been done: */
+    rows = table.rows;
     while (switching) {
         // Start by saying: no switching is done:
         switching = false;
-        rows = table.rows;
         /* Loop through all table rows (except the
         first, which contains table headers): */
         for (i = 0; i < rows.length - 1; i++) {
@@ -134,24 +168,24 @@ function sortTable(table, n) {
             one from current row and one from the next: */
             x = rows[i].getElementsByTagName("TD")[n];
             y = rows[i + 1].getElementsByTagName("TD")[n];
-
+            // console.log(x,y)
             /* Check if the two rows should switch place,
             based on the direction, asc or desc: */
             if (dir == "asc") {
-                if (n != 2 && x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                if (n == 0 && x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
                     // If so, mark as a switch and break the loop:
                     shouldSwitch = true;
                     break;
-                } else if (n == 2 && parseInt(x.innerHTML) > parseInt(y.innerHTML)) {
+                } else if (n != 0 && parseInt(x.innerHTML) > parseInt(y.innerHTML)) {
                     shouldSwitch = true;
                     break;
                 }
             } else if (dir == "desc") {
-                if (n != 2 && x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                if (n == 0 && x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
                     // If so, mark as a switch and break the loop:
                     shouldSwitch = true;
                     break;
-                } else if (n == 2 && parseInt(x.innerHTML) < parseInt(y.innerHTML)) {
+                } else if (n != 0 && parseInt(x.innerHTML) < parseInt(y.innerHTML)) {
                     shouldSwitch = true;
                     break;
                 }
@@ -221,11 +255,12 @@ async function main() {
 
     let categoryFreq = document.querySelector('.kategoriFrek')
     categoryFreq.onchange = () => fillTable(frekvensTable, freqStat(categoryFreq.value))
+
     let categoryDate = document.querySelector('.kategoriDato')
     categoryDate.onchange = () => fillTable(datoTable, statForDate(new Date(datePicker.value), categoryDate.value))
+
     let categoryPeriod = document.querySelector('.kategoriPeriode')
     categoryPeriod.onchange = () => fillTable(periodeTable, statForPeriod(new Date(periodStartPicker.value), new Date(periodEndPicker.value), categoryPeriod.value))
-
 
     fillTable(frekvensTable, freqStat('Alle'))
 
