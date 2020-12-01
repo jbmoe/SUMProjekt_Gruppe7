@@ -14,9 +14,9 @@ describe('integration test - promise', function () {
             .expect('Content-Type', /html/);
     });
 
-    it("get('/orders') test", async () => {
+    it("get('/order') test", async () => {
         let response = await request(app)
-            .get('/api/orders')
+            .get('/bestilling/api')
             .expect(200)
             .expect('Content-Type', /json/);
         response.body.length.should.be.greaterThanOrEqual(1); 
@@ -24,7 +24,7 @@ describe('integration test - promise', function () {
 
     it("post('/order') test", async () => {
         let response = await request(app)
-            .post('/api/orders')
+            .post('/bestilling')
             .send({
                 'orderID' : 'testOrder2',
                 'time' : 1234,
@@ -45,18 +45,5 @@ describe('integration test - promise', function () {
         response[response.length - 1].products.length.should.be.greaterThanOrEqual(1);
         response[response.length - 1].price.should.be.equal(100);
     });
-    
-//     it('should return status 200 after DELETING a order', function(done) {
-//         return request
-        
-//         .delete('/api/orders/' + order.orderID)
-//         .end(function(err, res){
-//             if(err) {
-//                 throw err;
-//             }
-//             res.should.have.status(200);
-//             done(); 
-//         });
-//     });
 })
 

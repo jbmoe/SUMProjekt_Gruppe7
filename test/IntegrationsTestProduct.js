@@ -42,18 +42,5 @@ describe('integration test - promise', function () {
         response[response.length - 1].category.should.be.equal('testCategory')
     });
     
-
-    
-    // it('should return status 200 after DELETING a product', function(done) {
-    //     return request
-    //     .delete('/api/products/' + 'testProduct')
-    //     .end(function(err, res){
-    //         if(err) {
-    //             throw err;
-    //         }
-    //         res.should.have.status(200);
-    //         done(); 
-    //     });
-    // });
 });
 
