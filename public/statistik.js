@@ -15,10 +15,14 @@ function fillTable(table, statArr) {
         row.insertCell().innerHTML = e.sum
         row.insertCell().innerHTML = e.category
     }
-    let row = table.insertRow()
+    // Indsætter række nederst i tabellen med samlet oversigt 
+    let footer = table.parentElement.querySelector('tfoot')
+    footer.innerHTML = ''
+    let row = footer.insertRow()
     row.insertCell().innerHTML = 'Samlet salg'
     row.insertCell().innerHTML = statArr[1]
     row.insertCell().innerHTML = statArr[2]
+    table.parentElement.appendChild(footer)
 }
 
 /**
@@ -151,10 +155,10 @@ function sortTable(table, n) {
     dir = "asc";
     /* Make a loop that will continue until
     no switching has been done: */
+    rows = table.rows;
     while (switching) {
         // Start by saying: no switching is done:
         switching = false;
-        rows = table.rows;
         /* Loop through all table rows (except the
         first, which contains table headers): */
         for (i = 0; i < rows.length - 1; i++) {
@@ -164,24 +168,24 @@ function sortTable(table, n) {
             one from current row and one from the next: */
             x = rows[i].getElementsByTagName("TD")[n];
             y = rows[i + 1].getElementsByTagName("TD")[n];
-
+            // console.log(x,y)
             /* Check if the two rows should switch place,
             based on the direction, asc or desc: */
             if (dir == "asc") {
-                if (n != 2 && x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                if (n == 0 && x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
                     // If so, mark as a switch and break the loop:
                     shouldSwitch = true;
                     break;
-                } else if (n == 2 && parseInt(x.innerHTML) > parseInt(y.innerHTML)) {
+                } else if (n != 0 && parseInt(x.innerHTML) > parseInt(y.innerHTML)) {
                     shouldSwitch = true;
                     break;
                 }
             } else if (dir == "desc") {
-                if (n != 2 && x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                if (n == 0 && x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
                     // If so, mark as a switch and break the loop:
                     shouldSwitch = true;
                     break;
-                } else if (n == 2 && parseInt(x.innerHTML) < parseInt(y.innerHTML)) {
+                } else if (n != 0 && parseInt(x.innerHTML) < parseInt(y.innerHTML)) {
                     shouldSwitch = true;
                     break;
                 }
