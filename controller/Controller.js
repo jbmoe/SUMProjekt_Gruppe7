@@ -7,8 +7,8 @@ const config = require('../config');
 
 mongoose.connect(config.databaseURI, { useNewUrlParser: true, useUnifiedTopology: true })
 
-exports.createUser = async function (username, password, admin) {
-    return await User.create({
+exports.createUser = function (username, password, admin) {
+    return User.create({
         username,
         password,
         admin
@@ -25,17 +25,17 @@ exports.deleteUser = async function (userId) {
     return await User.deleteOne().where('_id').eq(userId).exec()
 };
 
-exports.getUser = async function (userId) {
-    return await User.findById(userId).exec(); 
+exports.getUser = async function (username) {
+    return User.find({ username }).exec()
 };
 
-exports.getUsers = async function () {
-    return await User.find().populate('Users').exec();
+exports.getUsers = function () {
+    return User.find().populate('Users').exec();
 };
 
 
-exports.createProduct = async function (name, price, category) {
-    return await Product.create({
+exports.createProduct = function (name, price, category) {
+    return Product.create({
         name,
         price,
         category
@@ -48,20 +48,20 @@ exports.updateProduct = async function (id, name, price, category) {
     return await Product.findOneAndUpdate(filter, updatedProduct, { new: true })
 }
 
-exports.getProduct = async function (productId) {
-    return await Product.findById(productId).exec();
+exports.getProduct = function (productId) {
+    return Product.findById(productId).exec();
 };
 
-exports.getProducts = async function () {
-    return await Product.find().populate('Products').exec();
+exports.getProducts = function () {
+    return Product.find().populate('Products').exec();
 };
 
 exports.deleteProduct = async function (productId) {
     return await Product.deleteOne().where('_id').eq(productId).exec()
 };
 
-exports.createOrder = async function (time, table, waiter, products, price, comment) {
-    return await Order.create({
+exports.createOrder = function (time, table, waiter, products, price, comment) {
+    return Order.create({
         time,
         table,
         waiter,
@@ -71,12 +71,12 @@ exports.createOrder = async function (time, table, waiter, products, price, comm
     });
 };
 
-exports.getOrder = async function (orderID) {
-    return await Order.findById(orderID).exec();
+exports.getOrder = function (orderID) {
+    return Order.findById(orderID).exec();
 };
 
-exports.getOrders = async function () {
-    return await Order.find().populate('UnpaidOrders').exec();
+exports.getOrders = function () {
+    return Order.find().populate('UnpaidOrders').exec();
 };
 
 exports.updateOrder = async function (id, products, price, comment) {
