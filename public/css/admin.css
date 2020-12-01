@@ -2,7 +2,7 @@
 .item2 {grid-area: tright; text-align: left;}
 .item3 {grid-area: bleft; text-align: left;}
 .item4 {grid-area: bright; text-align: left;}
-.item5 {grid-area: header; text-align: left;}
+.item5 {grid-area: header; text-align: center;}
 *{max-height: 100%;}
 .grid-container {
     display: grid; 
