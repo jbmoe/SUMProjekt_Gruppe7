@@ -29,93 +29,59 @@
         </div>
         <div class="item3">
             <h5>Vælg statistik:</h5>
-            <div><input id="samletStat" type='radio' name='group' value='1' checked>
-                <label for="samletStat">Samlet statistik</label></div>
-            <div><input id="dagStat" type='radio' name='group' value='3'>
-                <label for="dagStat">Statistik for dag</label></div>
-            <div><input id="periodeStat" type='radio' name='group' value='2'>
-                <label for="periodeStat">Statistik for periode</label></div>
+            <table>
+                <tr>
+                    <td>
+                        <div><input id="samletStat" type='radio' name='group' value='1' checked>
+                            <label for="samletStat">Samlet statistik</label></div>
+                        <div><input id="dagStat" type='radio' name='group' value='2'>
+                            <label for="dagStat">Statistik for dag</label></div>
+                        <div><input id="periodeStat" type='radio' name='group' value='3'>
+                            <label for="periodeStat">Statistik for periode</label></div>
+                    </td>
+                    <td>
+                        <div id="frekvensStatistik" name="tableInfo">
+                        </div>
+                        <div id="statistikDag" name="tableInfo">
+                            <label for="date">Vælg dato</label>
+                            <input type="date" id="date">
+                        </div>
+                        <div id="statistikPeriode" name="tableInfo">
+                            <div>
+                                <label for="periodStart">Vælg periode start: </label>
+                                <input type="datetime-local" id="periodStart">
+                            </div>
+                            <div>
+                                <label for="periodEnd">Vælg periode slut: </label>
+                                <input type="datetime-local" id="periodEnd">
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+
+            </table>
         </div>
-        <!-- <div class="item2" id="frekvensStatistik"> -->
         <div class="item4">
-            <div id="frekvensStatistik" name="table">
-                <h5>Samlet salg</h5>
-                <table>
-                    <thead>
-                        <tr>
-                            <th class="statAttribut">Beskrivelse</th>
-                            <th class="statAttribut">Antal</th>
-                            <th class="statAttribut">Pris</th>
-                            <th>
-                                <select class="kategoriFrek">
-                                    <option value="Alle">Alle kategorier</option>
-                                    <option value="Madvare">Madvare</option>
-                                    <option value="Drikkevare">Drikkevare</option>
-                                    <option value="Diverse">Diverse</option>
-                                </select>
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody id="freqContent"></tbody>
-                    <tfoot></tfoot>
-                </table>
-            </div>
-            <!-- <div class="item3" id="statistikDag"> -->
-            <div id="statistikDag" name="table">
-                <h5>Samlet salg for dag</h5>
-                <label for="date">Vælg dato</label>
-                <input type="date" id="date">
-                <table>
-                    <thead>
-                        <tr>
-                            <th class="statAttribut">Beskrivelse</th>
-                            <th class="statAttribut">Antal</th>
-                            <th class="statAttribut">Pris</th>
-                            <th>
-                                <select class="kategoriDato">
-                                    <option value="Alle">Alle kategorier</option>
-                                    <option value="Madvare">Madvare</option>
-                                    <option value="Drikkevare">Drikkevare</option>
-                                    <option value="Diverse">Diverse</option>
-                                </select>
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody id="dateContent"></tbody>
-                    <tfoot></tfoot>
-                </table>
-            </div>
-            <!-- <div class="item4" id="statistikPeriode"> -->
-            <div id="statistikPeriode" name="table">
-                <h5>Samlet salg for periode</h5>
-                <div>
-                    <label for="periodStart">Vælg periode start: </label>
-                    <input type="datetime-local" id="periodStart">
-                </div>
-                <div>
-                    <label for="periodEnd">Vælg periode slut: </label>
-                    <input type="datetime-local" id="periodEnd">
-                </div>
-                <table>
-                    <thead>
-                        <tr>
-                            <th class="statAttribut">Beskrivelse</th>
-                            <th class="statAttribut">Antal</th>
-                            <th class="statAttribut">Pris</th>
-                            <th>
-                                <select class="kategoriPeriode">
-                                    <option value="Alle">Alle kategorier</option>
-                                    <option value="Madvare">Madvare</option>
-                                    <option value="Drikkevare">Drikkevare</option>
-                                    <option value="Diverse">Diverse</option>
-                                </select>
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody id="periodContent"></tbody>
-                    <tfoot></tfoot>
-                </table>
-            </div>
+            <h5 id="tableHeadline"></h5>
+            <table>
+                <thead>
+                    <tr>
+                        <th class="statAttribut">Beskrivelse</th>
+                        <th class="statAttribut">Antal</th>
+                        <th class="statAttribut">Pris</th>
+                        <th>
+                            <select id="kategori">
+                                <option value="Alle">Alle kategorier</option>
+                                <option value="Madvare">Madvare</option>
+                                <option value="Drikkevare">Drikkevare</option>
+                                <option value="Diverse">Diverse</option>
+                            </select>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody id="tableContent"></tbody>
+                <tfoot></tfoot>
+            </table>
         </div>
     </div>
     <div id="opretModal" class="modal">
@@ -141,7 +107,6 @@
         </div>
 
     </div>
-
     <div id="ændreModal" class="modal">
         <!-- Modal content -->
         <div class="ændreModal-content">
@@ -159,7 +124,6 @@
             <button id="close">Annuller</button>
         </div>
     </div>
-
     <div id="opretUserModal" class="modal">
 
         <!-- Modal content -->
@@ -202,8 +166,4 @@
             <button id="close">Annuller</button>
         </div>
     </div>
-
-
-
-
 </body>

@@ -1,14 +1,14 @@
-var frekvensTable = document.getElementById('freqContent')
-var datoTable = document.getElementById('dateContent')
-var periodeTable = document.getElementById('periodContent')
+var table = document.getElementById('tableContent')
+// var datoTable = document.getElementById('dateContent')
+// var periodeTable = document.getElementById('periodContent')
 var datePicker = document.getElementById('date')
 var periodStartPicker = document.getElementById('periodStart')
 var periodEndPicker = document.getElementById('periodEnd')
 var radios = document.getElementsByName('group')
-var tableDivs = document.getElementsByName('table')
+var tableInfos = document.getElementsByName('tableInfo')
 var orders = []
 
-function fillTable(table, statArr) {
+function fillTable(statArr) {
     table.innerHTML = ''
     for (const e of statArr[0]) {
         let row = table.insertRow();
@@ -32,7 +32,7 @@ function fillTable(table, statArr) {
  * @param {Date} date dato der ønskes statistk for 
  * @param {*} category kategorien af produkter der skal laves statistik på. Hvis alle kategorier ønskes, angives 'Alle'
  */
-function statForPeriod(d1, d2, category) {
+function statForPeriod(category, d1, d2) {
     let freqMap = new Map()
     let sum = 0, count = 0;
     let date1 = new Date(d1)
@@ -75,7 +75,7 @@ function statForPeriod(d1, d2, category) {
  * @param {Date} date dato der ønskes statistk for 
  * @param {*} category kategorien af produkter der skal laves statistik på. Hvis alle kategorier ønskes, angives 'Alle'
  */
-function statForDate(date, category) {
+function statForDate(category, date) {
     let freqMap = new Map()
     let sum = 0, count = 0;
     for (const o of orders) {
@@ -150,8 +150,8 @@ function freqStat(category) {
  * Function til at sortere table, og ja har selv lavet den *wink wink* (:
  * @param {Number} n 
  */
-function sortTable(table, n) {
-    var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+function sortTable(n) {
+    var rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
     switching = true;
     // Set the sorting direction to ascending:
     dir = "asc";
@@ -219,9 +219,9 @@ async function initialize() {
     }
 }
 
-function hideTables() {
-    for (let i = 0; i < tableDivs.length; i++) {
-        tableDivs[i].style.display = 'none'
+function hideTableInfo() {
+    for (let i = 0; i < tableInfos.length; i++) {
+        tableInfos[i].style.display = 'none'
     }
 }
 
@@ -235,19 +235,26 @@ async function get(url) {
 async function main() {
     await initialize()
 
+    let headlines = ['Samletsalg', 'Samlet salg for dag', 'Samlet salg for periode']
     for (let i = 0; i < radios.length; i++) {
         radios[i].onchange = () => {
-            hideTables();
-            tableDivs[i].style.display = 'block'
+            hideTableInfo();
+            document.getElementById('tableHeadline').innerHTML = headlines[i]
+            document.getElementById('kategori').value = 'Alle'
+            tableInfos[i].style.display = 'block'
+            if (i == 0) fillTable(freqStat('Alle'))
+            else if (i == 1) fillTable(statForDate('Alle', new Date(datePicker.value)))
+            else fillTable(statForPeriod('Alle', new Date(periodStartPicker.value), new Date(periodEndPicker.value)))
         }
     }
 
-    hideTables()
-    tableDivs[0].style.display = 'block'
+    hideTableInfo()
+    tableInfos[0].style.display = 'block'
+    document.getElementById('tableHeadline').innerHTML = headlines[0]
 
     datePicker.value = new Date().toISOString().slice(0, 10);
     datePicker.onchange = () => {
-        fillTable(datoTable, statForDate(new Date(datePicker.value), 'Alle'))
+        fillTable(statForDate('Alle', new Date(datePicker.value)))
     }
 
     let date2 = new Date()
@@ -256,34 +263,28 @@ async function main() {
 
     periodStartPicker.value = date1.toISOString().slice(0, 10) + "T" + date1.toTimeString().slice(0, 5)
     periodStartPicker.onchange = () => {
-        fillTable(periodeTable, statForPeriod(periodStartPicker.value, periodEndPicker.value, 'Alle'))
+        fillTable(statForPeriod('Alle', periodStartPicker.value, periodEndPicker.value))
     }
 
     periodEndPicker.value = date2.toISOString().slice(0, 10) + "T" + date2.toTimeString().slice(0, 5)
     periodEndPicker.onchange = () => {
-        fillTable(periodeTable, statForPeriod(periodStartPicker.value, periodEndPicker.value, 'Alle'))
+        fillTable(statForPeriod('Alle', periodStartPicker.value, periodEndPicker.value))
     }
 
     let theads = document.getElementsByClassName('statAttribut')
     for (let i = 0; i < theads.length; i++) {
         const element = theads[i];
-        let table = element.parentElement.parentElement.nextElementSibling;
-        element.onclick = () => sortTable(table, i % 3)
+        element.onclick = () => sortTable(i % 3)
     }
 
-    let categoryFreq = document.querySelector('.kategoriFrek')
-    categoryFreq.onchange = () => fillTable(frekvensTable, freqStat(categoryFreq.value))
+    let select = document.getElementById('kategori')
+    select.onchange = () => {
+        let i = (Array.from(radios).find(e => e.checked == true)).value
+        if (i == 1) fillTable(freqStat(select.value))
+        else if (i == 2) fillTable(statForDate(select.value, new Date(datePicker.value)))
+        else fillTable(statForPeriod(select.value, new Date(periodStartPicker.value), new Date(periodEndPicker.value)))
+    }
 
-    let categoryDate = document.querySelector('.kategoriDato')
-    categoryDate.onchange = () => fillTable(datoTable, statForDate(new Date(datePicker.value), categoryDate.value))
-
-    let categoryPeriod = document.querySelector('.kategoriPeriode')
-    categoryPeriod.onchange = () => fillTable(periodeTable, statForPeriod(new Date(periodStartPicker.value), new Date(periodEndPicker.value), categoryPeriod.value))
-
-    fillTable(frekvensTable, freqStat('Alle'))
-
-    fillTable(datoTable, statForDate(new Date(), 'Alle'))
-
-    fillTable(periodeTable, statForPeriod(date1, date2, 'Alle'))
+    fillTable(freqStat('Alle'))
 }
 main()
