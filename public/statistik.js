@@ -4,6 +4,8 @@ var periodeTable = document.getElementById('periodContent')
 var datePicker = document.getElementById('date')
 var periodStartPicker = document.getElementById('periodStart')
 var periodEndPicker = document.getElementById('periodEnd')
+var radios = document.getElementsByName('group')
+var tableDivs = document.getElementsByName('table')
 var orders = []
 
 function fillTable(table, statArr) {
@@ -217,6 +219,12 @@ async function initialize() {
     }
 }
 
+function hideTables() {
+    for (let i = 0; i < tableDivs.length; i++) {
+        tableDivs[i].style.display = 'none'
+    }
+}
+
 async function get(url) {
     const respons = await fetch(url);
     if (respons.status !== 200) // OK
@@ -226,6 +234,16 @@ async function get(url) {
 
 async function main() {
     await initialize()
+
+    for (let i = 0; i < radios.length; i++) {
+        radios[i].onchange = () => {
+            hideTables();
+            tableDivs[i].style.display = 'block'
+        }
+    }
+
+    hideTables()
+    tableDivs[0].style.display = 'block'
 
     datePicker.value = new Date().toISOString().slice(0, 10);
     datePicker.onchange = () => {

@@ -1,19 +1,23 @@
-.item1 {grid-area: tleft; text-align: left;}
-.item2 {grid-area: tright; text-align: left;}
-.item3 {grid-area: bleft; text-align: left;}
-.item4 {grid-area: bright; text-align: left;}
-.item5 {grid-area: header; text-align: center;}
+.item1 {grid-area: header; text-align: center;}
+.item2 {grid-area: btns; text-align: left;}
+.item3 {grid-area: radios; text-align: left;}
+.item4 {grid-area: tables; text-align: left;}
+/* .item4 {grid-area: bright; text-align: left;} */
 *{max-height: 100%;}
 .grid-container {
     display: grid; 
     grid-template-areas: 
     'header header'
-    'tleft tright'
-    'bleft bright';
+    'btns radios'
+    'btns tables';
 
     grid-template-columns: 50% 50%;
     grid-gap: 10px;
     margin: 0 auto;
+}
+
+.item3{
+    display: grid;
 }
 
 .grid-container {
