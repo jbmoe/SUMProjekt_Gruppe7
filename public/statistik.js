@@ -1,4 +1,4 @@
-var table = document.getElementById('tableContent')
+var tableContent = document.getElementById('tableContent')
 // var datoTable = document.getElementById('dateContent')
 // var periodeTable = document.getElementById('periodContent')
 var datePicker = document.getElementById('date')
@@ -9,22 +9,22 @@ var tableInfos = document.getElementsByName('tableInfo')
 var orders = []
 
 function fillTable(statArr) {
-    table.innerHTML = ''
+    tableContent.innerHTML = ''
     for (const e of statArr[0]) {
-        let row = table.insertRow();
+        let row = tableContent.insertRow();
         row.insertCell().innerHTML = e.product
         row.insertCell().innerHTML = e.amount
         row.insertCell().innerHTML = e.sum
         row.insertCell().innerHTML = e.category
     }
     // Indsætter række nederst i tabellen med samlet oversigt 
-    let footer = table.parentElement.querySelector('tfoot')
+    let footer = tableContent.parentElement.querySelector('tfoot')
     footer.innerHTML = ''
     let row = footer.insertRow()
     row.insertCell().innerHTML = 'Samlet salg'
     row.insertCell().innerHTML = statArr[1]
     row.insertCell().innerHTML = statArr[2]
-    table.parentElement.appendChild(footer)
+    // table.parentElement.appendChild(footer)
 }
 
 /**
@@ -157,7 +157,7 @@ function sortTable(n) {
     dir = "asc";
     /* Make a loop that will continue until
     no switching has been done: */
-    rows = table.rows;
+    rows = tableContent.rows;
     while (switching) {
         // Start by saying: no switching is done:
         switching = false;
