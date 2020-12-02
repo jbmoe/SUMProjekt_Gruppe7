@@ -1,7 +1,7 @@
 body {
   font-family: sans-serif;
   background-color: #FBFBFB;
-  overflow-y: auto;
+  overflow-y: scroll;
 }
 
 #div-login {
@@ -18,8 +18,6 @@ body {
   height: 250px;
   width: 200px;
 }
-
-
 
 img{
   width: 20px;
