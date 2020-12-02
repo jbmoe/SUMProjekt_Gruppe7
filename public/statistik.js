@@ -271,7 +271,7 @@ async function main() {
     let theads = document.getElementsByClassName('statAttribut')
     for (let i = 0; i < theads.length; i++) {
         const element = theads[i];
-        element.onclick = () => sortTable(i % 3)
+        element.onclick = () => sortTable(i)
     }
 
     let select = document.getElementById('kategori')
