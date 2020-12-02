@@ -1,6 +1,4 @@
 var tableContent = document.getElementById('tableContent')
-// var datoTable = document.getElementById('dateContent')
-// var periodeTable = document.getElementById('periodContent')
 var datePicker = document.getElementById('date')
 var periodStartPicker = document.getElementById('periodStart')
 var periodEndPicker = document.getElementById('periodEnd')
@@ -24,7 +22,6 @@ function fillTable(statArr) {
     row.insertCell().innerHTML = 'Samlet salg'
     row.insertCell().innerHTML = statArr[1]
     row.insertCell().innerHTML = statArr[2]
-    // table.parentElement.appendChild(footer)
 }
 
 /**
