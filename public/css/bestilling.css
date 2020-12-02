@@ -33,7 +33,6 @@
   text-align: left;
 }
 
-
 @media only screen and (max-width: 600px) {
   .grid-container { 
     grid-template-areas:
@@ -46,8 +45,16 @@
 
   
 }
+
 #empty{
     background-color: white;
+}
+
+#orders{
+  overflow-y:scroll;
+  height:30rem;
+  display:block;
+  overflow-x: hidden;
 }
 
 #produktTable, #regning {
@@ -66,7 +73,7 @@ tr {
 }
 
 button {
-    font-size: 20px;
+    /* font-size: 20px; */
     border: black 5;
     padding: 5px 10px;
 }
@@ -95,8 +102,8 @@ select {
     padding-top: 100px; /* Location of the box */
     left: 0;
     top: 0;
-    width: 100%; /* Full width */
-    height: 100%; /* Full height */
+    min-width: 100%; /* Full width */
+    min-height: 100%; /* Full height */
     overflow: auto; /* Enable scroll if needed */
     background-color: rgb(0,0,0); /* Fallback color */
     background-color: rgba(0,0,0,0.4); /* Black w/ opacity */

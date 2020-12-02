@@ -68,7 +68,7 @@
 
 #produktTable{
     overflow-y:scroll;
-    height:300px;
+    height:30rem;
     display:block;
     overflow-x: hidden;
  }
