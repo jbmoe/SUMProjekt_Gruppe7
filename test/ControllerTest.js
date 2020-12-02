@@ -1,4 +1,4 @@
-require('should');
+require('should')
 const request = require('supertest');
 const controller = require("../controller/controller");
 let tid = 1234; 
