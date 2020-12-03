@@ -125,7 +125,7 @@ function udregnPris() {
 
 function lavRabatProcent() {
     let pris = parseInt(samletPrisInput.value);
-    let rabatProcent = document.getElementById('rabatProcent').value;
+    let rabatProcent = parseInt(document.getElementById('rabatProcent').value);
     let rabat = pris * rabatProcent / 100
     let totalRabat = parseInt(rabatGivet.value) || 0
 
@@ -156,14 +156,18 @@ function lavRabatKroner() {
 }
 
 async function opretBestilling() {
+    let products = bestillingMapToArray()
+    if (products.length == 0) return;
+
     let bestilling = {
         time: Date.now(),
         table: bordSelect.value,
         waiter: 'Per',
-        products: JSON.stringify(bestillingMapToArray()),
+        products: JSON.stringify(products),
         price: samletPrisInput.value,
         comment: bemærkningInput.value
     }
+
     console.log(await post('/bestilling', bestilling));
     printBestilling(bestilling)
     rydRegning()
@@ -440,8 +444,9 @@ function rydRegning() {
     regningContent.innerHTML = '';
     bestillingMap.clear();
     samletPrisInput.value = 0
-    bemærkningInput.value = ""
+    bemærkningInput.value = ''
     bordSelect.value = 1
+    rabatGivet.value = ''
 }
 
 function printBestilling(bestilling) {
@@ -459,9 +464,9 @@ function printBestilling(bestilling) {
         if (s.kategori == "Diverse") diverse += `Ret ${i + 1}: ${s.navn} Mængde: ${s.antal} Pris: ${s.enhedsPris}\n`
     }
 
-    toReturn += madvarer + '\n'
-    toReturn += drikkevarer + '\n'
-    toReturn += diverse + '\n'
+    if (madvarer.length > 29) toReturn += madvarer + '\n'
+    if (drikkevarer.length > 29) toReturn += drikkevarer + '\n'
+    if (diverse.length > 29) toReturn += diverse + '\n'
 
     toReturn += `\nBemærkning: ${bestilling.comment}\n`
     toReturn += `Total pris: ${bestilling.price}\n`
