@@ -2,7 +2,8 @@ const controller = require("../controller/Controller");
 const express = require('express');
 const router = express.Router();
 const path = require('path');
-const session= require('express-session');
+const session = require('express-session');
+const { request, response } = require("express");
 
 
 router
@@ -10,8 +11,8 @@ router
         try {
             const navn = request.session.navn;
             if (navn) {
-                response.sendFile(path.resolve('public','html','bestilling.html'))
-            } 
+                response.sendFile(path.resolve('public', 'html', 'bestilling.html'))
+            }
             else {
                 response.redirect('/')
             }
@@ -25,8 +26,21 @@ router
             if (navn) {
                 let orders = await controller.getOrders();
                 response.send(orders);
-            } 
+            }
             else {
+                response.redirect('/')
+            }
+        } catch (e) {
+            sendStatus(e, response);
+        }
+    })
+    .get('/api/:orderID', async (request, response) => {
+        try {
+            const navn = request.session.navn;
+            if (navn) {
+                let order = await controller.getOrder(request.params.orderID)
+                response.send(order)
+            } else {
                 response.redirect('/')
             }
         } catch (e) {

@@ -276,11 +276,23 @@ async function editOrderHandler(order) {
     bemærkningCell.setAttribute('colspan', '2')
     bemærkningCell.appendChild(bemærkningInput)
 
-    document.getElementById('saveButton').onclick = () => updateOrder(order, salgslinjer, samletPrisInput.value, bemærkningInput.value)
+    document.getElementById('saveButton').onclick = () => {
+        printAdditions(order)
+        updateOrder(order, salgslinjer, samletPrisInput.value, bemærkningInput.value)
+    }
 
     document.getElementById('betalButton').onclick = () => betalOrder(order)
 
     document.getElementById('opdelButton').onclick = () => opdelRegning(order)
+}
+
+function printAdditions(newOrder) {
+
+    console.log(newOrder)
+    let oldOrder = await get('/bestilling/api/' + newOrder._id)
+    console.log(oldOrder)
+
+
 }
 
 function addProductToOrder(order) {
@@ -429,7 +441,7 @@ async function get(url) {
 }
 
 async function post(url, objekt) {
-    console.log(objekt)
+    // console.log(objekt)
     const respons = await fetch(url, {
         method: "POST",
         body: JSON.stringify(objekt),
