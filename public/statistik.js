@@ -27,7 +27,7 @@ function fillTable(statArr) {
 /**
  * Finder hyppigheden af produkter i oprettede ordrer på en given dato 
  * @param {Date} date dato der ønskes statistk for 
- * @param {*} category kategorien af produkter der skal laves statistik på. Hvis alle kategorier ønskes, angives 'Alle'
+ * @param {String} category kategorien af produkter der skal laves statistik på. Hvis alle kategorier ønskes, angives 'Alle'
  */
 function statForPeriod(category, d1, d2) {
     let freqMap = new Map()
@@ -70,7 +70,7 @@ function statForPeriod(category, d1, d2) {
 /**
  * Finder hyppigheden af produkter i oprettede ordrer på en given dato 
  * @param {Date} date dato der ønskes statistk for 
- * @param {*} category kategorien af produkter der skal laves statistik på. Hvis alle kategorier ønskes, angives 'Alle'
+ * @param {String} category kategorien af produkter der skal laves statistik på. Hvis alle kategorier ønskes, angives 'Alle'
  */
 function statForDate(category, date) {
     let freqMap = new Map()

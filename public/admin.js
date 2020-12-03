@@ -1,7 +1,7 @@
 var modals = document.getElementsByClassName("modal");
-var opretModal = document.getElementById("opretModal");
-var ændreModal = document.getElementById("ændreModal");
-var userModal = document.getElementById("opretUserModal")
+var createProductModal = document.getElementById("opretModal");
+var updateProductModal = document.getElementById("ændreModal");
+var createUserModal = document.getElementById("opretUserModal")
 var allUsersModal = document.getElementById("allUsersModal")
 var openModalBtns = document.getElementsByClassName("openModal");
 var closeElements = document.querySelectorAll("#close");
@@ -9,7 +9,7 @@ var inputData = document.getElementsByClassName('data')
 var inputUserData = document.getElementsByClassName('userData')
 var productTable = document.getElementById('produktTable')
 var userTable = document.getElementById('userTable')
-var bestillingTab = document.getElementById('bestilling')
+var orderTab = document.getElementById('bestilling')
 var logoutTab = document.getElementById('logout')
 var products = [];
 var users = []
@@ -26,12 +26,12 @@ async function initialize() {
 }
 
 function closeModals(event) {
-    if (event.target == opretModal || event.target == ændreModal || event.target == userModal || event.target == allUsersModal || event.key == 'Escape') {
-        opretModal.style.display = "none";
-        ændreModal.style.display = "none";
-        userModal.style.display = "none";
+    if (event.target == createProductModal || event.target == updateProductModal || event.target == createUserModal || event.target == allUsersModal || event.key == 'Escape') {
+        createProductModal.style.display = "none";
+        updateProductModal.style.display = "none";
+        createUserModal.style.display = "none";
         allUsersModal.style.display = "none";
-        rydFelter()
+        clearFields()
     }
 }
 
@@ -56,9 +56,9 @@ async function createUser() {
         admin
     };
 
-    rydFelter()
+    clearFields()
 
-    userModal.style.display = "none";
+    createUserModal.style.display = "none";
 
     let createdUser = await post('/admin', user);
     user._id = createdUser.created._id;
@@ -87,7 +87,7 @@ async function createProduct() {
         category
     };
 
-    rydFelter()
+    clearFields()
 
     let createdProduct = await post('/api/products/', product);
     product._id = createdProduct.created._id;
@@ -234,9 +234,8 @@ async function deleteProduct(product) {
     products.splice(products.indexOf(product), 1)
 }
 
-function rydFelter() {
-    for (input of inputData)
-        input.value = '';
+function clearFields() {
+    for (input of inputData) input.value = '';
     for (input of inputUserData) input.value = '';
     inputUserData[3].checked = false;
 }
@@ -278,11 +277,11 @@ async function main() {
     // When the user clicks on <span> (x) or annuller, close the modals
     for (e of closeElements) {
         e.onclick = function () {
-            opretModal.style.display = "none";
-            ændreModal.style.display = "none";
-            userModal.style.display = "none";
+            createProductModal.style.display = "none";
+            updateProductModal.style.display = "none";
+            createUserModal.style.display = "none";
             allUsersModal.style.display = "none";
-            rydFelter();
+            clearFields();
         }
     }
 
@@ -298,7 +297,7 @@ async function main() {
     document.getElementById('logout').onclick = () => {
         window.location.href = '/logout'
     }
-    bestillingTab.addEventListener('click', function () {
+    orderTab.addEventListener('click', function () {
         window.location.href = '/bestilling'
     }, false)
 
