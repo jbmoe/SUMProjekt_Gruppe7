@@ -135,7 +135,7 @@ function freqStat(category) {
                     sum: p.antal * p.enhedsPris
                 }
                 sum += entry.sum;
-                count += entry.amount;
+                count += parseInt(entry.amount);
                 freqMap.set(p.productId, entry)
             }
         }
