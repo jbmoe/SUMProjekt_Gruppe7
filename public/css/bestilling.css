@@ -70,15 +70,15 @@ tr {
     width: 49px;
 }
 
-button {
-    /* font-size: 20px; */
-    border: black 5;
-    padding: 5px 10px;
-}
 
 label {
     font-size: 25px;
     font-weight: bold;
+}
+
+textarea {
+  font-size: 20px;
+  font-family: sans-serif;
 }
 
 input {
