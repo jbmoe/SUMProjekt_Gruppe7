@@ -13,7 +13,10 @@ var kategoriSelect = document.getElementById('kategori')
 var productTable = document.getElementById('productTableContent')
 var adminTab = document.getElementById('admin')
 var logoutTab = document.getElementById('logout')
+var bordNrSelect = document.getElementById('bordNr')
+let rabatGivet = document.getElementById('rabatGivet')
 var products = [];
+var orders = [];
 var selectedToSplit = [];
 var bestillingMap = new Map();
 
@@ -123,19 +126,24 @@ function udregnPris() {
 function lavRabatProcent() {
     let pris = parseInt(samletPrisInput.value);
     let rabatProcent = document.getElementById('rabatProcent').value;
+    let rabat = pris * rabatProcent / 100
+    let totalRabat = parseInt(rabatGivet.value) || 0
 
     if (rabatProcent > 100 || rabatProcent < 1 || !rabatProcent) {
         alert('Rabatprocent skal være mellem 1 og 100')
     } else {
-        let total = pris - (pris * rabatProcent / 100);
+        let total = pris - rabat;
         samletPrisInput.value = total;
     }
+    rabatGivet.value = totalRabat + rabat
+
     document.getElementById('rabatProcent').value = ''
 }
 
 function lavRabatKroner() {
     let pris = parseInt(samletPrisInput.value);
-    let rabatKroner = document.getElementById('rabatKroner').value;
+    let rabatKroner = parseInt(document.getElementById('rabatKroner').value);
+    let totalRabat = parseFloat(rabatGivet.value) || 0
 
     if (rabatKroner > pris || rabatKroner < 1 || !rabatKroner) {
         alert('Rabatkroner skal være mindst 1 kr og ikke over total pris!')
@@ -143,6 +151,7 @@ function lavRabatKroner() {
         let total = pris - rabatKroner;
         samletPrisInput.value = total;
     }
+    rabatGivet.value = totalRabat + rabatKroner
     document.getElementById('rabatKroner').value = ''
 }
 
@@ -158,6 +167,8 @@ async function opretBestilling() {
     console.log(await post('/bestilling', bestilling));
     printBestilling(bestilling)
     rydRegning()
+    orders.push(bestilling)
+    refreshBordNr()
 }
 
 function bestillingMapToArray() {
@@ -328,10 +339,20 @@ function printAdditions(order, newProducts) {
 
     let toPrint = `*************TILFØJELSER*************\nBord ${order.table}, Tidspunkt: ${new Date(order.time).toLocaleString()}\n\n`;
 
+    let madvarer = '**********MADVARER**********\n'
+    let drikkevarer = '*********DRIKKEVARER********\n'
+    let diverse = '***********DIVERSE**********\n'
+
     for (let i = 0; i < newProducts.length; i++) {
         s = newProducts[i]
-        toPrint += `Ret ${i + 1}: ${s.name} Mængde: ${s.amount} Pris: ${s.price}\n`
+        if (s.category == "Madvare") madvarer += `Ret ${i + 1}: ${s.name} Mængde: ${s.amount} Pris: ${s.price}\n`
+        if (s.category == "Drikkevare") drikkevarer += `Ret ${i + 1}: ${s.name} Mængde: ${s.amount} Pris: ${s.price}\n`
+        if (s.category == "Diverse") diverse += `Ret ${i + 1}: ${s.name} Mængde: ${s.amount} Pris: ${s.price}\n`
     }
+
+    if (madvarer.length > 29) toPrint += madvarer + '\n'
+    if (drikkevarer.length > 29) toPrint += drikkevarer + '\n'
+    if (diverse.length > 29) toPrint += diverse + '\n'
 
     toPrint += `\nBemærkning: ${order.comment}\n`
     toPrint += `Total pris: ${order.price}\n`
@@ -411,7 +432,8 @@ async function betalOrder(order) {
         editModal.style.display = "none"
         generateOrdersModal()
     }
-
+    orders.splice(order)
+    refreshBordNr()
 }
 
 function rydRegning() {
@@ -426,10 +448,20 @@ function printBestilling(bestilling) {
     let salgslinjer = bestillingMapToArray()
     let toReturn = `Bord ${bestilling.table}, Tidspunkt: ${new Date(bestilling.time).toLocaleString()}\n\n`;
 
+    let madvarer = '**********MADVARER**********\n'
+    let drikkevarer = '*********DRIKKEVARER********\n'
+    let diverse = '***********DIVERSE**********\n'
+
     for (let i = 0; i < salgslinjer.length; i++) {
         s = salgslinjer[i]
-        toReturn += `Ret ${i + 1}: ${s.navn} Mængde: ${s.antal} Pris: ${s.enhedsPris}\n`
+        if (s.kategori == "Madvare") madvarer += `Ret ${i + 1}: ${s.navn} Mængde: ${s.antal} Pris: ${s.enhedsPris}\n`
+        if (s.kategori == "Drikkevare") drikkevarer += `Ret ${i + 1}: ${s.navn} Mængde: ${s.antal} Pris: ${s.enhedsPris}\n`
+        if (s.kategori == "Diverse") diverse += `Ret ${i + 1}: ${s.navn} Mængde: ${s.antal} Pris: ${s.enhedsPris}\n`
     }
+
+    toReturn += madvarer + '\n'
+    toReturn += drikkevarer + '\n'
+    toReturn += diverse + '\n'
 
     toReturn += `\nBemærkning: ${bestilling.comment}\n`
     toReturn += `Total pris: ${bestilling.price}\n`
@@ -471,9 +503,27 @@ function selectToSplit(salgslinje, checked) {
     console.log(selectedToSplit)
 }
 
+function refreshBordNr() {
+    let takenTables = [];
+    for (order of orders) {
+        takenTables.push(parseInt(order.table))
+    }
+    bordNrSelect.innerHTML = ""
+
+    for (let i = 1; i <= 100; i++) {
+        if (!takenTables.includes(i)) {
+            let option = document.createElement('option')
+            option.value = i
+            option.text = i
+            bordNrSelect.appendChild(option)
+        }
+    }
+}
+
 async function initialize() {
     try {
         products = await get('/api/products');
+        orders = await get('/bestilling/api');
     } catch (fejl) {
         console.log(fejl);
     }
@@ -547,5 +597,6 @@ async function main() {
     }
     await initialize();
     createProductTable(products);
+    refreshBordNr()
 }
 main();
