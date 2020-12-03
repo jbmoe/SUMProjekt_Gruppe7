@@ -221,11 +221,11 @@ async function editOrderHandler(order) {
         let antalInput = document.createElement('input');
         antalInput.setAttribute('type', 'number')
         antalInput.setAttribute('min', '1')
-        antalInput.value = s.antal;
+        antalInput.value = parseInt(s.antal);
         antalInput.style.maxWidth = '30px'
         antalInput.onchange = () => {
             samletPrisInput.value = samletPrisInput.value - cellPris.innerHTML
-            s.antal = antalInput.value;
+            s.antal = parseInt(antalInput.value);
             s.samletPris = s.antal * s.enhedsPris;
             cellPris.innerHTML = s.samletPris;
             samletPrisInput.value = parseInt(samletPrisInput.value) + parseInt(cellPris.innerHTML)
@@ -280,11 +280,68 @@ async function editOrderHandler(order) {
     bemærkningCell.setAttribute('colspan', '2')
     bemærkningCell.appendChild(bemærkningInput)
 
-    document.getElementById('saveButton').onclick = () => updateOrder(order, salgslinjer, samletPrisInput.value, bemærkningInput.value)
+    document.getElementById('saveButton').onclick = async () => {
+        let additions = await findAdditions(order._id, salgslinjer)
+        printAdditions(order, additions)
+        updateOrder(order, salgslinjer, samletPrisInput.value, bemærkningInput.value)
+    }
 
     document.getElementById('betalButton').onclick = () => betalOrder(order)
 
     document.getElementById('opdelButton').onclick = () => opdelRegning(order)
+}
+
+async function findAdditions(orderID, newProducts) {
+    let oldOrder = await get('/bestilling/api/' + orderID)
+    let oldProducts = JSON.parse(oldOrder.products)
+    let toReturn = []
+
+    for (const p of newProducts) {
+        let found = false
+        let i = 0;
+        while (!found && i < oldProducts.length) {
+            let e = oldProducts[i]
+            if (e.productId == p.productId) found = true;
+            else i++
+        }
+        let e = oldProducts[i]
+        if (found && p.antal > e.antal) {
+            let addition = {
+                name: p.navn,
+                amount: p.antal - e.antal,
+                category: p.kategori,
+                price: p.enhedsPris * p.antal
+            }
+            toReturn.push(addition)
+        }
+        else if (!found) {
+            let addition = {
+                name: p.navn,
+                amount: p.antal,
+                category: p.kategori,
+                price: p.enhedsPris * p.antal
+            }
+            toReturn.push(addition)
+        }
+    }
+    return toReturn;
+}
+
+function printAdditions(order, newProducts) {
+    if (newProducts.length == 0) return
+
+    let toPrint = `*************TILFØJELSER*************\nBord ${order.table}, Tidspunkt: ${new Date(order.time).toLocaleString()}\n\n`;
+
+    for (let i = 0; i < newProducts.length; i++) {
+        s = newProducts[i]
+        toPrint += `Ret ${i + 1}: ${s.name} Mængde: ${s.amount} Pris: ${s.price}\n`
+    }
+
+    toPrint += `\nBemærkning: ${order.comment}\n`
+    toPrint += `Total pris: ${order.price}\n`
+    toPrint += `Tjener: ${order.waiter}\n`
+
+    console.log(toPrint)
 }
 
 function addProductToOrder(order) {
@@ -318,6 +375,7 @@ function addProductHandler(order, product) {
             let salgslinje = {
                 antal: 1,
                 navn: product.name,
+                kategori: product.category,
                 samletPris: product.price,
                 enhedsPris: product.price,
                 productId: product._id
@@ -452,7 +510,7 @@ async function get(url) {
 }
 
 async function post(url, objekt) {
-    console.log(objekt)
+    // console.log(objekt)
     const respons = await fetch(url, {
         method: "POST",
         body: JSON.stringify(objekt),
@@ -475,7 +533,6 @@ async function deLete(url) {
 async function main() {
     document.getElementById('opretButton').onclick = opretBestilling
     document.getElementById('rydButton').onclick = rydRegning
-    document.getElementById('saveButton').onclick = updateOrder
     document.getElementById('lavRabatKronerButton').onclick = lavRabatKroner
     document.getElementById('lavRabatProcentButton').onclick = lavRabatProcent
 
