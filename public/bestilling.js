@@ -339,10 +339,20 @@ function printAdditions(order, newProducts) {
 
     let toPrint = `*************TILFØJELSER*************\nBord ${order.table}, Tidspunkt: ${new Date(order.time).toLocaleString()}\n\n`;
 
+    let madvarer = '**********MADVARER**********\n'
+    let drikkevarer = '*********DRIKKEVARER********\n'
+    let diverse = '***********DIVERSE**********\n'
+
     for (let i = 0; i < newProducts.length; i++) {
         s = newProducts[i]
-        toPrint += `Ret ${i + 1}: ${s.name} Mængde: ${s.amount} Pris: ${s.price}\n`
+        if (s.category == "Madvare") madvarer += `Ret ${i + 1}: ${s.name} Mængde: ${s.amount} Pris: ${s.price}\n`
+        if (s.category == "Drikkevare") drikkevarer += `Ret ${i + 1}: ${s.name} Mængde: ${s.amount} Pris: ${s.price}\n`
+        if (s.category == "Diverse") diverse += `Ret ${i + 1}: ${s.name} Mængde: ${s.amount} Pris: ${s.price}\n`
     }
+
+    if (madvarer.length > 29) toPrint += madvarer + '\n'
+    if (drikkevarer.length > 29) toPrint += drikkevarer + '\n'
+    if (diverse.length > 29) toPrint += diverse + '\n'
 
     toPrint += `\nBemærkning: ${order.comment}\n`
     toPrint += `Total pris: ${order.price}\n`
@@ -438,10 +448,20 @@ function printBestilling(bestilling) {
     let salgslinjer = bestillingMapToArray()
     let toReturn = `Bord ${bestilling.table}, Tidspunkt: ${new Date(bestilling.time).toLocaleString()}\n\n`;
 
+    let madvarer = '**********MADVARER**********\n'
+    let drikkevarer = '*********DRIKKEVARER********\n'
+    let diverse = '***********DIVERSE**********\n'
+
     for (let i = 0; i < salgslinjer.length; i++) {
         s = salgslinjer[i]
-        toReturn += `Ret ${i + 1}: ${s.navn} Mængde: ${s.antal} Pris: ${s.enhedsPris}\n`
+        if (s.kategori == "Madvare") madvarer += `Ret ${i + 1}: ${s.navn} Mængde: ${s.antal} Pris: ${s.enhedsPris}\n`
+        if (s.kategori == "Drikkevare") drikkevarer += `Ret ${i + 1}: ${s.navn} Mængde: ${s.antal} Pris: ${s.enhedsPris}\n`
+        if (s.kategori == "Diverse") diverse += `Ret ${i + 1}: ${s.navn} Mængde: ${s.antal} Pris: ${s.enhedsPris}\n`
     }
+
+    toReturn += madvarer + '\n'
+    toReturn += drikkevarer + '\n'
+    toReturn += diverse + '\n'
 
     toReturn += `\nBemærkning: ${bestilling.comment}\n`
     toReturn += `Total pris: ${bestilling.price}\n`
