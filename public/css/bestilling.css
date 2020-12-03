@@ -41,9 +41,7 @@
         'bestilling'
         'footer';
         grid-template-columns: 100%;
-  }
-
-  
+  }  
 }
 
 #empty{

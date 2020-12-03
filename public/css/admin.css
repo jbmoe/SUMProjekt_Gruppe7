@@ -1,8 +1,7 @@
 .item1 {grid-area: header; text-align: center;}
-.item2 {grid-area: btns; text-align: left;}
+.item2 {grid-area: btns; text-align: right;}
 .item3 {grid-area: radios; text-align: left;}
 .item4 {grid-area: tables; text-align: left;}
-/* .item4 {grid-area: bright; text-align: left;} */
 *{max-height: 100%;}
 .grid-container {
     display: grid; 
@@ -10,14 +9,19 @@
     'header header'
     'btns radios'
     'btns tables';
-
     grid-template-columns: 50% 50%;
     grid-gap: 10px;
+    max-width: 1024px;
     margin: 0 auto;
 }
 
-.item3{
+.item3 {
     display: grid;
+}
+
+.item4 {
+    height: 100%;
+    text-align: left;
 }
 
 .grid-container {
@@ -25,12 +29,22 @@
     gap: 0px; 
 }
 
-
-
 #buttons button {
     display: block;
+    border: black 5;
     padding: 10px;
     margin: 10px;
+}
+
+@media only screen and (max-width: 700px) {
+    .grid-container {
+        grid-template-areas:
+        'header'
+        'btns' 
+        'radios'
+        'tables';
+        grid-template-columns: 100%;
+    }
 }
   
 /* Modal Content */
