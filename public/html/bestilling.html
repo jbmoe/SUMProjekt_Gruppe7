@@ -17,7 +17,7 @@
     </div>
     <div class="grid-container">
         <div class="item1" id="header">
-            <h3>Bestilling</h3>
+            <h2>Bestilling</h2>
             <button id='hentborde'>Hent borde</button>
         </div>
         <div class="item2" id="menu">
@@ -56,12 +56,14 @@
             <div id="opretDiv">
                 <div>
                     <label for='samletPris'></label>
-                    <input readonly type='text' id='samletPris' value=0></input>
+                    <input readonly type='text' id='samletPris'placeholder="Samletpris"></input>
                     <label for='bordNr'>Bord Nr.</label>
                     <select name='bordNr' id='bordNr' value=0></select>
                     <br>
                     <label for='bemærkning'></label>
-                    <input type='text' id='bemærkning' placeholder="Bemærkning"></input>
+                    <textarea type='text' id='bemærkning' placeholder="Bemærkning" rows='3' cols='23'></textarea>
+                    <br>
+                    <label for='button'></label>
                     <button id='opretButton'>Opret</button>
                     <button id='rydButton'>Ryd</button>
                 </div>
@@ -77,8 +79,8 @@
                     <input type='number' min="1" id='rabatKroner' placeholder="Rabatkroner">
                     <button id="lavRabatKronerButton">Udregn</button>
                     <br>
-                    <label for='rabatGivet'>Total rabat</label>
-                    <input type='text' id='rabatGivet' readonly>
+                    <label for='rabatGivet'></label>
+                    <input type='text' id='rabatGivet' placeholder="Totalrabat" readonly>
                 </div>
             </div>
         </div>
