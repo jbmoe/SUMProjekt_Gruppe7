@@ -13,7 +13,9 @@ var kategoriSelect = document.getElementById('kategori')
 var productTable = document.getElementById('productTableContent')
 var adminTab = document.getElementById('admin')
 var logoutTab = document.getElementById('logout')
+var bordNrSelect = document.getElementById('bordNr')
 var products = [];
+var orders = [];
 var selectedToSplit = [];
 var bestillingMap = new Map();
 
@@ -158,6 +160,8 @@ async function opretBestilling() {
     console.log(await post('/bestilling', bestilling));
     printBestilling(bestilling)
     rydRegning()
+    orders.push(bestilling)
+    refreshBordNr()
 }
 
 function bestillingMapToArray() {
@@ -353,7 +357,8 @@ async function betalOrder(order) {
         editModal.style.display = "none"
         generateOrdersModal()
     }
-
+    orders.splice(order)
+    refreshBordNr()
 }
 
 function rydRegning() {
@@ -413,9 +418,27 @@ function selectToSplit(salgslinje, checked) {
     console.log(selectedToSplit)
 }
 
+function refreshBordNr() {
+    let takenTables = [];
+    for (order of orders) {
+        takenTables.push(parseInt(order.table))
+    }
+    bordNrSelect.innerHTML = ""
+
+    for (let i = 1; i <= 100; i++) {
+        if (!takenTables.includes(i)) {
+            let option = document.createElement('option')
+            option.value = i
+            option.text = i
+            bordNrSelect.appendChild(option)
+        }
+    }
+}
+
 async function initialize() {
     try {
         products = await get('/api/products');
+        orders = await get('/bestilling/api');
     } catch (fejl) {
         console.log(fejl);
     }
@@ -490,5 +513,6 @@ async function main() {
     }
     await initialize();
     createProductTable(products);
+    refreshBordNr()
 }
 main();
