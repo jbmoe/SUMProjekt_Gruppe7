@@ -14,6 +14,7 @@ var productTable = document.getElementById('productTableContent')
 var adminTab = document.getElementById('admin')
 var logoutTab = document.getElementById('logout')
 var bordNrSelect = document.getElementById('bordNr')
+let rabatGivet = document.getElementById('rabatGivet')
 var products = [];
 var orders = [];
 var selectedToSplit = [];
@@ -125,19 +126,24 @@ function udregnPris() {
 function lavRabatProcent() {
     let pris = parseInt(samletPrisInput.value);
     let rabatProcent = document.getElementById('rabatProcent').value;
+    let rabat = pris * rabatProcent / 100
+    let totalRabat = parseInt(rabatGivet.value) || 0
 
     if (rabatProcent > 100 || rabatProcent < 1 || !rabatProcent) {
         alert('Rabatprocent skal være mellem 1 og 100')
     } else {
-        let total = pris - (pris * rabatProcent / 100);
+        let total = pris - rabat;
         samletPrisInput.value = total;
     }
+    rabatGivet.value = totalRabat + rabat
+
     document.getElementById('rabatProcent').value = ''
 }
 
 function lavRabatKroner() {
     let pris = parseInt(samletPrisInput.value);
-    let rabatKroner = document.getElementById('rabatKroner').value;
+    let rabatKroner = parseInt(document.getElementById('rabatKroner').value);
+    let totalRabat = parseFloat(rabatGivet.value) || 0
 
     if (rabatKroner > pris || rabatKroner < 1 || !rabatKroner) {
         alert('Rabatkroner skal være mindst 1 kr og ikke over total pris!')
@@ -145,6 +151,7 @@ function lavRabatKroner() {
         let total = pris - rabatKroner;
         samletPrisInput.value = total;
     }
+    rabatGivet.value = totalRabat + rabatKroner
     document.getElementById('rabatKroner').value = ''
 }
 
