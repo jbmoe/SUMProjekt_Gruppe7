@@ -30,6 +30,7 @@ describe('controller test - promise', function () {
         let id = product2._id
         await controller.deleteProduct(id); 
         product2 = await controller.getProduct(id); 
+        console.log(product2)
         should.equal(product2, null)
     })
 
@@ -71,6 +72,7 @@ describe('controller test - promise', function () {
         let id = order2._id
         await controller.deleteOrder(id)
         order2 = await controller.getOrder(id)
+        console.log(order2)
         should.equal(order2, null)
     })
 
@@ -95,21 +97,21 @@ describe('controller test - promise', function () {
     it('updateUser() test', async () => {
         let user1 = await controller.createUser('Per', 'password', true)
         let id = user1._id
-        await controller.updateUser(id, 'Per2', 'password2', false)
-        let user = await controller.getUser(id)
-        user.username.should.be.equal('Per2')
-        user.password.should.be.equal('password2')
-        user.admin.should.be.equal(false)
+        let user2 = await controller.updateUser(id, 'Per2', 'password2', false)
+        let user = await controller.getUser(user2.username)
+        user[user.length-1].username.should.be.equal('Per2')
+        user[user.length-1].password.should.be.equal('password2')
+        user[user.length-1].admin.should.be.equal(false)
     })
 
 
     it('deleteUser() test', async () => {
-        let user2 = await controller.createUser('Rasmus', 'password', false)
-        let id = user2._id
-        console.log(user2)
+        let user = await controller.createUser('Rasmus', 'password', false)
+        let id = user._id
         await controller.deleteUser(id)
-        user2 = await controller.getUser(id)
-        should.equal(user2, null)
+        let username = user.username
+        let user2 = await controller.getUser(username)
+        user2.should.be.empty()
     })
 
     it('getUsers() test', async () => {
