@@ -20,7 +20,7 @@
 
 .item2 {
     height: 100%;
-    overflow-y:scroll;
+    overflow-y: scroll;
 }
 
 .item3 {
@@ -42,6 +42,11 @@
         'footer';
         grid-template-columns: 100%;
   }  
+  .produktTable {
+    overflow: hidden;
+    max-width: fit-content;
+    max-height: fit-content;
+  }
 }
 
 #empty{
