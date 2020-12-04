@@ -22,7 +22,6 @@ async function initialize() {
     try {
         products = await get('api/products');
         users = await get('admin/users')
-        console.log(orders)
     } catch (fejl) {
         console.log(fejl);
     }
@@ -269,6 +268,24 @@ function showOrder(order) {
         row.insertCell().innerHTML = s.antal;
         row.insertCell().innerHTML = s.samletPris;
     }
+
+    let samletPrisRow = table.insertRow();
+    samletPrisRow.insertCell().innerHTML = 'Samlet pris';
+    samletPrisRow.insertCell() // Emtpy cell for looks
+    samletPrisRow.insertCell().innerHTML = order.price;
+
+    let waiterRow = table.insertRow()
+    waiterRow.insertCell().innerHTML = 'Tjener'
+    waiterRow.insertCell() // Emtpy cell for looks
+    waiterRow.insertCell().innerHTML = order.waiter;
+
+    let bemærkningRow = table.insertRow();
+    bemærkningRow.insertCell().innerHTML = 'Bemærkning'
+
+    let bemærkningCell = bemærkningRow.insertCell();
+    bemærkningCell.setAttribute('colspan', '2')
+    bemærkningCell.innerHTML = order.comment
+
 }
 
 function clearFields() {

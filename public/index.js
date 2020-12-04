@@ -1,6 +1,8 @@
 let navn = document.getElementById('navn')
 let password = document.getElementById('password')
 let login = document.getElementById('login')
+let input = document.getElementById("password");
+
 
 async function get(url) {
     const respons = await fetch(url);
@@ -19,6 +21,12 @@ async function post(url, objekt) {
         throw new Error(respons.status);
     return await respons.json();
 }
+
+window.addEventListener("keyup", function (event) {
+    if (event.key === 'Enter') {
+        document.getElementById("login").click();
+    }
+})
 
 login.onclick = async () => {
     try {
