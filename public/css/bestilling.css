@@ -84,10 +84,11 @@ textarea {
 
 input {
     font-size: 20px;
+    width: 50%;
 }
 
 select {
-    font-size: 15px;
+    font-size: 20px;
 }
 
 #editModalDiv{
