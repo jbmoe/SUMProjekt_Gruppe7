@@ -12,6 +12,7 @@ var userTable = document.getElementById('userTable')
 var orderTab = document.getElementById('bestilling')
 var logoutTab = document.getElementById('logout')
 var products = [];
+var orders = [];
 var users = []
 
 
@@ -20,6 +21,10 @@ async function initialize() {
     try {
         products = await get('api/products');
         users = await get('admin/users')
+        paidOrders = await get('bestilling/paidOrders');
+        for (const o of paidOrders) {
+            orders.push(JSON.parse(o.order))
+        }
     } catch (fejl) {
         console.log(fejl);
     }
