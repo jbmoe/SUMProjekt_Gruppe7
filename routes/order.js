@@ -47,6 +47,19 @@ router
             sendStatus(e, response);
         }
     })
+    .get('/paidOrders', async (request, response) => {
+        try {
+            const navn = request.session.navn;
+            if (navn) {
+                let order = await controller.getPaidOrders();
+                response.send(order)
+            } else {
+                response.redirect('/')
+            }
+        } catch (e) {
+            sendStatus(e, response);
+        }
+    })
     .post('/', async (request, response) => {
         try {
             let { time, table, waiter, products, price, comment } = request.body;
@@ -58,8 +71,9 @@ router
     }).post('/payment', async (request, response) => {
         try {
             let { order, paymentMethod } = request.body;
-            await controller.createPaidOrder(order, paymentMethod);
             await controller.deleteOrder(order._id)
+            let orderToPay = JSON.stringify(order)
+            await controller.createPaidOrder(orderToPay, paymentMethod);
             response.send({ message: 'Order paid!' });
         } catch (e) {
             sendStatus(e, response);
