@@ -3,6 +3,7 @@ const request = require('supertest');
 const controller = require("../controller/controller");
 const app = require('../app.js');
 const { response } = require ('../app.js');
+const { post } = require('../routes/order');
 
 //Integrationstest af produkter
 describe('integration test - promise', function () {
@@ -13,8 +14,8 @@ describe('integration test - promise', function () {
             .expect(200)
             .expect('Content-Type', /html/);
     });
-
-    it("get('/order') test", async () => {
+    
+    it("get('/orders') test", async () => {
         let response = await request(app)
             .get('/bestilling/api')
             .expect(200)
