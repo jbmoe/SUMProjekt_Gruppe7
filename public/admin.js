@@ -3,6 +3,8 @@ var createProductModal = document.getElementById("opretModal");
 var updateProductModal = document.getElementById("ændreModal");
 var createUserModal = document.getElementById("opretUserModal")
 var allUsersModal = document.getElementById("allUsersModal")
+var orderModal = document.getElementById("bestillingModal")
+var editModal = document.getElementById('showOrder')
 var openModalBtns = document.getElementsByClassName("openModal");
 var closeElements = document.querySelectorAll("#close");
 var inputData = document.getElementsByClassName('data')
@@ -12,7 +14,6 @@ var userTable = document.getElementById('userTable')
 var orderTab = document.getElementById('bestilling')
 var logoutTab = document.getElementById('logout')
 var products = [];
-var orders = [];
 var users = []
 
 
@@ -21,10 +22,7 @@ async function initialize() {
     try {
         products = await get('api/products');
         users = await get('admin/users')
-        paidOrders = await get('bestilling/paidOrders');
-        for (const o of paidOrders) {
-            orders.push(JSON.parse(o.order))
-        }
+        console.log(orders)
     } catch (fejl) {
         console.log(fejl);
     }
@@ -36,6 +34,8 @@ function closeModals(event) {
         updateProductModal.style.display = "none";
         createUserModal.style.display = "none";
         allUsersModal.style.display = "none";
+        orderModal.style.display = "none";
+        editModal.style.display = "none"
         clearFields()
     }
 }
@@ -230,13 +230,45 @@ async function updateProduct(product, data) {
         price: parseInt(data[1]),
         category: data[2]
     }
-    // console.log(p);
     console.log(await post(`/api/products/update/${product._id}`, p), p);
 }
 
 async function deleteProduct(product) {
     console.log(await deLete(`/api/products/${product._id}`), product)
     products.splice(products.indexOf(product), 1)
+}
+
+function createOrdersTable() {
+    let table = document.getElementById('ordersContent')
+    table.innerHTML = ''
+    for (const o of orders) {
+        let row = table.insertRow();
+        row.insertCell().innerHTML = o.table;
+        row.insertCell().innerHTML = o.price;
+        row.insertCell().innerHTML = new Date(o.time).toLocaleDateString()
+
+        let cellShow = row.insertCell();
+        let showBtn = document.createElement('button');
+        showBtn.onclick = () => showOrder(o)
+        showBtn.innerHTML = 'Vis'
+        cellShow.appendChild(showBtn)
+
+    }
+}
+
+function showOrder(order) {
+    editModal.style.display = "block"
+
+    let table = document.getElementById('showOrderContent');
+    table.innerHTML = ''
+    let salgslinjer = JSON.parse(order.products);
+
+    for (const s of salgslinjer) {
+        let row = table.insertRow();
+        row.insertCell().innerHTML = s.navn
+        row.insertCell().innerHTML = s.antal;
+        row.insertCell().innerHTML = s.samletPris;
+    }
 }
 
 function clearFields() {
@@ -286,9 +318,12 @@ async function main() {
             updateProductModal.style.display = "none";
             createUserModal.style.display = "none";
             allUsersModal.style.display = "none";
+            orderModal.style.display = "none";
+            editModal.style.display = "none"
             clearFields();
         }
     }
+
 
 
     // When the user clicks anywhere outside of the modal or the escape button, close it
@@ -297,6 +332,7 @@ async function main() {
 
     document.getElementById('opret').onclick = createProduct;
     document.getElementById('opretUser').onclick = createUser
+
 
 
     document.getElementById('logout').onclick = () => {
@@ -309,6 +345,7 @@ async function main() {
     await initialize();
     createProductTable();
     createUserTable();
+    createOrdersTable();
 }
 
 main();

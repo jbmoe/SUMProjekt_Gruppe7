@@ -214,7 +214,6 @@ async function initialize() {
         for (const o of paidOrders) {
             orders.push(JSON.parse(o.order))
         }
-        console.log(orders)
     } catch (fejl) {
         console.log(fejl);
     }
