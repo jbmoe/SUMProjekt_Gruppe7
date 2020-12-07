@@ -55,31 +55,26 @@
         <div class="item4" id="footer">
             <div id="opretDiv">
                 <div>
-                    <label for='samletPris'></label>
                     <input readonly type='text' id='samletPris'placeholder="Samletpris"></input>
+                    <br>
                     <label for='bordNr'>Bord Nr.</label>
                     <select name='bordNr' id='bordNr' value=0></select>
                     <br>
-                    <label for='bemærkning'></label>
                     <textarea type='text' id='bemærkning' placeholder="Bemærkning" rows='3' cols='23'></textarea>
                     <br>
-                    <label for='button'></label>
                     <button id='opretButton'>Opret</button>
                     <button id='rydButton'>Ryd</button>
                 </div>
             </div>
             <div id="rabatDiv">
                 <div>
-                    <label></label>
                     <input type='number' id='rabatProcent' placeholder="Rabatprocent">
                     <button id="lavRabatProcentButton">Udregn</button>
                 </div>
                 <div>
-                    <label></label>
                     <input type='number' min="1" id='rabatKroner' placeholder="Rabatkroner">
                     <button id="lavRabatKronerButton">Udregn</button>
                     <br>
-                    <label for='rabatGivet'></label>
                     <input type='text' id='rabatGivet' placeholder="Totalrabat" readonly>
                 </div>
             </div>
@@ -97,10 +92,9 @@
                     </tr>
                 </thead>
                 <tbody id="ordersContent"></tbody>
+                <button hidden id="annuller">Annuller</button>
             </table>
-            <button id="annuller">Annuller</button>
         </div>
-
         <div id="editModal" class="modal">
             <div class="modal-content" id="editModalDiv">
                 <span class="close" id="close">&times;</span>

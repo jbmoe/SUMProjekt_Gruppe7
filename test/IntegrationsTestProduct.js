@@ -15,14 +15,7 @@ describe('integration test - promise', function () {
             .expect('Content-Type', /html/);
     });
 
-    it("get('/product') test", async () => {
-        let response = await request(app)
-            .get('/api/products')
-            .expect(200)
-            .expect('Content-Type', /json/);
-        response.body.length.should.be.greaterThanOrEqual(1); 
-        
-    });
+
 
     it("post('/product') test", async () => {
         let response = await request(app)
@@ -36,11 +29,20 @@ describe('integration test - promise', function () {
             .set('Accept', 'application/json')
             .expect(200);
         response = await controller.getProducts(); 
-        response.length.should.be.greaterThanOrEqual(2);
+        response.length.should.be.greaterThanOrEqual(1);
         response[response.length - 1].name.should.be.equal('testProduct')
         response[response.length - 1].price.should.be.equal(50)
         response[response.length - 1].category.should.be.equal('testCategory')
     });
     
+
+    it("get('/product') test", async () => {
+        let response = await request(app)
+            .get('/api/products')
+            .expect(200)
+            .expect('Content-Type', /json/);
+        response.body.length.should.be.greaterThanOrEqual(1); 
+        
+    });
 });
 

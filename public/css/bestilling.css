@@ -20,7 +20,7 @@
 
 .item2 {
     height: 100%;
-    overflow-y:scroll;
+    overflow-y: scroll;
 }
 
 .item3 {
@@ -42,6 +42,11 @@
         'footer';
         grid-template-columns: 100%;
   }  
+  .produktTable {
+    overflow: hidden;
+    max-width: fit-content;
+    max-height: fit-content;
+  }
 }
 
 #empty{
@@ -72,9 +77,10 @@ tr {
 
 
 label {
-    font-size: 25px;
+    font-size: 20px;
     font-weight: bold;
 }
+
 
 textarea {
   font-size: 20px;
@@ -83,10 +89,11 @@ textarea {
 
 input {
     font-size: 20px;
+    width: 50%;
 }
 
 select {
-    font-size: 15px;
+    font-size: 20px;
 }
 
 #editModalDiv{
@@ -105,6 +112,7 @@ select {
     overflow: auto; /* Enable scroll if needed */
     background-color: rgb(0,0,0); /* Fallback color */
     background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    overflow-y: scroll;
 }
 
 /* Modal Content */

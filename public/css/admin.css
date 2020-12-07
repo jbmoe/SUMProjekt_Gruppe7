@@ -17,11 +17,18 @@
 
 .item3 {
     display: grid;
+    height: 100px;
+    width: 500px;
 }
 
 .item4 {
     height: 100%;
     text-align: left;
+}
+
+#input {
+    font-size: 20px;
+    font-family: sans-serif;
 }
 
 .grid-container {
@@ -70,6 +77,26 @@
     display: grid;
 }
 
+.orderModal-content {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    max-width: fit-content;    
+    max-height: fit-content;
+    display: grid;
+}
+
+#showOrderModal{
+    background-color: #fefefe;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    max-width: fit-content;    
+    max-height: fit-content;
+    display: grid;
+}
+
 .opretUserModal-content * {
     margin: 2px;
 }
@@ -88,7 +115,7 @@
     overflow-y:scroll;
     height:30rem;
     display:block;
-    overflow-x: hidden;
+    overflow-x: scroll;
  }
 
  
@@ -100,6 +127,8 @@
     max-width: fit-content;  
     max-height: 80%;  
     display: grid;
+    overflow-y: scroll;
+    overflow-x: scroll;
 }
 
 #usersTable{

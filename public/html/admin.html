@@ -28,6 +28,8 @@
                 <br>
                 <button id="opretuserBtn" class="openModal">Opret bruger</button>
                 <button id="allUsersBtn" class="openModal">Administrér brugere</button>
+                <br>
+                <button id="visBestillinger" class="openModal">Bestillinger</button>
             </span>
         </div>
         <div class="item3">
@@ -52,16 +54,18 @@
                         <div id="statistikPeriode" name="tableInfo">
                             <div>
                                 <label for="periodStart">Vælg periode start: </label>
+                                <br>
                                 <input type="datetime-local" id="periodStart">
                             </div>
                             <div>
                                 <label for="periodEnd">Vælg periode slut: </label>
+                                <br>
                                 <input type="datetime-local" id="periodEnd">
                             </div>
                         </div>
                     </td>
                 </tr>
-
+                
             </table>
         </div>
         <div class="item4">
@@ -124,7 +128,7 @@
                     <th>Slet</th>
                 </tr>
             </table>
-            <button id="close">Annuller</button>
+            <button hidden id="close">Annuller</button>
         </div>
     </div>
     <div id="opretUserModal" class="modal">
@@ -167,6 +171,38 @@
                 <tbody id="userTable"></tbody>
             </table>
             <button id="close">Annuller</button>
+        </div>
+    </div>
+    <div id="bestillingModal" class="modal">
+        <div class="orderModal-content">
+            <span class="close" id="close">&times;</span>
+            <h2>Borde:</h2>
+            <table id="orders">
+                <thead>
+                    <tr id='theader'>
+                        <th>Bord nr.</th>
+                        <th>Samlet pris</th>
+                        <th>Dato</th>
+                    </tr>
+                </thead>
+                <tbody id="ordersContent"></tbody>
+            </table>
+            <button id="annuller">Annuller</button>
+        </div>
+        <div id="showOrder" class="modal">
+            <div class="modal-content" id="showOrderModal">
+                <span class="close" id="close">&times;</span>
+                <table id="editOrder">
+                    <thead>
+                        <tr id='theader'>
+                            <th>Beskrivelse</th>
+                            <th>Antal</th>
+                            <th>Pris</th>
+                        </tr>
+                    </thead>
+                    <tbody id="showOrderContent"></tbody>
+                </table>
+            </div>
         </div>
     </div>
 </body>

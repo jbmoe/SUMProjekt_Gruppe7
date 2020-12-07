@@ -95,3 +95,7 @@ exports.createPaidOrder = async function (order, paymentMethod) {
         paymentMethod
     })
 }
+
+exports.getPaidOrders = function () {
+    return PaidOrder.find().populate('PaidOrders').exec();
+}
