@@ -542,7 +542,6 @@ async function get(url) {
 }
 
 async function post(url, objekt) {
-    // console.log(objekt)
     const respons = await fetch(url, {
         method: "POST",
         body: JSON.stringify(objekt),
