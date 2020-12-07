@@ -15,6 +15,7 @@ var adminTab = document.getElementById('admin')
 var logoutTab = document.getElementById('logout')
 var bordNrSelect = document.getElementById('bordNr')
 let rabatGivet = document.getElementById('rabatGivet')
+var waiter = 'Tjener'
 var products = [];
 var orders = [];
 var selectedToSplit = [];
@@ -162,7 +163,7 @@ async function opretBestilling() {
     let bestilling = {
         time: Date.now(),
         table: bordSelect.value,
-        waiter: 'Per',
+        waiter,
         products: JSON.stringify(products),
         price: samletPrisInput.value,
         comment: bemærkningInput.value
@@ -471,7 +472,7 @@ function printBestilling(bestilling) {
     toReturn += `\nBemærkning: ${bestilling.comment}\n`
     toReturn += `Total pris: ${bestilling.price}\n`
     toReturn += `Tjener: ${bestilling.waiter}\n`
-
+    
     console.log(toReturn)
 }
 
@@ -529,6 +530,7 @@ async function initialize() {
     try {
         products = await get('/api/products');
         orders = await get('/bestilling/api');
+        waiter = (await get('/login/session')).navn
     } catch (fejl) {
         console.log(fejl);
     }

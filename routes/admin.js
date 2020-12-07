@@ -22,7 +22,6 @@ router
             sendStatus(e, response);
         }
     })
-
     .get('/users', async (request, response) => {
         try {
             let users = await controller.getUsers()
