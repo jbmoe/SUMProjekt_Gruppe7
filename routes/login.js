@@ -5,15 +5,6 @@ const router = express.Router();
 const session = require('express-session');
 
 router
-    .get('/', async (request, response) => {
-        try {
-            let orders = await controller.getOrders();
-            response.send(orders);
-        } catch (e) {
-            sendStatus(e, response);
-        }
-    })
-
     .post('/', async (request, response) => {
         const { navn, password } = request.body;
         let user = await controller.getUser(navn)
