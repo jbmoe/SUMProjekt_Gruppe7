@@ -147,14 +147,14 @@ function freqStat(category) {
  * Function til at sortere table, og ja har selv lavet den *wink wink* (:
  * @param {Number} n 
  */
-function sortTable(n) {
+function sortTable(n,table) {
     var rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
     switching = true;
     // Set the sorting direction to ascending:
     dir = "asc";
     /* Make a loop that will continue until
     no switching has been done: */
-    rows = tableContent.rows;
+    rows = table.rows;
     while (switching) {
         // Start by saying: no switching is done:
         switching = false;
@@ -274,7 +274,7 @@ async function main() {
     let theads = document.getElementsByClassName('statAttribut')
     for (let i = 0; i < theads.length; i++) {
         const element = theads[i];
-        element.onclick = () => sortTable(i)
+        element.onclick = () => sortTable(i, tableContent)
     }
 
     let select = document.getElementById('kategori')
