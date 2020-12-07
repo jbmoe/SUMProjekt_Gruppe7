@@ -12,7 +12,6 @@ var inputUserData = document.getElementsByClassName('userData')
 var productTable = document.getElementById('produktTable')
 var userTable = document.getElementById('userTable')
 var orderTab = document.getElementById('bestilling')
-var logoutTab = document.getElementById('logout')
 var products = [];
 var users = []
 
@@ -238,6 +237,11 @@ async function deleteProduct(product) {
 function createOrdersTable() {
     let table = document.getElementById('ordersContent')
     table.innerHTML = ''
+
+    Array.from(table.parentElement.getElementsByTagName('th')).forEach((item, index) => {
+        if (index !== 2) item.onclick = () => sortTable(index, table)
+    })
+
     for (const o of orders) {
         let row = table.insertRow();
         row.insertCell().innerHTML = o.table;
@@ -249,12 +253,15 @@ function createOrdersTable() {
         showBtn.onclick = () => showOrder(o)
         showBtn.innerHTML = 'Vis'
         cellShow.appendChild(showBtn)
-
     }
 }
 
 function showOrder(order) {
     editModal.style.display = "block"
+
+    let d = new Date(order.time)
+    document.getElementById('tid').innerHTML = `Klokkeslet: ${d.toLocaleTimeString()}`
+    document.getElementById('dato').innerHTML = `Dato: ${d.toLocaleDateString()}`
 
     let table = document.getElementById('showOrderContent');
     table.innerHTML = ''

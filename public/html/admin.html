@@ -2,8 +2,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <head>
-    <script src="../admin.js" defer></script>
-    <script src="../statistik.js" defer></script>
+    <script src="../script/admin.js" defer></script>
+    <script src="../script/statistik.js" defer></script>
     <link rel="icon" href="../img/favicon.png">
     <link rel="stylesheet" href="../css/admin.css">
     <link rel="stylesheet" href="../css/index.css">
@@ -65,10 +65,13 @@
                         </div>
                     </td>
                 </tr>
-                
             </table>
         </div>
+        <br>
+        <br>
         <div class="item4">
+            <br>
+            <br>
             <h5 id="tableHeadline"></h5>
             <table>
                 <thead>
@@ -192,6 +195,8 @@
         <div id="showOrder" class="modal">
             <div class="modal-content" id="showOrderModal">
                 <span class="close" id="close">&times;</span>
+                <p id="tid"></p>
+                <p id="dato"></p>
                 <table id="editOrder">
                     <thead>
                         <tr id='theader'>

@@ -22,7 +22,6 @@ router
             sendStatus(e, response);
         }
     })
-
     .get('/users', async (request, response) => {
         try {
             let users = await controller.getUsers()
@@ -41,12 +40,15 @@ router
         } catch (e) {
             sendStatus(e, response);
         }
-
     })
     .post('/users/update/:userId', async (request, response) => {
         try {
             let { username, password, admin } = request.body;
-            let updatedUser = await controller.updateUser(request.params.userId, username, password, admin);
+            
+            const saltRounds = 10;
+            let hashedPassword = bcrypt.hashSync(password, saltRounds);
+
+            let updatedUser = await controller.updateUser(request.params.userId, username, hashedPassword, admin);
             response.send({ message: 'User updated!', updatedUser })
         } catch (e) {
             sendStatus(e, response);
