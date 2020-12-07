@@ -3,13 +3,16 @@ const express = require('express');
 const router = express.Router();
 const path = require('path');
 const session = require('express-session');
+const bcrypt = require('bcrypt');
+const {
+    hashIt
+} = require("../app");
 
 router
     .get('/', async (request, response) => {
         try {
             const navn = request.session.navn;
-            let user = await controller.getUser(navn)
-            if (navn && user[0].admin) {
+            if (navn && request.session.admin) {
                 response.sendFile(path.resolve('public', 'html', 'admin.html'))
             }
             else {
@@ -31,12 +34,14 @@ router
     .post('/', async (request, response) => {
         try {
             let { username, password, admin } = request.body;
-            let created = await controller.createUser(username, password, admin);
+            const saltRounds = 10;
+            let hashedPassword = bcrypt.hashSync(password, saltRounds);
+            let created = await controller.createUser(username, hashedPassword, admin);
             response.send({ message: 'User saved!', created });
         } catch (e) {
             sendStatus(e, response);
         }
-        response.sendStatus(201)
+
     })
     .post('/users/update/:userId', async (request, response) => {
         try {

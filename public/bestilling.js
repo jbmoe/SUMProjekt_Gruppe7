@@ -202,7 +202,7 @@ function generateOrdersTable(orders) {
 
         let cellEdit = row.insertCell();
         let editBtn = document.createElement('button');
-        editBtn.innerHTML = 'Ændre'
+        editBtn.innerHTML = 'Betal'
         editBtn.onclick = () => editOrderHandler(o);
         cellEdit.appendChild(editBtn)
 

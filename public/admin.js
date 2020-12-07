@@ -14,8 +14,6 @@ var logoutTab = document.getElementById('logout')
 var products = [];
 var users = []
 
-
-
 async function initialize() {
     try {
         products = await get('api/products');

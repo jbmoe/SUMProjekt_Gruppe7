@@ -1,8 +1,8 @@
 const controller = require("../controller/Controller");
 const express = require('express');
+const bcrypt = require('bcrypt')
 const router = express.Router();
-const session= require('express-session');
-
+const session = require('express-session');
 
 router
     .get('/', async (request, response) => {
@@ -17,15 +17,17 @@ router
     .post('/', async (request, response) => {
         const { navn, password } = request.body;
         let user = await controller.getUser(navn)
-        if (password === user[0].password && navn) {
-            request.session.navn = navn;
-            request.session.admin = user[0].admin
-            // response.status(201).send(['login ok!']);
-            response.send(user)
-        } else {
-            // response.send({navn, password});
-            response.send(user.password)
-        }
+        let hashPword = user.password
+        bcrypt.compare(password, hashPword, async function (err, res) {
+            if (res) {
+                // Passwords match
+                request.session.navn = navn;
+                request.session.admin = user.admin
+                response.send(user)
+            } else {
+                // Passwords don't match
+            }
+        });
     });
 
 

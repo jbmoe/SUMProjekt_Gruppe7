@@ -4,6 +4,7 @@ const Product = require('../models/Product')
 const PaidOrder = require('../models/PaidOrder')
 const User = require('../models/User')
 const config = require('../config');
+const bcrypt = require('bcrypt')
 
 mongoose.connect(config.databaseURI, { useNewUrlParser: true, useUnifiedTopology: true })
 
@@ -26,7 +27,7 @@ exports.deleteUser = async function (userId) {
 };
 
 exports.getUser = async function (username) {
-    return User.find({ username }).exec()
+    return User.findOne({ username }).exec()
 };
 
 exports.getUsers = function () {
