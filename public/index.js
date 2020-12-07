@@ -30,8 +30,8 @@ window.addEventListener("keyup", function (event) {
 
 login.onclick = async () => {
     try {
-        let users = await post("/login", { navn: navn.value, password: password.value })
-        console.log(users);
+        let session = await post("/login", { navn: navn.value, password: password.value })
+        console.log(session);
         window.location.href = "/bestilling";
     } catch (e) {
         console.log(e)
