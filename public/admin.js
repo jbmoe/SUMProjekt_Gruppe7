@@ -238,9 +238,7 @@ function createOrdersTable() {
     let table = document.getElementById('ordersContent')
     table.innerHTML = ''
 
-    console.log(table.parentElement.getElementsByTagName('th'))
     Array.from(table.parentElement.getElementsByTagName('th')).forEach((item, index) => {
-        console.log(index, item)
         if (index !== 2) item.onclick = () => sortTable(index, table)
     })
 
