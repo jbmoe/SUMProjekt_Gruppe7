@@ -89,7 +89,7 @@ textarea {
 
 input {
     font-size: 20px;
-    width: 50%;
+    /* width: 50%; */
 }
 
 select {
