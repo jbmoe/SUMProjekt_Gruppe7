@@ -16,7 +16,7 @@ router
                 response.sendFile(path.resolve('public', 'html', 'admin.html'))
             }
             else {
-                response.send('<h1> Pil af din reje </h1><a href="/bestilling"> Gå tilbage</a>')
+                response.send('<h1> Denne side kræver administratorrettigheder </h1><a href="/bestilling"> Gå tilbage</a>')
             }
         } catch (e) {
             sendStatus(e, response);

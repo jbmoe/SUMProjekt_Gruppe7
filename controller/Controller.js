@@ -4,7 +4,6 @@ const Product = require('../models/Product')
 const PaidOrder = require('../models/PaidOrder')
 const User = require('../models/User')
 const config = require('../config');
-const bcrypt = require('bcrypt')
 
 mongoose.connect(config.databaseURI, { useNewUrlParser: true, useUnifiedTopology: true })
 
