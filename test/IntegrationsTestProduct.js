@@ -5,7 +5,7 @@ const app = require('../app.js');
 const { response } = require ('../app.js');
 
 
-//Integrations test af order
+//Integrations test af product
 describe('integration test - promise', function () {
     
     it("get('/') test", function (){

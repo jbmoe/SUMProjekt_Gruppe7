@@ -5,7 +5,7 @@ const app = require('../app.js');
 const { response } = require ('../app.js');
 const { post } = require('../routes/order');
 
-//Integrationstest af produkter
+//Integrationstest af order 
 describe('integration test - promise', function () {
 
     before(function() {

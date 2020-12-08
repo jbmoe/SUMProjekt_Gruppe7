@@ -99,9 +99,10 @@ describe('controller test - promise', function () {
         let id = user1._id
         let user2 = await controller.updateUser(id, 'Per2', 'password2', false)
         let user = await controller.getUser(user2.username)
-        user[user.length-1].username.should.be.equal('Per2')
-        user[user.length-1].password.should.be.equal('password2')
-        user[user.length-1].admin.should.be.equal(false)
+        console.log(user)
+        user.username.should.be.equal('Per2')
+        user.password.should.be.equal('password2')
+        user.admin.should.be.equal(false)
     })
 
 
@@ -111,7 +112,7 @@ describe('controller test - promise', function () {
         await controller.deleteUser(id)
         let username = user.username
         let user2 = await controller.getUser(username)
-        user2.should.be.empty()
+        should.equal(user2, null)
     })
 
     it('getUsers() test', async () => {
@@ -120,6 +121,4 @@ describe('controller test - promise', function () {
         users[users.length-1].password.should.be.equal('password2')
         users[users.length-1].admin.should.be.equal(false)
     })
-
-
 });
