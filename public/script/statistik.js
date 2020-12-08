@@ -1,10 +1,10 @@
-var tableContent = document.getElementById('tableContent')
-var datePicker = document.getElementById('date')
-var periodStartPicker = document.getElementById('periodStart')
-var periodEndPicker = document.getElementById('periodEnd')
-var radios = document.getElementsByName('group')
-var tableInfos = document.getElementsByName('tableInfo')
-var orders = []
+let tableContent = document.getElementById('tableContent')
+let datePicker = document.getElementById('date')
+let periodStartPicker = document.getElementById('periodStart')
+let periodEndPicker = document.getElementById('periodEnd')
+let radios = document.getElementsByName('group')
+let tableInfos = document.getElementsByName('tableInfo')
+let orders = []
 
 function fillTable(statArr) {
     tableContent.innerHTML = ''
@@ -148,7 +148,7 @@ function freqStat(category) {
  * @param {Number} n 
  */
 function sortTable(n,table) {
-    var rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+    let rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
     switching = true;
     // Set the sorting direction to ascending:
     dir = "asc";
