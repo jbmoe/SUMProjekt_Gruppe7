@@ -1,19 +1,19 @@
-var modals = document.getElementsByClassName("modal");
-var createProductModal = document.getElementById("opretModal");
-var updateProductModal = document.getElementById("ændreModal");
-var createUserModal = document.getElementById("opretUserModal")
-var allUsersModal = document.getElementById("allUsersModal")
-var orderModal = document.getElementById("bestillingModal")
-var editModal = document.getElementById('showOrder')
-var openModalBtns = document.getElementsByClassName("openModal");
-var closeElements = document.querySelectorAll("#close");
-var inputData = document.getElementsByClassName('data')
-var inputUserData = document.getElementsByClassName('userData')
-var productTable = document.getElementById('produktTable')
-var userTable = document.getElementById('userTable')
-var orderTab = document.getElementById('bestilling')
-var products = [];
-var users = []
+let modals = document.getElementsByClassName("modal");
+let createProductModal = document.getElementById("opretModal");
+let updateProductModal = document.getElementById("ændreModal");
+let createUserModal = document.getElementById("opretUserModal")
+let allUsersModal = document.getElementById("allUsersModal")
+let orderModal = document.getElementById("bestillingModal")
+let editModal = document.getElementById('showOrder')
+let openModalBtns = document.getElementsByClassName("openModal");
+let closeElements = document.querySelectorAll("#close");
+let inputData = document.getElementsByClassName('data')
+let inputUserData = document.getElementsByClassName('userData')
+let productTable = document.getElementById('produktTable')
+let userTable = document.getElementById('userTable')
+let orderTab = document.getElementById('bestilling')
+let products = [];
+let users = []
 
 async function initialize() {
     try {
@@ -102,7 +102,7 @@ function createUserTable() {
 }
 
 function insertUserRow(user) {
-    var row = userTable.insertRow();
+    let row = userTable.insertRow();
 
     let username = document.createElement('input')
     username.value = user.username
@@ -164,7 +164,7 @@ function createProductTable() {
 
 function insertProductRow(product) {
     // Create an empty <tr> element and add it to the last position of the table
-    var row = productTable.insertRow();
+    let row = productTable.insertRow();
 
     // Inserts three new cells (<td> elements) 
     // at the 1st, 2nd and 3rd position of the "new" <tr> element

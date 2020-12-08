@@ -1,25 +1,24 @@
-// const {controller} = require('../controller/Controller')????
-var regningContent = document.getElementById('regningContent');
-var bordSelect = document.getElementById('bordNr')
-var regning = document.getElementById('regning')
-var samletPrisInput = document.getElementById('samletPris')
-var close = document.getElementById('close')
-var borderModal = document.getElementById('bordeModal')
-var editModal = document.getElementById('editModal')
-var editOrderTable = document.getElementById('editOrder');
-var orderTable = document.getElementById('orders');
-var bemærkningInput = document.getElementById('bemærkning')
-var kategoriSelect = document.getElementById('kategori')
-var productTable = document.getElementById('productTableContent')
-var adminTab = document.getElementById('admin')
-var logoutTab = document.getElementById('logout')
-var bordNrSelect = document.getElementById('bordNr')
+let regningContent = document.getElementById('regningContent');
+let bordSelect = document.getElementById('bordNr')
+let regning = document.getElementById('regning')
+let samletPrisInput = document.getElementById('samletPris')
+let close = document.getElementById('close')
+let borderModal = document.getElementById('bordeModal')
+let editModal = document.getElementById('editModal')
+let editOrderTable = document.getElementById('editOrder');
+let orderTable = document.getElementById('orders');
+let bemærkningInput = document.getElementById('bemærkning')
+let kategoriSelect = document.getElementById('kategori')
+let productTable = document.getElementById('productTableContent')
+let adminTab = document.getElementById('admin')
+let logoutTab = document.getElementById('logout')
+let bordNrSelect = document.getElementById('bordNr')
 let rabatGivet = document.getElementById('rabatGivet')
-var waiter = 'Tjener'
-var products = [];
-var orders = [];
-var selectedToSplit = [];
-var bestillingMap = new Map();
+let waiter = 'Tjener'
+let products = [];
+let orders = [];
+let selectedToSplit = [];
+let bestillingMap = new Map();
 
 function createProductTable(products) {
     productTable.innerHTML = ''
@@ -29,9 +28,9 @@ function createProductTable(products) {
 }
 
 function insertProductRow(product) {
-    var row = productTable.insertRow();
+    let row = productTable.insertRow();
 
-    var data = [product.name, product.price, product.category];
+    let data = [product.name, product.price, product.category];
     for (let i = 0; i < 3; i++) {
         let cell = row.insertCell(i);
         cell.innerHTML = data[i];
@@ -372,8 +371,8 @@ function addProductToOrder(order) {
     table.innerHTML = '';
 
     for (const p of products) {
-        var row = table.insertRow();
-        var data = [p.name, p.price, p.category];
+        let row = table.insertRow();
+        let data = [p.name, p.price, p.category];
         for (let i = 0; i < 3; i++) {
             let cell = row.insertCell(i);
             cell.innerHTML = data[i];
